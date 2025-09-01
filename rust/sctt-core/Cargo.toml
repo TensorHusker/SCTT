@@ -1,0 +1,20 @@
+[package]
+name = "sctt-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+num-traits = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+wasm-bindgen = { workspace = true }
+serde-wasm-bindgen = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+wasm-bindgen-test = "0.3"

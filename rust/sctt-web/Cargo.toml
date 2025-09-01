@@ -1,0 +1,48 @@
+[package]
+name = "sctt-web"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Leptos framework
+leptos = { version = "0.6", features = ["csr", "nightly"] }
+leptos_meta = { version = "0.6", features = ["csr", "nightly"] }
+leptos_router = { version = "0.6", features = ["csr", "nightly"] }
+
+# WASM support
+wasm-bindgen = { workspace = true }
+web-sys = { workspace = true, features = [
+    "Document",
+    "Element",
+    "HtmlElement",
+    "HtmlCanvasElement",
+    "HtmlTextAreaElement",
+    "CanvasRenderingContext2d",
+    "Window",
+    "console"
+] }
+
+# Our SCTT modules
+sctt-core = { path = "../sctt-core" }
+sctt-smooth = { path = "../sctt-smooth" }
+sctt-cubical = { path = "../sctt-cubical" }
+sctt-checker = { path = "../sctt-checker" }
+
+# Utils
+console_error_panic_hook = "0.1"
+console_log = "1"
+log = "0.4"
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[features]
+default = ["csr"]
+csr = ["leptos/csr", "leptos_meta/csr", "leptos_router/csr"]
+ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr"]
+hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]

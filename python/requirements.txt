@@ -1,0 +1,28 @@
+# SCTT Python Dependencies
+
+# Mathematical computation
+numpy>=1.24.0
+sympy>=1.12
+scipy>=1.10.0
+
+# Visualization
+matplotlib>=3.6.0
+plotly>=5.14.0
+
+# Type checking and validation
+typing-extensions>=4.5.0
+pydantic>=2.0.0
+
+# Testing
+pytest>=7.3.0
+pytest-cov>=4.0.0
+hypothesis>=6.75.0
+
+# Development tools
+black>=23.0.0
+mypy>=1.3.0
+ipython>=8.12.0
+jupyter>=1.0.0
+
+# Performance
+numba>=0.57.0  # For JIT compilation of hot paths

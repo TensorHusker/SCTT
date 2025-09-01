@@ -1,0 +1,21 @@
+[package]
+name = "sctt-playground"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "sctt-playground"
+path = "src/main.rs"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-smooth = { path = "../sctt-smooth" }
+sctt-cubical = { path = "../sctt-cubical" }
+sctt-checker = { path = "../sctt-checker" }
+
+rustyline = { workspace = true }
+colored = { workspace = true }
+clap = { workspace = true }
+anyhow = { workspace = true }

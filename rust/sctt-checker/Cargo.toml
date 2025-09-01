@@ -1,0 +1,12 @@
+[package]
+name = "sctt-checker"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-smooth = { path = "../sctt-smooth" }
+sctt-cubical = { path = "../sctt-cubical" }
+thiserror = { workspace = true }

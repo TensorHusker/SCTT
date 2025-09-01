@@ -1,0 +1,31 @@
+[package]
+name = "sctt-game"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "smooth-quest"
+path = "src/main.rs"
+
+[dependencies]
+# Game engine
+crossterm = "0.27"
+ratatui = "0.24"
+
+# Math
+nalgebra = "0.32"
+num-traits = "0.2"
+
+# Game logic
+rand = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# SCTT modules
+sctt-core = { path = "../sctt-core" }
+sctt-smooth = { path = "../sctt-smooth" }
+sctt-cubical = { path = "../sctt-cubical" }
+
+# Utilities
+anyhow = "1.0"
+colored = "2.0"

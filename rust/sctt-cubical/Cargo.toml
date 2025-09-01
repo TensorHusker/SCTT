@@ -1,0 +1,10 @@
+[package]
+name = "sctt-cubical"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+thiserror = { workspace = true }

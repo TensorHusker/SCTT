@@ -1,0 +1,26 @@
+# Leptos configuration for SCTT
+
+[package]
+name = "sctt-web"
+bin-package = "sctt-server"
+lib-package = "sctt-web"
+
+# Build configuration
+[build]
+output-name = "sctt-web"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+assets-dir = "assets"
+site-addr = "127.0.0.1:8080"
+reload-port = 3001
+
+# Style configuration
+style-file = "style/main.scss"
+tailwind-input-file = "style/tailwind.css"
+
+# Environment variables
+[env]
+LEPTOS_OUTPUT_NAME = "sctt-web"
+LEPTOS_SITE_ROOT = "target/site"
+LEPTOS_SITE_PKG_DIR = "pkg"
+LEPTOS_ASSETS_DIR = "assets"
