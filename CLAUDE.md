@@ -1,1 +1,2 @@
 - This will be a website for developing Smooth Cubical Type Theory.
+- Let's make the book for Smooth Cubical Type Theory
