@@ -4,34 +4,63 @@
 >
 > "In SCTT, derivatives are not just operations—they are morphisms in the category of smooth types."
 
-## Introduction
+## Introduction  
 
 Having established smooth types in Chapter 4, we now turn to computation with differential structures. This chapter shows how SCTT makes differentiation a first-class computational operation, with derivatives that are guaranteed correct by type checking.
 
 Traditional calculus relies on limiting processes that may not converge. Numerical differentiation suffers from truncation and roundoff errors. SCTT solves both problems: derivatives exist by construction and compute exactly. We'll see how the chain rule becomes a theorem rather than a rule, how integration respects types, and how differential forms provide coordinate-free calculus.
 
+### Three Perspectives on Differentiation
+
+1. **Analytic**: Derivatives as limits (classical)
+2. **Algebraic**: Derivatives via dual numbers/jets (automatic differentiation)
+3. **Synthetic**: Derivatives via Kock-Lawvere (our approach)
+
+SCTT unifies these perspectives: the synthetic approach gives us the theory, the algebraic approach gives us computation, and we recover the analytic approach in models.
+
 ## 5.1 Differentiation {#differentiation}
 
 ### The Differential Operator
 
-In SCTT, differentiation is a type-preserving operation:
+In SCTT, differentiation is a functorial operation:
+
+#### Categorical Structure
 
 ```sctt
--- The differential operator
-D : C∞(M, N) → C∞(T M, T N)
-D f (x, v) = (f x, Df_x(v))
-  where Df_x : TangentSpace M x → TangentSpace N (f x)
+-- Differentiation as a functor
+D : Smooth → Smooth
+  Objects: D(M) = TM (tangent bundle)
+  Morphisms: D(f) = Tf (tangent map)
 
--- For real functions, this simplifies to
+-- Satisfying functorial laws
+D(id_M) ≡ id_{TM}              -- Preserves identity
+D(g ∘ f) ≡ D(g) ∘ D(f)        -- Preserves composition
+```
+
+#### Computational Rules via Kock-Lawvere
+
+```sctt
+-- Differentiation without limits!
 D : C∞(ℝ, ℝ) → C∞(ℝ, ℝ)
-D f x = lim[h → 0] (f(x + h) - f(x))/h
-  -- But computed exactly, not numerically!
+D f x = the unique b such that
+        ∀(ε : 𝔻), f(x + ε) = f(x) + b·ε
 
--- Examples
-D[λ x → x²] ≡ λ x → 2*x         -- Power rule
-D[sin] ≡ cos                    -- Trig derivatives
-D[exp] ≡ exp                    -- Exponential
-D[λ x → c] ≡ λ x → 0           -- Constant rule
+-- This gives us all the standard rules
+D[λ x → xⁿ] ≡ λ x → n*xⁿ⁻¹    -- Power rule (computed!)
+D[sin] ≡ cos                    -- Via sin(ε) = ε for infinitesimal ε
+D[exp] ≡ exp                    -- Via exp(ε) = 1 + ε
+D[const] ≡ λ x → 0             -- No ε dependence
+
+-- Leibniz rule (product rule)
+leibniz : (f g : C∞(ℝ, ℝ)) →
+          D[f * g] ≡ D[f] * g + f * D[g]
+leibniz f g = 
+  -- Proof using Kock-Lawvere:
+  -- (f*g)(x+ε) = f(x+ε)*g(x+ε)
+  --            = (f(x) + f'(x)ε)(g(x) + g'(x)ε)  
+  --            = f(x)g(x) + (f'(x)g(x) + f(x)g'(x))ε
+  --            (using ε² = 0)
+  refl
 ```
 
 ### Computational Differentiation
@@ -55,25 +84,54 @@ _ = refl
 
 ### Partial Derivatives
 
-For multivariate functions:
+For multivariate functions, we use multiple infinitesimal directions:
+
+#### Multivariable Kock-Lawvere
 
 ```sctt
--- Partial derivative with respect to i-th variable
-∂ᵢ : C∞(ℝⁿ, ℝ) → C∞(ℝⁿ, ℝ)
-∂ᵢ f (x₁, ..., xₙ) = D[λ xᵢ → f(x₁, ..., xᵢ, ..., xₙ)] xᵢ
+-- Multiple infinitesimal directions
+𝔻ⁿ : Type
+𝔻ⁿ = {ε : ℝⁿ | εᵢ * εⱼ = 0 for all i,j}
 
--- Gradient
-∇ : C∞(ℝⁿ, ℝ) → C∞(ℝⁿ, ℝⁿ)
-∇ f x = (∂₁ f x, ..., ∂ₙ f x)
+-- Multilinear approximation
+multi_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
+           ∃! (a : ℝ) (b : ℝⁿ), ∀(ε : 𝔻ⁿ),
+           f(x + ε) = a + ⟨b, ε⟩
 
--- Hessian matrix
-H : C∞(ℝⁿ, ℝ) → C∞(ℝⁿ, ℝⁿˣⁿ)
-H f x = [∂ᵢ ∂ⱼ f x]ᵢⱼ
+-- The vector b is the gradient!
+∇ : C∞(ℝⁿ, ℝ) → C∞(ℝⁿ, ℝⁿ) 
+∇ f x = the unique b from multi_KL
+```
 
--- Mixed partials commute (Schwarz's theorem)
-schwarz : (f : C∞(ℝⁿ, ℝ)) → 
-          ∂ᵢ (∂ⱼ f) ≡ ∂ⱼ (∂ᵢ f)
-schwarz f = refl  -- Holds by smoothness!
+#### Second-Order Structure
+
+```sctt  
+-- Second-order infinitesimals
+𝔻² : Type
+𝔻² = {ε : ℝ | ε³ = 0}
+
+-- Hessian via second-order KL
+hessian_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
+             ∃! H : ℝⁿˣⁿ, ∀(ε : 𝔻²)ⁿ,
+             f(x + ε) = f(x) + ⟨∇f(x), ε⟩ + ½⟨ε, Hε⟩
+
+-- Schwarz's theorem is automatic
+schwarz : (f : C∞(ℝⁿ, ℝ)) →
+          ∂ᵢ ∂ⱼ f ≡ ∂ⱼ ∂ᵢ f
+schwarz f = refl  -- By commutativity of 𝔻²!
+```
+
+#### Jacobian Matrix
+
+```sctt
+-- For vector-valued functions
+Jacobian : C∞(ℝⁿ, ℝᵐ) → C∞(ℝⁿ, ℝᵐˣⁿ)
+Jacobian F x = [∂ⱼ Fᵢ(x)]ᵢⱼ
+
+-- Satisfies chain rule
+chain_jacobian : (F : C∞(ℝⁿ, ℝᵐ)) → (G : C∞(ℝᵐ, ℝᵖ)) →
+                 Jacobian (G ∘ F) ≡ 
+                 λx. Jacobian G (F x) × Jacobian F x
 ```
 
 ### Directional Derivatives
@@ -101,29 +159,49 @@ _ = refl  -- Lie bracket relation
 
 ### The Chain Rule as a Theorem
 
-In SCTT, the chain rule isn't a rule to remember—it's a provable theorem:
+In SCTT, the chain rule emerges from the functoriality of differentiation:
+
+#### Proof via Kock-Lawvere
 
 ```sctt
--- Chain rule theorem
+-- Chain rule proof
 chain_rule : {L M N : Manifold} →
             (g : C∞(L, M)) → (f : C∞(M, N)) →
             D[f ∘ g] ≡ D[f] ∘ D[g]
-chain_rule g f = refl
-  -- Holds definitionally by construction!
+chain_rule g f = 
+  -- Let ε : 𝔻
+  -- (f ∘ g)(x + ε) = f(g(x + ε))
+  --                 = f(g(x) + g'(x)ε)     (by KL for g)
+  --                 = f(g(x)) + f'(g(x))·g'(x)ε  (by KL for f)
+  --                 = (f ∘ g)(x) + (f' ∘ g)(x)·g'(x)ε
+  -- Therefore D[f ∘ g](x) = f'(g(x))·g'(x) = (D[f] ∘ D[g])(x)
+  refl  -- QED, holds definitionally!
+```
 
--- Example application
-h : C∞(ℝ, ℝ)
-h x = sin(exp(x²))
+#### Higher-Order Chain Rule
 
--- Derivative via chain rule
-h' : C∞(ℝ, ℝ)
-h' = D[h]
--- Automatically computes to:
--- λ x → cos(exp(x²)) * exp(x²) * 2x
+```sctt
+-- Faà di Bruno's formula (computed!)
+faa_di_bruno : (n : ℕ) → (f g : C∞(ℝ, ℝ)) →
+               Dⁿ[f ∘ g] ≡ 
+               Σ[k₁+2k₂+...+nkₙ=n]
+                 (n! / ∏kᵢ!) × 
+                 Dᵏ[f](g) × ∏(Dᵢ[g]/i!)ᵏᵢ
+  where k = k₁ + k₂ + ... + kₙ
 
--- Verification
-_ : h' ≡ λ x → cos(exp(x²)) * exp(x²) * 2x
-_ = refl
+-- This complex formula is derived automatically
+-- from iterating the basic chain rule!
+```
+
+#### Chain Rule for Manifolds
+
+```sctt
+-- General chain rule between manifolds
+chain_manifold : {M N P : Manifold} →
+                (g : C∞(M, N)) → (f : C∞(N, P)) →
+                T(f ∘ g) ≡ Tf ∘ Tg
+  -- In coordinates:
+  -- (f ∘ g)*(ω) = g*(f*(ω)) for forms ω
 ```
 
 ### Automatic Differentiation

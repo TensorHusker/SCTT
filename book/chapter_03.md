@@ -10,6 +10,14 @@ Traditional type theory treats equality as a mere proposition: either two things
 
 This chapter introduces the revolutionary cubical structure that gives SCTT its power. We'll see how paths become computational objects, how spaces emerge from types, and how the univalence axiom becomes a theorem rather than an axiom.
 
+### Mathematical Foundations
+
+Cubical type theory is based on a model in cubical sets—presheaves on the category of cubes with connections and symmetries. The key insight is that:
+
+1. **Cubes model higher equalities**: An n-cube represents an n-dimensional path
+2. **Composition is geometric**: Kan filling operations give computational content
+3. **Univalence computes**: Via Glue types, equivalence becomes equality
+
 ## 3.1 The Interval Type {#interval}
 
 ### The Computational Interval
@@ -18,7 +26,7 @@ At the heart of cubical type theory lies a deceptively simple type:
 
 ```sctt
 -- The interval type I
-I : Type
+I : PreType  -- Not a proper type!
 
 -- With two endpoints
 i0 : I  -- left endpoint (0)
@@ -28,7 +36,31 @@ i1 : I  -- right endpoint (1)
 -- I behaves like the real interval [0,1]
 ```
 
-But `I` is not an ordinary inductive type. It's a primitive that represents "dimension" or "direction":
+But `I` is not an ordinary type—it's a pretype that represents "dimension" or "direction".
+
+#### De Morgan Algebra Structure
+
+The interval forms a de Morgan algebra:
+
+```sctt
+-- Operations on I
+_∧_ : I → I → I  -- meet (minimum)
+_∨_ : I → I → I  -- join (maximum)
+~_ : I → I        -- involution (1 - i)
+
+-- De Morgan laws:
+-- ~(i ∧ j) = ~i ∨ ~j
+-- ~(i ∨ j) = ~i ∧ ~j
+-- ~~i = i
+-- i ∧ (j ∨ k) = (i ∧ j) ∨ (i ∧ k)
+```
+
+#### Why Not an Inductive Type?
+
+The interval cannot be an inductive type because:
+1. It would only have two distinct elements (i0 and i1)
+2. We need a continuum of points
+3. Interval variables must be symbolic, not concrete
 
 ```sctt
 -- We can have expressions involving interval variables
@@ -68,35 +100,82 @@ middle i = line_segment (i ∧ ~i)  -- stays at midpoint
 
 The interval supports constraints through face formulas:
 
-```sctt
--- Face formulas (φ : 𝔽) describe boundaries
--- Examples:
--- (i = i0)        -- left face
--- (i = i1)        -- right face
--- (i = i0) ∨ (i = i1)  -- both endpoints
+#### Face Lattice
 
--- Partial elements: defined only on some faces
-partial_function : (i : I) → [(i = i0) ∨ (i = i1)] → Nat
-partial_function i [(i = i0)] = 0
-partial_function i [(i = i1)] = 1
+```sctt
+-- Face formulas form a Boolean algebra
+data FaceFormula : Type where
+  ⊤ : FaceFormula              -- true (everywhere)
+  ⊥ : FaceFormula              -- false (nowhere)
+  _=ᵢ_ : I → I → FaceFormula  -- equality constraint
+  _∧_ : FaceFormula → FaceFormula → FaceFormula
+  _∨_ : FaceFormula → FaceFormula → FaceFormula
+  ¬_ : FaceFormula → FaceFormula
+```
+
+#### Partial Elements
+
+A partial element is defined only where a formula holds:
+
+```sctt
+-- Partial type former
+Partial : FaceFormula → Type → Type
+
+-- Example: boundary of a square
+square_boundary : (i j : I) → 
+                  Partial ((i = i0) ∨ (i = i1) ∨ 
+                          (j = i0) ∨ (j = i1)) A
+square_boundary i j [(i = i0)] = left_edge j
+square_boundary i j [(i = i1)] = right_edge j
+square_boundary i j [(j = i0)] = bottom_edge i
+square_boundary i j [(j = i1)] = top_edge i
+```
+
+#### Systems and Compatibility
+
+Systems must be compatible on overlapping faces:
+
+```sctt
+-- Compatibility condition
+IsCompatible : {φ ψ : FaceFormula} → 
+               Partial φ A → Partial ψ A → Type
+IsCompatible u v = ∀ (i : I), (φ ∧ ψ)(i) → u(i) ≡ v(i)
 ```
 
 ## 3.2 Path Types {#paths}
 
 ### Paths as Functions from the Interval
 
-A path in type `A` from `x` to `y` is a function from `I`:
+A path in type `A` from `x` to `y` is a continuous function from `I`:
+
+#### Path Type Formation
 
 ```sctt
--- Path type definition
+-- Dependent path type
+PathP : (A : I → Type) → A i0 → A i1 → Type
+PathP A x y = Π (i : I), A i 
+              [i ↦ i0] ↦ x  -- boundary condition
+              [i ↦ i1] ↦ y  -- boundary condition
+
+-- Non-dependent version
 Path : (A : Type) → A → A → Type
 Path A x y = PathP (λ _ → A) x y
+```
 
--- Where PathP is the dependent version
-PathP : (A : I → Type) → A i0 → A i1 → Type
+#### Formal Rules for Paths
 
--- A path is essentially a function p : (i : I) → A i
--- with p i0 = x and p i1 = y
+```
+Γ ⊢ A : I → Type   Γ ⊢ x : A i0   Γ ⊢ y : A i1
+—————————————————————————————————————————————  (Path-form)
+Γ ⊢ PathP A x y : Type
+
+Γ, i : I ⊢ p : A i   Γ ⊢ p[i0/i] ≡ x   Γ ⊢ p[i1/i] ≡ y
+——————————————————————————————————————————————————  (Path-intro)
+Γ ⊢ λi. p : PathP A x y
+
+Γ ⊢ p : PathP A x y   Γ ⊢ r : I
+———————————————————————————————  (Path-elim)
+Γ ⊢ p @ r : A r
 ```
 
 ### Creating Paths
@@ -161,38 +240,100 @@ transport p x = transp (λ i → p i) i0 x
 
 ### Path Composition
 
-We can compose paths using the sophisticated `hcomp` operation:
+We can compose paths using the sophisticated composition operations:
+
+#### Homogeneous Composition (hcomp)
 
 ```sctt
--- Horizontal composition (transitivity)
+-- Horizontal composition for homogeneous types
+hcomp : {A : Type} → {φ : FaceFormula} →
+        (u : (i : I) → Partial φ A) →
+        (u0 : A [φ ↦ u i0]) → A
+
+-- Path composition via hcomp
 _∙_ : {A : Type} {x y z : A} → 
       Path A x y → Path A y z → Path A x z
 p ∙ q = λ i → hcomp (λ j → λ {
-  (i = i0) → x;
-  (i = i1) → q j
-}) (p i)
+  (i = i0) → x;         -- left boundary
+  (i = i1) → q j        -- right boundary  
+}) (p i)                 -- bottom
+```
 
--- Symmetry (path reversal)
-sym : {A : Type} {x y : A} → Path A x y → Path A y x
-sym p = λ i → p (~i)
+#### The Double Composition Square
+
+```
+        p
+    x ———→ y
+    |       |
+  refl      q  
+    |       |
+    ↓       ↓
+    x ———→ z
+       p∙q
+```
+
+#### Properties of Composition
+
+```sctt
+-- Left identity
+lid : {A : Type} {x y : A} (p : Path A x y) →
+      Path (Path A x y) (refl ∙ p) p
+lid p = λ i j → hfill (λ k → λ {
+  (j = i0) → x;
+  (j = i1) → p k
+}) (inS x) i
+
+-- Associativity (up to higher path)
+assoc : {A : Type} {w x y z : A}
+        (p : Path A w x) (q : Path A x y) (r : Path A y z) →
+        Path (Path A w z) ((p ∙ q) ∙ r) (p ∙ (q ∙ r))
 ```
 
 ### The comp Operation
 
-The fundamental composition operation fills cubes:
+The fundamental composition operation for dependent types:
+
+#### General Composition
 
 ```sctt
--- Composition structure
-comp : (A : I → Type) → 
-       (φ : 𝔽) →
-       ((i : I) → Partial φ (A i)) →
-       A i0 → A i1
+-- Composition in type families
+comp : (A : I → Type) → {φ : FaceFormula} →
+       (u : (i : I) → Partial φ (A i)) →
+       (u0 : A i0 [φ ↦ u i0]) → A i1
 
--- Example: composing in a type family
-compose_dependent : {A : I → Type} {x : A i0} {y : A i1} →
-                    PathP A x y → 
-                    {B : Type} → (f : (i : I) → A i → B) →
-                    Path B (f i0 x) (f i1 y)
+-- Key properties:
+-- 1. Extends partial element u to total element
+-- 2. Agrees with u on φ
+-- 3. Starts from u0 at i0
+```
+
+#### Kan Filling Operation
+
+```sctt
+-- Kan filling (composition with intermediate results)
+fill : (A : I → Type) → {φ : FaceFormula} →
+       (u : (i : I) → Partial φ (A i)) →
+       (u0 : A i0 [φ ↦ u i0]) →
+       (i : I) → A i
+fill A {φ} u u0 i = comp (λj → A (i ∧ j)) {φ ∨ (i = i0)}
+                          (λj → λ { (φ = 1) → u (i ∧ j);
+                                   (i = i0) → u0 })
+                          u0
+
+-- Crucial: fill i0 = u0, fill i1 = comp A u u0
+```
+
+#### Example: Path Lifting
+
+```sctt
+-- Lifting a path to a path of paths
+path_lifting : {A : Type} {x y : A} →
+               (p : Path A x y) →
+               Path (Path A x x) refl p
+path_lifting p = λi j → fill A {i0 ∨ i1}
+                             (λk → λ { (j = i0) → x;
+                                      (j = i1) → p k })
+                             x i
 ```
 
 ### Transport: Moving Along Paths

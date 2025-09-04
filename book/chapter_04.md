@@ -10,6 +10,15 @@ We now reach the heart of SCTT's innovation: adding smooth structure to our cubi
 
 This chapter introduces smooth types—types equipped with differential structure that computes. We'll see how every type can be made smooth, how functions become differentiable by construction, and how the cubical structure from Chapter 3 naturally extends to support calculus.
 
+### Synthetic vs Analytic Approach
+
+Classical differential geometry builds smooth structures analytically through limits and epsilon-delta arguments. Synthetic Differential Geometry (SDG), pioneered by Lawvere and Kock, takes the opposite approach: smoothness is primitive, and all maps are smooth by construction.
+
+SCTT adapts SDG to our cubical setting:
+- **Classical SDG**: Uses nilpotent infinitesimals in a topos
+- **SCTT Approach**: Uses cubical paths as infinitesimals
+- **Key Innovation**: Computational content via cubical structure
+
 ## 4.1 Smooth Real Numbers {#smooth-reals}
 
 ### The Smooth Real Type
@@ -53,22 +62,50 @@ smooth_sqrt : C∞(ℝ₊, ℝ)  -- Guaranteed smooth where defined
 
 ### Infinitesimals and Tangent Vectors
 
-SCTT realizes infinitesimals as paths:
+SCTT realizes infinitesimals through a cubical adaptation of the Kock-Lawvere axiom:
+
+#### The Infinitesimal Object
 
 ```sctt
--- An infinitesimal is a path starting at 0
-Infinitesimal : Type
-Infinitesimal = Σ (ε : Path ℝ 0ₛ 0ₛ), 
-                  (ε ≠ refl) × (ε ∘ ε ≡ refl)
+-- The infinitesimal object (cubical version of D = {d : d² = 0})
+𝔻 : Type
+𝔻 = Σ (ε : Path ℝ 0 0), ε ∘ ε ≡ refl
 
--- The tangent space at a point
+-- Kock-Lawvere axiom (cubical form)
+KL : (f : C∞(ℝ, ℝ)) → (x : ℝ) →
+     ∃! (a b : ℝ), ∀ (ε : 𝔻), 
+     f(x + ε) = a + b · ε
+
+-- The coefficient b is the derivative!
+derivative_via_KL : C∞(ℝ, ℝ) → C∞(ℝ, ℝ)
+derivative_via_KL f x = the unique b from KL
+```
+
+#### Microlinearity Principle
+
+```sctt
+-- Every function is linear on infinitesimals
+microlinear : (f : C∞(ℝ, ℝ)) → (x : ℝ) → (ε : 𝔻) →
+              f(x + ε) ≡ f(x) + f'(x) · ε
+
+-- This holds definitionally in SCTT!
+```
+
+#### Tangent Bundle via Infinitesimals
+
+```sctt
+-- Tangent space as maps from infinitesimals
 TangentSpace : ℝ → Type
-TangentSpace x = Σ (v : ℝ), Path ℝ x x
+TangentSpace x = 𝔻 → ℝ
+  -- Equivalently: ℝ^𝔻 in exponential notation
 
--- Tangent vectors act on smooth functions
-apply_tangent : {x : ℝ} → TangentSpace x → 
-                C∞(ℝ, ℝ) → ℝ
-apply_tangent (v, path) f = D[f](x) · v
+-- Tangent bundle
+Tℝ : SmoothType
+Tℝ = Σ (x : ℝ), TangentSpace x
+
+-- Tangent vectors act as derivations
+derivation : Tℝ → C∞(ℝ, ℝ) → ℝ
+derivation (x, v) f = v(λh. f(x + h) - f(x))
 ```
 
 ### Computing with Smooth Reals
@@ -101,20 +138,38 @@ derivative_example = D[example]
 
 ### The Smooth Function Type
 
-Functions between smooth types can carry smooth structure:
+Functions between smooth types automatically carry smooth structure:
+
+#### The Internal Hom
 
 ```sctt
--- Smooth function type
-C∞ : SmoothType → SmoothType → Type
-C∞ A B = SmoothMap A B
+-- Smooth function type (exponential in smooth category)
+C∞ : SmoothType → SmoothType → SmoothType
+C∞ A B = B^A  -- Exponential object
 
--- Construction
-smooth_fn : C∞(ℝ, ℝ)
-smooth_fn x = x³ - 3*x + 1
+-- Key theorem: All functions are smooth
+all_smooth : (f : A → B) → IsSmooth f
+all_smooth f = axiom  -- By construction in smooth topos!
 
--- Every smooth function has derivatives
-D : C∞(ℝ, ℝ) → C∞(ℝ, ℝ)
-D smooth_fn = λ x → 3*x² - 3
+-- But we can distinguish smoothness levels:
+C⁰ : Type → Type → Type      -- Continuous
+C¹ : Type → Type → Type      -- Once differentiable
+C∞ : Type → Type → Type      -- Smooth (all derivatives)
+Cω : Type → Type → Type      -- Analytic (Taylor series)
+```
+
+#### Smooth Evaluation Map
+
+```sctt
+-- Evaluation is smooth
+eval : C∞(C∞(A,B) × A, B)
+eval (f, a) = f a
+
+-- Currying is smooth
+curry : C∞(A × B, C) → C∞(A, C∞(B, C))
+curry f = λa. λb. f(a, b)
+
+-- These form a smooth cartesian closed category
 ```
 
 ### Smooth vs Non-Smooth
@@ -138,16 +193,44 @@ limit ε = smooth_abs ε
 
 ### Higher Derivatives
 
-Smooth functions have all derivatives:
+Smooth functions have all derivatives, computed via iterated Kock-Lawvere:
+
+#### Jet Bundles
 
 ```sctt
--- nth derivative
-Dⁿ : (n : ℕ) → C∞(ℝ, ℝ) → C∞(ℝ, ℝ)
-D⁰ f = f
-Dⁿ⁺¹ f = D (Dⁿ f)
+-- n-jet at a point (Taylor polynomial data)
+Jet : ℕ → ℝ → C∞(ℝ, ℝ) → Type
+Jet n x f = (f(x), f'(x), f''(x)/2!, ..., fⁿ(x)/n!)
 
--- Taylor series
-taylor : C∞(ℝ, ℝ) → ℝ → ℝ → ℕ → ℝ
+-- Jet bundle (all Taylor data)
+Jⁿ : C∞(ℝ, ℝ) → C∞(ℝ, ℝⁿ⁺¹)
+Jⁿ f x = (f(x), Df(x), D²f(x), ..., Dⁿf(x))
+```
+
+#### Higher-Order Infinitesimals
+
+```sctt
+-- nth order infinitesimal neighborhood
+𝔻ⁿ : Type
+𝔻¹ = {ε : ℝ | ε² = 0}           -- First order
+𝔻² = {ε : ℝ | ε³ = 0}           -- Second order
+𝔻ⁿ = {ε : ℝ | εⁿ⁺¹ = 0}       -- nth order
+
+-- Taylor expansion via higher infinitesimals
+taylor_expansion : C∞(ℝ, ℝ) → ℝ → (ε : 𝔻ⁿ) → ℝ
+taylor_expansion f x ε = 
+  f(x) + f'(x)ε + f''(x)ε²/2! + ... + fⁿ(x)εⁿ/n!
+```
+
+#### Faà di Bruno Formula
+
+```sctt
+-- Chain rule for higher derivatives (computed!)
+faa_di_bruno : (f g : C∞(ℝ, ℝ)) → (n : ℕ) →
+               Dⁿ(f ∘ g) ≡ Σ[partitions of n] ...
+-- The formula is computed automatically from
+-- the Kock-Lawvere axiom iteration
+```
 taylor f a x n = Σ[k ≤ n] (Dᵏ[f](a) / k!) * (x - a)ᵏ
 
 -- Smooth functions equal their Taylor series

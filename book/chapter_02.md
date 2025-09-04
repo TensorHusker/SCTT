@@ -6,6 +6,15 @@
 
 Before we can add smooth structures to type theory, we need a solid foundation. This chapter introduces dependent type theory—the bedrock upon which SCTT is built. If you're familiar with languages like Haskell or ML, you'll recognize many concepts, but with a crucial twist: types can depend on values.
 
+### Chapter Overview
+
+We present type theory in three layers:
+1. **Syntax**: How to write types and terms
+2. **Semantics**: What types and terms mean
+3. **Pragmatics**: How to use types effectively
+
+By the end of this chapter, you'll understand the formal rules governing dependent types and how they provide a computational foundation for mathematics.
+
 ## 2.1 Types and Terms {#types-and-terms}
 
 ### What is a Type?
@@ -27,12 +36,46 @@ pi : Real
 
 ### The Judgment Forms
 
-Type theory is built on four fundamental judgments:
+Type theory is built on fundamental judgments. We write judgments in contexts:
 
-1. **Type formation**: `A : Type` ("A is a type")
-2. **Term introduction**: `a : A` ("a is a term of type A")
-3. **Definitional equality**: `a ≡ b : A` ("a equals b by definition")
-4. **Type equality**: `A ≡ B : Type` ("types A and B are definitionally equal")
+#### Contexts
+```
+Γ ::= · | Γ, x : A
+```
+A context is a list of variable declarations.
+
+#### Four Core Judgments
+
+1. **Context formation**: `⊢ Γ ctx` ("Γ is a well-formed context")
+   ```
+   ———————  (empty)
+   ⊢ · ctx
+   
+   ⊢ Γ ctx   Γ ⊢ A : Type
+   ————————————————————————  (extend)
+   ⊢ Γ, x : A ctx
+   ```
+
+2. **Type formation**: `Γ ⊢ A : Type` ("A is a type in context Γ")
+   ```
+   ⊢ Γ ctx
+   ————————————  (universe)
+   Γ ⊢ Type₀ : Type₁
+   ```
+
+3. **Term typing**: `Γ ⊢ a : A` ("a has type A in context Γ")
+   ```
+   ⊢ Γ, x : A, Δ ctx
+   —————————————————  (variable)
+   Γ, x : A, Δ ⊢ x : A
+   ```
+
+4. **Definitional equality**: `Γ ⊢ a ≡ b : A` ("a equals b at type A")
+   ```
+   Γ ⊢ a : A
+   —————————————  (reflexivity)
+   Γ ⊢ a ≡ a : A
+   ```
 
 ### Functions as First-Class Citizens
 
@@ -53,19 +96,38 @@ result = double 3  -- evaluates to 6
 
 ### The Universe Hierarchy
 
-To avoid paradoxes, types themselves have types:
+To avoid paradoxes like Russell's, we have a hierarchy of universes:
 
-```sctt
-Type₀ : Type₁
-Type₁ : Type₂
--- ... and so on
+#### Universe Rules
+```
+—————————————————  (universe hierarchy)
+Γ ⊢ Typeᵢ : Typeᵢ₊₁
 
--- Examples
-Nat : Type₀
-Type₀ → Type₀ : Type₁
+Γ ⊢ A : Typeᵢ   Γ ⊢ B : Typeⱼ
+—————————————————————————————  (universe cumulativity)
+Γ ⊢ A → B : Typeₘₐₓ(ᵢ,ⱼ)
 ```
 
-This hierarchy ensures logical consistency while maintaining expressiveness.
+#### Examples
+```sctt
+-- Basic types live in Type₀
+Nat : Type₀
+Bool : Type₀
+Real : Type₀
+
+-- Type constructors live higher
+Type₀ → Type₀ : Type₁
+Π (A : Type₀), A → A : Type₁
+
+-- This would cause a paradox:
+-- Type : Type  -- ✗ Not allowed!
+```
+
+#### Russell's Paradox Prevention
+Consider the set R = {x | x ∉ x}. In type theory:
+- We cannot form the "type of all types"
+- Every type has a level
+- No self-containing types
 
 ## 2.2 Dependent Types {#dependent-types}
 
@@ -89,37 +151,110 @@ three_vector : Vec 3
 
 ### Pi Types (Dependent Functions)
 
-The dependent function type `(x : A) → B(x)` is the heart of dependent type theory:
+The dependent function type `Π (x : A), B(x)` is the heart of dependent type theory.
 
+#### Formation Rule
+```
+Γ ⊢ A : Type   Γ, x : A ⊢ B : Type
+———————————————————————————————————  (Π-form)
+Γ ⊢ Π (x : A), B : Type
+```
+
+#### Introduction Rule (Lambda)
+```
+Γ, x : A ⊢ b : B
+—————————————————————————  (Π-intro)
+Γ ⊢ λx. b : Π (x : A), B
+```
+
+#### Elimination Rule (Application)
+```
+Γ ⊢ f : Π (x : A), B   Γ ⊢ a : A
+—————————————————————————————————  (Π-elim)
+Γ ⊢ f a : B[a/x]
+```
+
+#### Computation Rule (β-reduction)
+```
+Γ, x : A ⊢ b : B   Γ ⊢ a : A
+———————————————————————————————  (Π-β)
+Γ ⊢ (λx. b) a ≡ b[a/x] : B[a/x]
+```
+
+#### Uniqueness Rule (η-expansion)
+```
+Γ ⊢ f : Π (x : A), B
+————————————————————  (Π-η)
+Γ ⊢ f ≡ λx. f x : Π (x : A), B
+```
+
+#### Example: Type-Safe Vector Replication
 ```sctt
--- A function whose output type depends on input value
-replicate : (n : Nat) → A → Vec A n
-replicate zero _ = empty
-replicate (succ n) x = cons x (replicate n x)
+-- The type precisely specifies the length
+replicate : Π (n : Nat), Π (A : Type), A → Vec A n
+replicate zero A x = nil
+replicate (succ n) A x = cons x (replicate n A x)
 
--- The return type changes with the input!
-test1 : Vec Bool 3
-test1 = replicate 3 true
-
-test2 : Vec Nat 5  
-test2 = replicate 5 zero
+-- Type checker verifies length correctness
+test : Vec Bool 3
+test = replicate 3 Bool true  -- ✓ Type checks!
 ```
 
 ### Sigma Types (Dependent Pairs)
 
-Dependent pairs package a value with a type that depends on it:
+Dependent pairs `Σ (x : A), B(x)` package a value with dependent data.
 
+#### Formation Rule
+```
+Γ ⊢ A : Type   Γ, x : A ⊢ B : Type
+———————————————————————————————————  (Σ-form)
+Γ ⊢ Σ (x : A), B : Type
+```
+
+#### Introduction Rule (Pairing)
+```
+Γ ⊢ a : A   Γ ⊢ b : B[a/x]
+—————————————————————————  (Σ-intro)
+Γ ⊢ (a, b) : Σ (x : A), B
+```
+
+#### Elimination Rules (Projections)
+```
+Γ ⊢ p : Σ (x : A), B
+————————————————————  (Σ-elim₁)
+Γ ⊢ π₁ p : A
+
+Γ ⊢ p : Σ (x : A), B
+————————————————————  (Σ-elim₂)
+Γ ⊢ π₂ p : B[π₁ p/x]
+```
+
+#### Computation Rules
+```
+Γ ⊢ a : A   Γ ⊢ b : B[a/x]
+——————————————————————————  (Σ-β₁)
+Γ ⊢ π₁ (a, b) ≡ a : A
+
+Γ ⊢ a : A   Γ ⊢ b : B[a/x]
+——————————————————————————  (Σ-β₂)
+Γ ⊢ π₂ (a, b) ≡ b : B[a/x]
+```
+
+#### Example: Subsets and Refinement Types
 ```sctt
--- Sigma type syntax
-Σ (x : A), B(x)
-
--- Example: a number with a proof it's positive
+-- Numbers with proofs
 PositiveReal : Type
-PositiveReal = Σ (x : Real), (x > 0)
+PositiveReal = Σ (x : Real), IsPositive x
 
--- Creating a dependent pair
-sqrt_two : PositiveReal
-sqrt_two = (1.414..., proof_positive)
+-- Matrices with dimension proofs
+SquareMatrix : Type
+SquareMatrix = Σ (n : Nat), Matrix n n
+
+-- Differentiable functions with derivative
+Differentiable : Type
+Differentiable = Σ (f : Real → Real), 
+                 Σ (f' : Real → Real),
+                 IsDeriv f f'
 ```
 
 ### Real-World Example: Matrix Multiplication
@@ -146,7 +281,26 @@ valid = multiply 2 3 4
 
 ### Simple Functions
 
-Non-dependent functions are a special case:
+Non-dependent functions `A → B` are a special case of Pi types where B doesn't depend on the input:
+
+```
+A → B ≡ Π (_ : A), B
+```
+
+#### Inference Rules for Simple Functions
+```
+Γ ⊢ A : Type   Γ ⊢ B : Type
+————————————————————————————  (→-form)
+Γ ⊢ A → B : Type
+
+Γ, x : A ⊢ b : B
+—————————————————  (→-intro)
+Γ ⊢ λx. b : A → B
+
+Γ ⊢ f : A → B   Γ ⊢ a : A
+—————————————————————————  (→-elim)
+Γ ⊢ f a : B
+```
 
 ```sctt
 -- When B doesn't depend on x, we write:
