@@ -1,0 +1,48 @@
+[build]
+  command = "trunk build --release"
+  publish = "dist"
+
+[build.environment]
+  RUST_VERSION = "1.75.0"
+  TRUNK_VERSION = "0.18.0"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://sctt-api.netlify.app/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/ws/*"
+  to = "https://sctt-api.netlify.app/ws/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/pkg/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.wasm"
+  [headers.values]
+    Content-Type = "application/wasm"
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[dev]
+  command = "trunk serve"
+  port = 8080
+  targetPort = 8080
+  publish = "dist"

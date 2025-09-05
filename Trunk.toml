@@ -1,0 +1,25 @@
+[build]
+target = "index.html"
+dist = "dist"
+public_url = "/"
+
+[watch]
+watch = ["src", "index.html", "styles"]
+ignore = ["target", "dist", "pkg"]
+
+[serve]
+address = "127.0.0.1"
+port = 8080
+open = false
+
+[[proxy]]
+rewrite = "/api/"
+backend = "http://localhost:3000/api/"
+
+[[proxy]]
+rewrite = "/ws/"
+backend = "ws://localhost:3000/ws/"
+
+[clean]
+dist = "dist"
+cargo = true

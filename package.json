@@ -1,0 +1,33 @@
+{
+  "name": "sctt-system",
+  "version": "0.1.0",
+  "description": "Smooth Cubical Type Theory - Web Interface",
+  "scripts": {
+    "dev": "trunk serve --open",
+    "build": "trunk build --release",
+    "build:wasm": "wasm-pack build --target web --out-dir pkg",
+    "serve": "python3 -m http.server 8080 -d dist",
+    "deploy": "npm run build && npm run deploy:netlify",
+    "deploy:netlify": "netlify deploy --prod --dir=dist",
+    "deploy:vercel": "vercel --prod",
+    "test": "wasm-pack test --headless --firefox"
+  },
+  "devDependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^1.6.0",
+    "netlify-cli": "^17.0.0",
+    "vercel": "^32.0.0"
+  },
+  "keywords": [
+    "type-theory",
+    "proof-assistant",
+    "wasm",
+    "rust",
+    "mathematics"
+  ],
+  "author": "SCTT Contributors",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sctt"
+  }
+}

@@ -536,13 +536,25 @@ vec_transport eq vec = transport (cong (Vec A) eq) vec
 
 ### Uniqueness of Identity Proofs (UIP)
 
-In standard Martin-Löf type theory, all proofs of equality are equal:
+In standard Martin-Löf type theory with K axiom, all proofs of equality are equal:
 
 ```sctt
-UIP : {A : Type} {x y : A} (p q : x ≡ y) → p ≡ q
+-- UIP in MLTT with K:
+UIP_MLTT : {A : Type} {x y : A} (p q : x ≡ y) → p ≡ q
 ```
 
-But in SCTT (with cubical structure), this is no longer true! We'll explore this in Chapter 3.
+In SCTT with cubical structure, UIP does NOT hold in general:
+
+```sctt
+-- In SCTT: Different paths can be observably different!
+-- For example, paths in S¹ with different winding numbers
+counterexample_to_UIP : Path S¹ base base
+path1 = refl  -- Winding number 0
+path2 = loop  -- Winding number 1
+-- path1 ≠ path2 even though both are proofs of base ≡ base
+```
+
+This gives SCTT its higher-dimensional structure, explored in Chapter 3.
 
 ## 2.7 Propositions as Types
 

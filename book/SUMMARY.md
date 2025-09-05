@@ -44,12 +44,14 @@
   - [5.5 Stokes' Theorem](./chapter_05.md#stokes)
   - [Exercises](./chapter_05.md#exercises)
 
-- [Chapter 6: Smooth Homotopy Theory](./chapter_06.md)
-  - [6.1 Smooth Path Spaces](./chapter_06.md#smooth-paths)
-  - [6.2 Smooth Homotopy Groups](./chapter_06.md#homotopy-groups)
-  - [6.3 Smooth Fibrations](./chapter_06.md#fibrations)
-  - [6.4 Connections and Curvature](./chapter_06.md#connections)
-  - [Exercises](./chapter_06.md#exercises)
+- [Chapter 6: Addressing Limitations and Challenges](./chapter_06.md)
+  - [6.1 Fundamental Expressivity Limitations](./chapter_06.md#expressivity-limits)
+  - [6.2 Computational Complexity Barriers](./chapter_06.md#complexity-barriers)
+  - [6.3 Non-Smooth Phenomena](./chapter_06.md#non-smooth)
+  - [6.4 Undecidability and Uncomputability](./chapter_06.md#undecidable)
+  - [6.5 Practical Implementation Challenges](./chapter_06.md#implementation)
+  - [6.6 Workarounds and Extensions](./chapter_06.md#workarounds)
+  - [6.7 Topological Cryptography](./chapter_06.md#homotopical-crypto)
 
 # Part III: Formal System
 

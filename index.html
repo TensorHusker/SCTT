@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SCTT System - Smooth Cubical Type Theory</title>
+    <meta name="description" content="Advanced proof assistant and compiler for Smooth Cubical Type Theory with collaborative features and WASM compilation">
+    <meta name="keywords" content="type theory, proof assistant, mathematics, WASM, Rust">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="SCTT System">
+    <meta property="og:description" content="Interactive proof assistant for Smooth Cubical Type Theory">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/assets/og-image.png">
+    
+    <!-- Styles -->
+    <link data-trunk rel="css" href="styles/main.css">
+    <link data-trunk rel="copy-dir" href="assets">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    
+    <!-- WASM -->
+    <link data-trunk rel="rust" data-wasm-opt="z" />
+    
+    <!-- Analytics (optional) -->
+    <script defer data-domain="sctt.example.com" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+    <noscript>
+        <div class="noscript-banner">
+            <p>This application requires JavaScript and WebAssembly to run.</p>
+            <p>Please enable JavaScript in your browser settings.</p>
+        </div>
+    </noscript>
+    
+    <div id="app"></div>
+    
+    <!-- Loading screen -->
+    <div id="loading" class="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading SCTT System...</p>
+    </div>
+    
+    <script>
+        // Remove loading screen when WASM is loaded
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+            }, 500);
+        });
+        
+        // Register service worker for offline support
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>

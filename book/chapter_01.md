@@ -40,6 +40,8 @@ Traditional type theories excel at discrete reasoning but struggle with continui
 3. The univalence axiom holds computationally via Glue types
 4. Differentiation is a definitional operation on smooth functions
 
+**Important Note**: While this theorem establishes the existence of SCTT, practical implementation faces significant challenges including EXPTIME-complete type checking and undecidable smooth function equality (see Chapter 6 for limitations).
+
 **Proof sketch**: We construct this model using cubical sets enriched with smooth structure, where the interval [0,1] has its standard smooth structure, and composition operations preserve smoothness. Full details in Chapter 8.
 
 ```sctt
@@ -97,12 +99,13 @@ Self-driving cars and robots need smooth control with safety guarantees. SCTT pr
 - Smooth trajectory planning
 - Collision avoidance proofs
 
-#### 4. **Cryptographic Protocols**
+#### 4. **Cryptographic Protocols (Theoretical)**
 
-Modern cryptography increasingly uses continuous structures (lattices, isogenies). SCTT offers:
-- Verified implementations
-- Side-channel resistance proofs
-- Quantum-resistant protocols
+While SCTT's deterministic nature limits traditional cryptographic applications (see Chapter 6), it enables novel theoretical approaches:
+- Topological cryptographic primitives
+- Type-theoretic security proofs
+- Verification of cryptographic properties
+- Note: Requires external entropy sources for practical implementation
 
 ### Real-World Impact
 
@@ -123,10 +126,15 @@ stability_proof : ∀ (ε : ℝ₊) → ∃ (δ : ℝ₊) →
 stability_proof = construct_lyapunov_function
 ```
 
-This isn't hypothetical. Every SCTT program comes with mathematical guarantees that eliminate entire classes of errors. The type system would have caught:
-- Sensor input validation failures
-- Missing redundancy checks  
-- Unstable feedback loops
+This isn't hypothetical. SCTT programs come with strong mathematical guarantees that can eliminate certain classes of errors when properly specified. The type system could help catch:
+- Sensor input validation failures (when proper types are defined)
+- Missing redundancy checks (when specified in the type)
+- Unstable feedback loops (when stability requirements are encoded)
+
+However, SCTT has fundamental limitations (see Chapter 6):
+- Type checking is EXPTIME-complete, limiting practical scalability
+- Cannot handle discontinuous phenomena or true randomness
+- Chaotic systems remain unpredictable despite smooth structure
 
 ## 1.3 Historical Context {#history}
 
