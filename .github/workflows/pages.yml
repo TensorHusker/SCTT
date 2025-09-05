@@ -1,0 +1,81 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install mdbook
+        run: |
+          curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
+          source ~/.cargo/env
+          cargo install mdbook
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Build site
+        run: |
+          # Create public directory
+          mkdir -p public
+          
+          # Copy static files as the main site
+          cp -r static/* public/
+          
+          # Build book if book.toml exists, otherwise use existing book content
+          if [ -f "book.toml" ]; then
+            source ~/.cargo/env
+            mdbook build
+            cp -r book/html/* public/book/
+          else
+            # Copy book files directly
+            mkdir -p public/book
+            cp -r book/* public/book/
+          fi
+          
+          # Copy docs
+          mkdir -p public/docs
+          cp -r docs/* public/docs/
+          
+          # Ensure CNAME is in public directory
+          cp CNAME public/
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
