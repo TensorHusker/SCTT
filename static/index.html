@@ -168,9 +168,8 @@
             <a href="/" class="logo">SCTT</a>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
+                <li><a href="/docs/">Docs</a></li>
                 <li><a href="/book/">Book</a></li>
-                <li><a href="/playground">Playground</a></li>
-                <li><a href="/docs">Docs</a></li>
                 <li><a href="https://github.com/TensorHusker/SCTT">GitHub</a></li>
             </ul>
         </nav>
@@ -182,8 +181,8 @@
                 <h1>Smooth Cubical Type Theory</h1>
                 <p class="subtitle">Where Homotopy Meets Differential Geometry</p>
                 <div class="buttons">
-                    <a href="/book/" class="btn btn-primary">Read the Book</a>
-                    <a href="/playground" class="btn btn-secondary">Try Playground</a>
+                    <a href="/docs/" class="btn btn-primary">Read Docs</a>
+                    <a href="/book/" class="btn btn-secondary">Read Book</a>
                 </div>
             </section>
 
@@ -199,28 +198,28 @@ path i = λ x → (1-i) * f(x) + i * g(x)</pre>
 
             <section class="features">
                 <div class="feature">
-                    <h3>🎯 Pure Type Theory</h3>
-                    <p>Built from the ground up as a native implementation of smooth cubical type theory, not just a wrapper around existing systems.</p>
+                    <h3>📚 Comprehensive Documentation</h3>
+                    <p>Detailed guides, tutorials, and reference materials for learning and implementing Smooth Cubical Type Theory.</p>
                 </div>
                 <div class="feature">
-                    <h3>🎮 Runetika Integration</h3>
-                    <p>Leverage game-theoretic insights from Runetika player data to discover new proof strategies and patterns.</p>
+                    <h3>📖 Complete Book</h3>
+                    <p>The definitive guide to SCTT, covering theory, implementation, and practical applications from basics to advanced topics.</p>
                 </div>
                 <div class="feature">
-                    <h3>💎 Libertalia Economy</h3>
-                    <p>Proof-based economy that rewards novel theorem discovery and verification, creating a sustainable research ecosystem.</p>
+                    <h3>🔬 Research Foundation</h3>
+                    <p>Built on solid mathematical foundations combining homotopy type theory with differential geometry for verified computation.</p>
                 </div>
                 <div class="feature">
-                    <h3>🌐 Web-First Design</h3>
-                    <p>Interactive playground, collaborative proof editing, and real-time visualization - all in your browser.</p>
+                    <h3>🧮 Mathematical Rigor</h3>
+                    <p>Handles smooth functions and calculus natively with computational proofs of mathematical theorems.</p>
                 </div>
                 <div class="feature">
-                    <h3>📚 Research Blog</h3>
-                    <p>Follow our research progress, experiments, and discoveries through detailed blog posts and interactive examples.</p>
+                    <h3>🔧 Implementation Ready</h3>
+                    <p>Both Python and Rust implementations available, with clear examples and practical guidance for getting started.</p>
                 </div>
                 <div class="feature">
-                    <h3>🦀 Pure Rust</h3>
-                    <p>Fast, safe, and concurrent. Built entirely in Rust for performance and reliability.</p>
+                    <h3>🌐 Open Source</h3>
+                    <p>Freely available under MIT license with active development and community contributions welcome.</p>
                 </div>
             </section>
         </div>
@@ -233,81 +232,18 @@ path i = λ x → (1-i) * f(x) + i * g(x)</pre>
     </footer>
 
     <script>
-        // Simple client-side routing
-        function route() {
-            const path = window.location.pathname;
-            const app = document.getElementById('app');
-            
-            if (path === '/blog') {
-                loadBlog();
-            } else if (path === '/playground') {
-                loadPlayground();
-            }
-        }
-
-        async function loadBlog() {
-            const response = await fetch('/api/blog');
-            const posts = await response.json();
-            const app = document.getElementById('app');
-            
-            let html = '<h1>Research Blog</h1><div class="posts">';
-            for (const post of posts) {
-                html += `
-                    <article class="feature">
-                        <h2><a href="/blog/${post.slug}">${post.title}</a></h2>
-                        <p>${new Date(post.date).toLocaleDateString()}</p>
-                        <p>Reading time: ${post.reading_time} min</p>
-                    </article>
-                `;
-            }
-            html += '</div>';
-            app.innerHTML = html;
-        }
-
-        function loadPlayground() {
-            const app = document.getElementById('app');
-            app.innerHTML = `
-                <h1>SCTT Playground</h1>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-                    <div>
-                        <h3>Code</h3>
-                        <textarea id="code" style="width: 100%; height: 400px; font-family: monospace; padding: 1rem;">
--- Try some SCTT code!
-smooth f : C∞(ℝ, ℝ)
-f x = x² + sin(x)
-                        </textarea>
-                        <button onclick="runCode()" class="btn btn-primary" style="margin-top: 1rem;">Run</button>
-                    </div>
-                    <div>
-                        <h3>Output</h3>
-                        <pre id="output" style="background: #f8f9fa; padding: 1rem; min-height: 400px;">
-Output will appear here...
-                        </pre>
-                    </div>
-                </div>
-            `;
-        }
-
-        async function runCode() {
-            const code = document.getElementById('code').value;
-            const output = document.getElementById('output');
-            
-            try {
-                const response = await fetch('/api/typecheck', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ code })
+        // Simple interaction enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 });
-                const result = await response.json();
-                output.textContent = JSON.stringify(result, null, 2);
-            } catch (error) {
-                output.textContent = 'Error: ' + error.message;
-            }
-        }
-
-        // Initialize routing
-        window.addEventListener('popstate', route);
-        document.addEventListener('DOMContentLoaded', route);
+            });
+        });
     </script>
 </body>
 </html>
