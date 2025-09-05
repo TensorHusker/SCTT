@@ -39,19 +39,29 @@ jobs:
           cp -r static/* _site/
           
           # Copy the CNAME file for custom domain
-          cp CNAME _site/
+          if [ -f "CNAME" ]; then
+            cp CNAME _site/
+          fi
           
           # Create docs directory structure
           mkdir -p _site/docs
-          cp -r docs/* _site/docs/
+          if [ -d "docs" ]; then
+            rsync -a --exclude 'index.md' docs/ _site/docs/
+          fi
           
           # Create book directory structure  
           mkdir -p _site/book
-          cp -r book/* _site/book/
+          if [ -d "book" ]; then
+            rsync -a --exclude 'index.md' book/ _site/book/
+          fi
           
           # Copy important markdown files to the root
-          cp README.md _site/
-          cp LICENSE _site/
+          if [ -f "README.md" ]; then
+            cp README.md _site/
+          fi
+          if [ -f "LICENSE" ]; then
+            cp LICENSE _site/
+          fi
           
           # Create a simple docs index if it doesn't exist
           if [ ! -f "_site/docs/index.html" ]; then
