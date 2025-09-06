@@ -1,0 +1,244 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Create site structure
+        run: |
+          # Create the _site directory for GitHub Pages
+          mkdir -p _site
+          
+          # Copy the main static content
+          cp -r static/* _site/
+          
+          # Copy the CNAME file for custom domain
+          if [ -f "CNAME" ]; then
+            cp CNAME _site/
+          fi
+          
+          # Create docs directory structure
+          mkdir -p _site/docs
+          if [ -d "docs" ]; then
+            rsync -a --exclude 'index.md' docs/ _site/docs/
+          fi
+          
+          # Create book directory structure  
+          mkdir -p _site/book
+          if [ -d "book" ]; then
+            rsync -a --exclude 'index.md' book/ _site/book/
+          fi
+          
+          # Copy important markdown files to the root
+          if [ -f "README.md" ]; then
+            cp README.md _site/
+          fi
+          if [ -f "LICENSE" ]; then
+            cp LICENSE _site/
+          fi
+          
+          # Create a simple docs index if it doesn't exist
+          if [ ! -f "_site/docs/index.html" ]; then
+            cat > _site/docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>SCTT Documentation</title>
+              <style>
+                  body { 
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+                      margin: 40px; 
+                      line-height: 1.6; 
+                      color: #1a1a1a;
+                  }
+                  h1 { color: #6366f1; margin-bottom: 1rem; }
+                  h2 { color: #374151; margin-top: 2rem; margin-bottom: 1rem; }
+                  ul { padding-left: 0; }
+                  li { 
+                      list-style: none; 
+                      margin: 10px 0; 
+                      padding: 8px;
+                      border-left: 3px solid #6366f1;
+                      background: #f8f9fa;
+                  }
+                  a { 
+                      color: #6366f1; 
+                      text-decoration: none; 
+                      font-weight: 500;
+                  }
+                  a:hover { text-decoration: underline; }
+                  .home-link {
+                      display: inline-block;
+                      margin-top: 2rem;
+                      padding: 8px 16px;
+                      background: #6366f1;
+                      color: white;
+                      border-radius: 4px;
+                  }
+                  .home-link:hover {
+                      background: #4f46e5;
+                      text-decoration: none;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>SCTT Documentation</h1>
+              <p>Smooth Cubical Type Theory documentation and guides.</p>
+              <h2>Getting Started</h2>
+              <ul>
+                  <li><a href="guides/START_HERE.md">📚 Start Here - Your first steps with SCTT</a></li>
+                  <li><a href="guides/MATH_BACKGROUND.md">🧮 Math Background - Prerequisites and foundations</a></li>
+                  <li><a href="guides/PLAIN_ENGLISH_GUIDE.md">🗣️ Plain English Guide - SCTT explained simply</a></li>
+              </ul>
+              <h2>Theory and Implementation</h2>
+              <ul>
+                  <li><a href="guides/THEORY.md">🔬 Theory - Deep dive into the mathematics</a></li>
+                  <li><a href="guides/IMPLEMENTATION.md">⚙️ Implementation - Building SCTT systems</a></li>
+                  <li><a href="guides/DESIGN.md">🎨 Design - Architecture and patterns</a></li>
+              </ul>
+              <h2>Practical Guides</h2>
+              <ul>
+                  <li><a href="guides/PROBLEM_SETS.md">📝 Problem Sets - Practice exercises</a></li>
+                  <li><a href="guides/PREPARATION_ROADMAP.md">🗺️ Roadmap - Learning path</a></li>
+                  <li><a href="guides/PROJECT_STRUCTURE.md">📁 Project Structure - Codebase overview</a></li>
+              </ul>
+              <a href="/" class="home-link">← Back to Home</a>
+          </body>
+          </html>
+          EOF
+          fi
+          
+          # Create a simple book index if it doesn't exist
+          if [ ! -f "_site/book/index.html" ]; then
+            cat > _site/book/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>SCTT Book</title>
+              <style>
+                  body { 
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+                      margin: 40px; 
+                      line-height: 1.6; 
+                      color: #1a1a1a;
+                  }
+                  h1 { color: #6366f1; margin-bottom: 1rem; }
+                  h2 { color: #374151; margin-top: 2rem; margin-bottom: 1rem; }
+                  ul { padding-left: 0; }
+                  li { 
+                      list-style: none; 
+                      margin: 15px 0; 
+                      padding: 12px;
+                      border-left: 4px solid #8b5cf6;
+                      background: #f8f9fa;
+                      border-radius: 4px;
+                  }
+                  a { 
+                      color: #8b5cf6; 
+                      text-decoration: none; 
+                      font-weight: 500;
+                      font-size: 1.1rem;
+                  }
+                  a:hover { text-decoration: underline; }
+                  .description {
+                      color: #666;
+                      font-size: 0.9rem;
+                      margin-top: 4px;
+                  }
+                  .home-link {
+                      display: inline-block;
+                      margin-top: 2rem;
+                      padding: 8px 16px;
+                      background: #8b5cf6;
+                      color: white;
+                      border-radius: 4px;
+                  }
+                  .home-link:hover {
+                      background: #7c3aed;
+                      text-decoration: none;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>The Smooth Cubical Type Theory Book</h1>
+              <p>The definitive guide to Smooth Cubical Type Theory (SCTT), a revolutionary foundation for mathematics and computation that unifies homotopy type theory with differential geometry.</p>
+              
+              <h2>Table of Contents</h2>
+              <ul>
+                  <li>
+                      <a href="README.md">📖 About This Book</a>
+                      <div class="description">Introduction, reading guide, and book structure</div>
+                  </li>
+                  <li>
+                      <a href="chapter_01.md">Chapter 1: Foundations</a>
+                      <div class="description">Introduction to type theory and mathematical foundations</div>
+                  </li>
+                  <li>
+                      <a href="chapter_02.md">Chapter 2: Cubical Structure</a>
+                      <div class="description">Understanding cubical type theory and path types</div>
+                  </li>
+                  <li>
+                      <a href="chapter_03.md">Chapter 3: Smooth Structures</a>
+                      <div class="description">Differential geometry meets type theory</div>
+                  </li>
+                  <li>
+                      <a href="SUMMARY.md">📋 Summary</a>
+                      <div class="description">Book overview and chapter summaries</div>
+                  </li>
+              </ul>
+              
+              <a href="/" class="home-link">← Back to Home</a>
+          </body>
+          </html>
+          EOF
+          fi
+          
+          # List the contents to verify
+          echo "Site structure:"
+          find _site -type f | head -25
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
