@@ -1,0 +1,112 @@
+-- Smooth manifolds and differential geometry in Alien
+module SmoothManifolds where
+
+-- Define a smooth manifold
+Manifold : Type → Type
+Manifold M = (x : M) → ∃(n : ℕ) × LocalChart M n x
+
+-- Local chart (coordinate system)
+LocalChart : Type → ℕ → Type → Type
+LocalChart M n x = 
+  ∃(U : OpenSet M x) × 
+  ∃(φ : U ⇒ ℝ^n) × 
+  IsHomeomorphism φ
+
+-- Tangent space at a point
+TangentSpace : (M : Manifold) → M → Type
+TangentSpace M p = 
+  { v : DerivationAt M p | IsLinear v }
+
+-- Tangent bundle
+TangentBundle : Manifold M → Type
+TangentBundle M = (p : M) × TangentSpace M p
+
+-- Vector field as smooth section of tangent bundle
+VectorField : Manifold M → Type
+VectorField M = (p : M) ⇒ TangentSpace M p
+
+-- Differential forms
+DifferentialForm : ℕ → Manifold M → Type
+DifferentialForm k M = 
+  (p : M) ⇒ AlternatingForm k (TangentSpace M p) ℝ
+
+-- Exterior derivative (automatically smooth)
+d : DifferentialForm n M ⇒ DifferentialForm (n+1) M
+d ω = <p> <v₀...vₙ> 
+  sum i from 0 to n of
+    (-1)^i * (∂(ω(omit vᵢ)) along vᵢ)
+
+-- de Rham cohomology
+deRhamCohomology : ℕ → Manifold M → Type
+deRhamCohomology n M = 
+  ClosedForms n M / ExactForms n M
+  where
+    ClosedForms n M = { ω : DifferentialForm n M | d ω ≡ 0 }
+    ExactForms n M = { d α | α : DifferentialForm (n-1) M }
+
+-- Smooth path on manifold
+SmoothPath : Manifold M → M → M → Type
+SmoothPath M a b = 
+  ∃(γ : [0,1] ⇒ M) × (γ 0 ≡ a) × (γ 1 ≡ b)
+
+-- Parallel transport along path
+parallelTransport : 
+  {M : Manifold} → 
+  Connection M → 
+  SmoothPath M a b → 
+  TangentSpace M a ⇒ TangentSpace M b
+parallelTransport ∇ γ v₀ = 
+  solve (∇_{γ'(t)} V(t) ≡ 0) with V(0) = v₀
+
+-- Riemannian metric
+RiemannianMetric : Manifold M → Type
+RiemannianMetric M = 
+  (p : M) ⇒ InnerProduct (TangentSpace M p)
+
+-- Geodesic equation
+geodesic : RiemannianMetric M → M → TangentSpace M p → SmoothPath M p
+geodesic g p v = 
+  solve (∇_{γ'} γ' ≡ 0) with γ(0) = p and γ'(0) = v
+  where ∇ = LeviCivita g
+
+-- Curvature tensor
+RiemannCurvature : Connection M → Type
+RiemannCurvature ∇ = 
+  (X Y Z : VectorField M) ⇒ 
+    ∇_X (∇_Y Z) - ∇_Y (∇_X Z) - ∇_{[X,Y]} Z
+
+-- Example: 2-sphere as smooth manifold
+S² : Manifold
+S² = { (x,y,z) : ℝ³ | x² + y² + z² ≡ 1 }
+
+-- Stereographic projection charts
+northChart : LocalChart S² 2 northPole
+northChart = (S² \ {northPole}, stereographicN)
+  where stereographicN (x,y,z) = (x/(1-z), y/(1-z))
+
+southChart : LocalChart S² 2 southPole  
+southChart = (S² \ {southPole}, stereographicS)
+  where stereographicS (x,y,z) = (x/(1+z), y/(1+z))
+
+-- Transition function (smooth!)
+transition : (ℝ² \ {0}) ⇒ (ℝ² \ {0})
+transition (u,v) = (u/(u²+v²), v/(u²+v²))
+
+-- Area form on S²
+areaForm : DifferentialForm 2 S²
+areaForm = sin(θ) dθ ∧ dφ  -- In spherical coordinates
+
+-- Total area via integration
+sphereArea : ℝ
+sphereArea = ∫[S²] areaForm  -- Result: 4π
+
+-- Hopf fibration S³ → S²
+hopf : S³ ⇒ S²
+hopf (z₁, z₂) = 
+  ( 2 * Re(z₁ * conj z₂)
+  , 2 * Im(z₁ * conj z₂)  
+  , |z₁|² - |z₂|² )
+
+-- Fiber over point is S¹ (smooth!)
+hopfFiber : (p : S²) → Path Type (hopf⁻¹ p) S¹
+hopfFiber p = smoothEquivalence
