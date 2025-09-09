@@ -1,0 +1,157 @@
+-- Quantum computing with smooth operations in Alien
+module QuantumComputing where
+
+-- Complex numbers with smooth structure
+ℂ : Smooth Type
+ℂ = ℝ × ℝ  -- Real and imaginary parts
+
+-- Quantum state as unit vector in Hilbert space
+Qubit : Type
+Qubit = { (α, β) : ℂ × ℂ | |α|² + |β|² ≡ 1 }
+
+-- Bloch sphere representation (smooth!)
+blochSphere : Qubit ≃ S²
+blochSphere (α, β) = 
+  let θ = 2 * arccos |α| in
+  let φ = arg(β/α) in
+  (sin θ * cos φ, sin θ * sin φ, cos θ)
+
+-- Quantum gates as smooth unitary operations
+QuantumGate : ℕ → Type
+QuantumGate n = { U : Matrix ℂ (2^n) (2^n) | U† * U ≡ I }
+
+-- Pauli matrices (smooth paths in SU(2))
+pauliX : QuantumGate 1
+pauliX = [[0, 1], [1, 0]]
+
+pauliY : QuantumGate 1
+pauliY = [[0, -i], [i, 0]]
+
+pauliZ : QuantumGate 1
+pauliZ = [[1, 0], [0, -1]]
+
+-- Hadamard gate via smooth rotation
+hadamard : QuantumGate 1
+hadamard = (1/√2) * [[1, 1], [1, -1]]
+
+-- Smooth rotation gates
+rotateX : ℝ ⇒ QuantumGate 1
+rotateX θ = 
+  [[cos(θ/2), -i*sin(θ/2)],
+   [-i*sin(θ/2), cos(θ/2)]]
+
+rotateY : ℝ ⇒ QuantumGate 1
+rotateY θ = 
+  [[cos(θ/2), -sin(θ/2)],
+   [sin(θ/2), cos(θ/2)]]
+
+rotateZ : ℝ ⇒ QuantumGate 1
+rotateZ θ = 
+  [[exp(-i*θ/2), 0],
+   [0, exp(i*θ/2)]]
+
+-- CNOT gate
+cnot : QuantumGate 2
+cnot = [[1,0,0,0],
+        [0,1,0,0],
+        [0,0,0,1],
+        [0,0,1,0]]
+
+-- Toffoli gate (controlled-controlled-NOT)
+toffoli : QuantumGate 3
+toffoli = I₆ ⊕ pauliX  -- Block diagonal
+
+-- Quantum Fourier Transform (smooth!)
+qft : (n : ℕ) → QuantumGate n
+qft n = 
+  let ω = exp(2πi / 2^n) in
+  [[ω^(j*k) / √(2^n) | k <- [0..2^n-1]] | j <- [0..2^n-1]]
+
+-- Entanglement as higher-dimensional path
+EntanglementPath : Qubit × Qubit → Path² (Qubit × Qubit)
+EntanglementPath (q₁, q₂) = <i j>
+  let phase = smooth (i * j * π) in
+  (rotateZ phase q₁, rotateZ (-phase) q₂)
+
+-- Bell states
+bell00 : Qubit × Qubit
+bell00 = (1/√2) * (|00⟩ + |11⟩)
+
+bell01 : Qubit × Qubit  
+bell01 = (1/√2) * (|01⟩ + |10⟩)
+
+bell10 : Qubit × Qubit
+bell10 = (1/√2) * (|00⟩ - |11⟩)
+
+bell11 : Qubit × Qubit
+bell11 = (1/√2) * (|01⟩ - |10⟩)
+
+-- Measurement (probabilistic)
+measure : Qubit → IO 𝔹
+measure q = do
+  r <- random
+  return (r < |amplitude₀ q|²)
+
+-- Quantum teleportation protocol
+teleport : Qubit → EntangledPair → IO Qubit
+teleport ψ (epr₁, epr₂) = do
+  -- Bell measurement on ψ and epr₁
+  (b₁, b₂) <- bellMeasure ψ epr₁
+  
+  -- Apply corrections based on measurement
+  let corrected = match (b₁, b₂) with
+    | (0, 0) => epr₂
+    | (0, 1) => pauliX epr₂
+    | (1, 0) => pauliZ epr₂
+    | (1, 1) => pauliZ (pauliX epr₂)
+  
+  return corrected
+
+-- Grover's algorithm with smooth oracle
+grover : (oracle : 𝔹^n → 𝔹) → ℕ → Qubit^n
+grover oracle iterations = 
+  let initial = uniform n in
+  let diffusion = 2*|ψ⟩⟨ψ| - I in
+  iterate iterations (oracleGate ∘ diffusion) initial
+
+-- Quantum phase estimation
+phaseEstimation : QuantumGate n → Qubit^n → ℝ
+phaseEstimation U eigenstate = 
+  let ancilla = hadamard^m |0⟩^m in
+  let controlled = controlledU^(2^k) for k in [0..m-1] in
+  let result = qft† ancilla in
+  measurePhase result
+
+-- Adiabatic quantum computation (smooth evolution)
+adiabatic : Hamiltonian → Hamiltonian → Time → Qubit^n
+adiabatic H₀ H₁ T = 
+  let H(t) = (1 - t/T) * H₀ + (t/T) * H₁ in
+  let evolution = smooth-evolve H from 0 to T in
+  evolution groundState(H₀)
+
+-- VQE (Variational Quantum Eigensolver)
+vqe : Hamiltonian → (θ : ℝ^k) ⇒ ℝ
+vqe H θ = 
+  let ansatz = parameterizedCircuit θ in
+  let ψ = ansatz |0⟩^n in
+  ⟨ψ| H |ψ⟩
+
+-- Optimize VQE parameters smoothly
+optimizeVQE : Hamiltonian → ℝ^k
+optimizeVQE H = 
+  let energy = vqe H in
+  let gradient = ∇ energy in  -- Automatic differentiation!
+  gradientDescent energy gradient
+
+-- Quantum error correction with smooth syndrome extraction
+quantumErrorCorrect : Code n k → NoisyQubit^n → Qubit^k
+quantumErrorCorrect code noisy = 
+  let syndrome = smoothSyndromeExtract code noisy in
+  let correction = lookupCorrection syndrome in
+  applyCorrection correction noisy
+
+-- Topological quantum computing via anyons
+anyonBraid : Path² (Anyon × Anyon)
+anyonBraid = <i j>
+  let θ = smooth (2π * i * j) in
+  exchangeAnyons θ

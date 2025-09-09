@@ -1,0 +1,56 @@
+-- Basic examples showcasing Alien language features
+module BasicExamples where
+
+-- Simple function with type annotation
+identity : (A : Type) → A → A
+identity A x = x
+
+-- Dependent types
+Vec : Type → ℕ → Type
+Vec A zero = Unit
+Vec A (suc n) = A × Vec A n
+
+-- Length-preserving map
+map : (A B : Type) → (n : ℕ) → (A → B) → Vec A n → Vec B n
+map A B zero f unit = unit
+map A B (suc n) f (x, xs) = (f x, map A B n f xs)
+
+-- Path types for equality
+symmetry : (A : Type) → (x y : A) → Path A x y → Path A y x
+symmetry A x y p = <i> p @ (~i)
+
+-- Function extensionality
+funext : (A B : Type) → (f g : A → B) → 
+         ((x : A) → Path B (f x) (g x)) → 
+         Path (A → B) f g
+funext A B f g h = <i> λ x → h x @ i
+
+-- Higher inductive type: Circle
+windingNumber : S¹ → ℤ
+windingNumber = λ x → match x with
+  | base => 0
+  | loop @ i => if i < 0.5 then i * 2 else (1 - i) * 2
+
+-- Smooth functions
+smoothStep : ℝ ⇒ ℝ
+smoothStep x = 
+  if x <= 0 then 0
+  else if x >= 1 then 1
+  else 3 * x^2 - 2 * x^3
+
+-- Derivative computed automatically
+smoothStep' : ℝ ⇒ ℝ
+smoothStep' = ∂ smoothStep   -- 6x - 6x²
+
+-- Integration example
+area : ℝ
+area = ∫ smoothStep dx from 0 to 1   -- Result: 0.5
+
+-- Monadic do-notation
+readAndDouble : IO ℝ
+readAndDouble = do
+  input <- readLine
+  let n = parseFloat input
+  let doubled = n * 2
+  print ("Result: " ++ show doubled)
+  return doubled
