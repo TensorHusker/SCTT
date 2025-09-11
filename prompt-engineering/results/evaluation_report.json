@@ -1,0 +1,1114 @@
+{
+  "evaluations": [
+    {
+      "technique_id": "smooth_reasoning",
+      "technique_name": "Smooth Reasoning Manifold",
+      "category": "mathematical",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.8333333333333333), weight=0.25, sub_scores={'problem_solving': 0.85, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows strong problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7833333333333332), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.8, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.7999999999999999), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.9, 'actionability': 0.65}, justification='Highly practical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.7833333333333333), weight=0.1, sub_scores={'simplicity': 0.85, 'beauty': 0.85, 'minimalism': 0.65}, justification='Elegant conceptual design')"
+      },
+      "overall_score": 0.751,
+      "strengths": [
+        "Excellent effectiveness (0.83)",
+        "Good clarity (0.78)",
+        "Good practicality (0.80)",
+        "Good elegance (0.78)"
+      ],
+      "weaknesses": [
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)"
+      ],
+      "best_use_cases": [
+        "Real-world applications",
+        "Mathematical proofs",
+        "Complex optimization problems",
+        "Optimization",
+        "Educational contexts"
+      ],
+      "recommendation": "RECOMMENDED - Strong technique for specific use cases"
+    },
+    {
+      "technique_id": "metamathematical_compass",
+      "technique_name": "Metamathematical Compass",
+      "category": "formal",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.7499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7833333333333332), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.8, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.7999999999999999), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.9, 'actionability': 0.65}, justification='Highly practical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.7333333333333333), weight=0.1, sub_scores={'simplicity': 0.85, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.725,
+      "strengths": [
+        "Good effectiveness (0.75)",
+        "Good clarity (0.78)",
+        "Good practicality (0.80)",
+        "Good elegance (0.73)"
+      ],
+      "weaknesses": [
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)"
+      ],
+      "best_use_cases": [
+        "Real-world applications",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "reality_refactoring",
+      "technique_name": "Reality Refactoring Pattern",
+      "category": "creative",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.8166666666666668), weight=0.2, sub_scores={'novelty': 0.95, 'creativity': 0.9, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.72,
+      "strengths": [
+        "Excellent innovation (0.82)",
+        "Good clarity (0.77)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Creative problem solving",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "recursive_meta",
+      "technique_name": "Recursive Meta-Prompt Pattern",
+      "category": "meta_cognitive",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.8166666666666668), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.85}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.7166666666666667), weight=0.15, sub_scores={'thoroughness': 0.9, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.707,
+      "strengths": [
+        "Excellent clarity (0.82)",
+        "Good depth (0.72)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Meta-learning",
+        "Self-improvement",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "temporal_braiding",
+      "technique_name": "Temporal Braiding Technique",
+      "category": "temporal",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.7833333333333333), weight=0.15, sub_scores={'thoroughness': 0.9, 'nuance': 0.65, 'edge_cases': 0.8}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.707,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good depth (0.78)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Long-term planning",
+        "Historical analysis",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "godel_loop",
+      "technique_name": "G\u00f6del Loop Instruction",
+      "category": "self_reference",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.8166666666666668), weight=0.2, sub_scores={'novelty': 0.95, 'creativity': 0.65, 'unexpected_insights': 0.85}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7166666666666667), weight=0.2, sub_scores={'understandability': 0.7, 'structure': 0.75, 'coherence': 0.7}, justification='Complex conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'implementability': 0.6499999999999999, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.703,
+      "strengths": [
+        "Excellent innovation (0.82)",
+        "Good clarity (0.72)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate practicality (0.68)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Creative problem solving"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "bootstrap_paradox",
+      "technique_name": "Bootstrap Paradox Prompt",
+      "category": "paradoxical",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.8166666666666668), weight=0.2, sub_scores={'novelty': 0.95, 'creativity': 0.65, 'unexpected_insights': 0.85}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7166666666666667), weight=0.2, sub_scores={'understandability': 0.7, 'structure': 0.75, 'coherence': 0.7}, justification='Complex conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.7000000000000001), weight=0.1, sub_scores={'implementability': 0.7, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6499999999999999), weight=0.1, sub_scores={'simplicity': 0.6, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.702,
+      "strengths": [
+        "Excellent innovation (0.82)",
+        "Good clarity (0.72)",
+        "Good practicality (0.70)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate elegance (0.65)"
+      ],
+      "best_use_cases": [
+        "Creative problem solving",
+        "Resolving contradictions",
+        "Self-referential systems"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "consciousness_bridge",
+      "technique_name": "Consciousness Bridge Protocol",
+      "category": "perspective_shift",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.7166666666666667), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.85, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.7166666666666667), weight=0.1, sub_scores={'simplicity': 0.7999999999999999, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.7,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good depth (0.72)",
+        "Good practicality (0.75)",
+        "Good elegance (0.72)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)"
+      ],
+      "best_use_cases": [
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "emergent_intelligence",
+      "technique_name": "Emergent Intelligence Protocol",
+      "category": "distributed",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.7166666666666668), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.8}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.697,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good depth (0.72)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "strange_attractor",
+      "technique_name": "Strange Attractor Method",
+      "category": "dynamical",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.7666666666666666), weight=0.1, sub_scores={'simplicity': 0.7999999999999999, 'beauty': 0.85, 'minimalism': 0.65}, justification='Elegant conceptual design')"
+      },
+      "overall_score": 0.695,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good practicality (0.75)",
+        "Good elegance (0.77)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)"
+      ],
+      "best_use_cases": [
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "quantum_superposition",
+      "technique_name": "Quantum Superposition Approach",
+      "category": "quantum",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.7333333333333334), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.85}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7333333333333334), weight=0.2, sub_scores={'understandability': 0.75, 'structure': 0.75, 'coherence': 0.7}, justification='Complex conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.7000000000000001), weight=0.1, sub_scores={'implementability': 0.7, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.692,
+      "strengths": [
+        "Good innovation (0.73)",
+        "Good clarity (0.73)",
+        "Good practicality (0.70)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Probabilistic reasoning",
+        "Parallel exploration"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "dimensional_collapse",
+      "technique_name": "Dimensional Collapse Technique",
+      "category": "abstract_reasoning",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.687,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "hyperdimensional_projection",
+      "technique_name": "Hyperdimensional Projection Method",
+      "category": "dimensional",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7333333333333334), weight=0.2, sub_scores={'understandability': 0.75, 'structure': 0.75, 'coherence': 0.7}, justification='Complex conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.7166666666666667), weight=0.15, sub_scores={'thoroughness': 0.9, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.7166666666666667), weight=0.1, sub_scores={'implementability': 0.75, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.687,
+      "strengths": [
+        "Good clarity (0.73)",
+        "Good depth (0.72)",
+        "Good practicality (0.72)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "alien_archaeology",
+      "technique_name": "Alien Archaeology Method",
+      "category": "reverse_engineering",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.687,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "cognitive_parallax",
+      "technique_name": "Cognitive Parallax Technique",
+      "category": "perspective",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.687,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    }
+  ],
+  "rankings": {
+    "overall": [
+      [
+        "Smooth Reasoning Manifold",
+        0.751
+      ],
+      [
+        "Metamathematical Compass",
+        0.725
+      ],
+      [
+        "Reality Refactoring Pattern",
+        0.72
+      ],
+      [
+        "Recursive Meta-Prompt Pattern",
+        0.707
+      ],
+      [
+        "Temporal Braiding Technique",
+        0.707
+      ],
+      [
+        "G\u00f6del Loop Instruction",
+        0.703
+      ],
+      [
+        "Bootstrap Paradox Prompt",
+        0.702
+      ],
+      [
+        "Consciousness Bridge Protocol",
+        0.7
+      ],
+      [
+        "Emergent Intelligence Protocol",
+        0.697
+      ],
+      [
+        "Strange Attractor Method",
+        0.695
+      ],
+      [
+        "Quantum Superposition Approach",
+        0.692
+      ],
+      [
+        "Dimensional Collapse Technique",
+        0.687
+      ],
+      [
+        "Hyperdimensional Projection Method",
+        0.687
+      ],
+      [
+        "Alien Archaeology Method",
+        0.687
+      ],
+      [
+        "Cognitive Parallax Technique",
+        0.687
+      ]
+    ],
+    "by_effectiveness": [
+      [
+        "Smooth Reasoning Manifold",
+        0.8333333333333333
+      ],
+      [
+        "Metamathematical Compass",
+        0.7499999999999999
+      ],
+      [
+        "Reality Refactoring Pattern",
+        0.6499999999999999
+      ],
+      [
+        "Recursive Meta-Prompt Pattern",
+        0.6499999999999999
+      ],
+      [
+        "Temporal Braiding Technique",
+        0.6499999999999999
+      ],
+      [
+        "G\u00f6del Loop Instruction",
+        0.6499999999999999
+      ],
+      [
+        "Bootstrap Paradox Prompt",
+        0.6499999999999999
+      ],
+      [
+        "Consciousness Bridge Protocol",
+        0.6499999999999999
+      ],
+      [
+        "Emergent Intelligence Protocol",
+        0.6499999999999999
+      ],
+      [
+        "Strange Attractor Method",
+        0.6499999999999999
+      ],
+      [
+        "Quantum Superposition Approach",
+        0.6499999999999999
+      ],
+      [
+        "Dimensional Collapse Technique",
+        0.6499999999999999
+      ],
+      [
+        "Hyperdimensional Projection Method",
+        0.6499999999999999
+      ],
+      [
+        "Alien Archaeology Method",
+        0.6499999999999999
+      ],
+      [
+        "Cognitive Parallax Technique",
+        0.6499999999999999
+      ]
+    ],
+    "by_innovation": [
+      [
+        "Reality Refactoring Pattern",
+        0.8166666666666668
+      ],
+      [
+        "G\u00f6del Loop Instruction",
+        0.8166666666666668
+      ],
+      [
+        "Bootstrap Paradox Prompt",
+        0.8166666666666668
+      ],
+      [
+        "Quantum Superposition Approach",
+        0.7333333333333334
+      ],
+      [
+        "Smooth Reasoning Manifold",
+        0.65
+      ],
+      [
+        "Metamathematical Compass",
+        0.65
+      ],
+      [
+        "Recursive Meta-Prompt Pattern",
+        0.65
+      ],
+      [
+        "Temporal Braiding Technique",
+        0.65
+      ],
+      [
+        "Consciousness Bridge Protocol",
+        0.65
+      ],
+      [
+        "Emergent Intelligence Protocol",
+        0.65
+      ],
+      [
+        "Strange Attractor Method",
+        0.65
+      ],
+      [
+        "Dimensional Collapse Technique",
+        0.65
+      ],
+      [
+        "Hyperdimensional Projection Method",
+        0.65
+      ],
+      [
+        "Alien Archaeology Method",
+        0.65
+      ],
+      [
+        "Cognitive Parallax Technique",
+        0.65
+      ]
+    ],
+    "by_clarity": [
+      [
+        "Recursive Meta-Prompt Pattern",
+        0.8166666666666668
+      ],
+      [
+        "Smooth Reasoning Manifold",
+        0.7833333333333332
+      ],
+      [
+        "Metamathematical Compass",
+        0.7833333333333332
+      ],
+      [
+        "Reality Refactoring Pattern",
+        0.7666666666666666
+      ],
+      [
+        "Temporal Braiding Technique",
+        0.7666666666666666
+      ],
+      [
+        "Consciousness Bridge Protocol",
+        0.7666666666666666
+      ],
+      [
+        "Emergent Intelligence Protocol",
+        0.7666666666666666
+      ],
+      [
+        "Strange Attractor Method",
+        0.7666666666666666
+      ],
+      [
+        "Dimensional Collapse Technique",
+        0.7666666666666666
+      ],
+      [
+        "Alien Archaeology Method",
+        0.7666666666666666
+      ],
+      [
+        "Cognitive Parallax Technique",
+        0.7666666666666666
+      ],
+      [
+        "Quantum Superposition Approach",
+        0.7333333333333334
+      ],
+      [
+        "Hyperdimensional Projection Method",
+        0.7333333333333334
+      ],
+      [
+        "G\u00f6del Loop Instruction",
+        0.7166666666666667
+      ],
+      [
+        "Bootstrap Paradox Prompt",
+        0.7166666666666667
+      ]
+    ],
+    "by_depth": [
+      [
+        "Temporal Braiding Technique",
+        0.7833333333333333
+      ],
+      [
+        "Emergent Intelligence Protocol",
+        0.7166666666666668
+      ],
+      [
+        "Recursive Meta-Prompt Pattern",
+        0.7166666666666667
+      ],
+      [
+        "Consciousness Bridge Protocol",
+        0.7166666666666667
+      ],
+      [
+        "Hyperdimensional Projection Method",
+        0.7166666666666667
+      ],
+      [
+        "Smooth Reasoning Manifold",
+        0.65
+      ],
+      [
+        "Metamathematical Compass",
+        0.65
+      ],
+      [
+        "Reality Refactoring Pattern",
+        0.65
+      ],
+      [
+        "G\u00f6del Loop Instruction",
+        0.65
+      ],
+      [
+        "Bootstrap Paradox Prompt",
+        0.65
+      ],
+      [
+        "Strange Attractor Method",
+        0.65
+      ],
+      [
+        "Quantum Superposition Approach",
+        0.65
+      ],
+      [
+        "Dimensional Collapse Technique",
+        0.65
+      ],
+      [
+        "Alien Archaeology Method",
+        0.65
+      ],
+      [
+        "Cognitive Parallax Technique",
+        0.65
+      ]
+    ],
+    "by_practicality": [
+      [
+        "Smooth Reasoning Manifold",
+        0.7999999999999999
+      ],
+      [
+        "Metamathematical Compass",
+        0.7999999999999999
+      ],
+      [
+        "Reality Refactoring Pattern",
+        0.75
+      ],
+      [
+        "Recursive Meta-Prompt Pattern",
+        0.75
+      ],
+      [
+        "Temporal Braiding Technique",
+        0.75
+      ],
+      [
+        "Consciousness Bridge Protocol",
+        0.75
+      ],
+      [
+        "Emergent Intelligence Protocol",
+        0.75
+      ],
+      [
+        "Strange Attractor Method",
+        0.75
+      ],
+      [
+        "Dimensional Collapse Technique",
+        0.75
+      ],
+      [
+        "Alien Archaeology Method",
+        0.75
+      ],
+      [
+        "Cognitive Parallax Technique",
+        0.75
+      ],
+      [
+        "Hyperdimensional Projection Method",
+        0.7166666666666667
+      ],
+      [
+        "Bootstrap Paradox Prompt",
+        0.7000000000000001
+      ],
+      [
+        "Quantum Superposition Approach",
+        0.7000000000000001
+      ],
+      [
+        "G\u00f6del Loop Instruction",
+        0.6833333333333332
+      ]
+    ],
+    "by_elegance": [
+      [
+        "Smooth Reasoning Manifold",
+        0.7833333333333333
+      ],
+      [
+        "Strange Attractor Method",
+        0.7666666666666666
+      ],
+      [
+        "Metamathematical Compass",
+        0.7333333333333333
+      ],
+      [
+        "Consciousness Bridge Protocol",
+        0.7166666666666667
+      ],
+      [
+        "Reality Refactoring Pattern",
+        0.6833333333333332
+      ],
+      [
+        "Recursive Meta-Prompt Pattern",
+        0.6833333333333332
+      ],
+      [
+        "Temporal Braiding Technique",
+        0.6833333333333332
+      ],
+      [
+        "G\u00f6del Loop Instruction",
+        0.6833333333333332
+      ],
+      [
+        "Emergent Intelligence Protocol",
+        0.6833333333333332
+      ],
+      [
+        "Quantum Superposition Approach",
+        0.6833333333333332
+      ],
+      [
+        "Dimensional Collapse Technique",
+        0.6833333333333332
+      ],
+      [
+        "Hyperdimensional Projection Method",
+        0.6833333333333332
+      ],
+      [
+        "Alien Archaeology Method",
+        0.6833333333333332
+      ],
+      [
+        "Cognitive Parallax Technique",
+        0.6833333333333332
+      ],
+      [
+        "Bootstrap Paradox Prompt",
+        0.6499999999999999
+      ]
+    ]
+  },
+  "statistics": {
+    "mean_score": 0.7031333333333333,
+    "std_dev": 0.01705624681914386,
+    "max_score": 0.751,
+    "min_score": 0.687,
+    "median_score": 0.7
+  },
+  "top_techniques": [
+    {
+      "technique_id": "smooth_reasoning",
+      "technique_name": "Smooth Reasoning Manifold",
+      "category": "mathematical",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.8333333333333333), weight=0.25, sub_scores={'problem_solving': 0.85, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows strong problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7833333333333332), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.8, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.7999999999999999), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.9, 'actionability': 0.65}, justification='Highly practical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.7833333333333333), weight=0.1, sub_scores={'simplicity': 0.85, 'beauty': 0.85, 'minimalism': 0.65}, justification='Elegant conceptual design')"
+      },
+      "overall_score": 0.751,
+      "strengths": [
+        "Excellent effectiveness (0.83)",
+        "Good clarity (0.78)",
+        "Good practicality (0.80)",
+        "Good elegance (0.78)"
+      ],
+      "weaknesses": [
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)"
+      ],
+      "best_use_cases": [
+        "Real-world applications",
+        "Mathematical proofs",
+        "Complex optimization problems",
+        "Optimization",
+        "Educational contexts"
+      ],
+      "recommendation": "RECOMMENDED - Strong technique for specific use cases"
+    },
+    {
+      "technique_id": "metamathematical_compass",
+      "technique_name": "Metamathematical Compass",
+      "category": "formal",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.7499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7833333333333332), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.8, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.7999999999999999), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.9, 'actionability': 0.65}, justification='Highly practical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.7333333333333333), weight=0.1, sub_scores={'simplicity': 0.85, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.725,
+      "strengths": [
+        "Good effectiveness (0.75)",
+        "Good clarity (0.78)",
+        "Good practicality (0.80)",
+        "Good elegance (0.73)"
+      ],
+      "weaknesses": [
+        "Moderate innovation (0.65)",
+        "Moderate depth (0.65)"
+      ],
+      "best_use_cases": [
+        "Real-world applications",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "reality_refactoring",
+      "technique_name": "Reality Refactoring Pattern",
+      "category": "creative",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.8166666666666668), weight=0.2, sub_scores={'novelty': 0.95, 'creativity': 0.9, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.65), weight=0.15, sub_scores={'thoroughness': 0.7, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.72,
+      "strengths": [
+        "Excellent innovation (0.82)",
+        "Good clarity (0.77)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate depth (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Creative problem solving",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "recursive_meta",
+      "technique_name": "Recursive Meta-Prompt Pattern",
+      "category": "meta_cognitive",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.8166666666666668), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.85}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.7166666666666667), weight=0.15, sub_scores={'thoroughness': 0.9, 'nuance': 0.65, 'edge_cases': 0.6}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.707,
+      "strengths": [
+        "Excellent clarity (0.82)",
+        "Good depth (0.72)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Meta-learning",
+        "Self-improvement",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    },
+    {
+      "technique_id": "temporal_braiding",
+      "technique_name": "Temporal Braiding Technique",
+      "category": "temporal",
+      "dimension_scores": {
+        "effectiveness": "EvaluationScore(dimension='effectiveness', score=np.float64(0.6499999999999999), weight=0.25, sub_scores={'problem_solving': 0.6, 'accuracy': 0.7, 'completeness': 0.65}, justification='Technique shows moderate problem-solving capability')",
+        "innovation": "EvaluationScore(dimension='innovation', score=np.float64(0.65), weight=0.2, sub_scores={'novelty': 0.7, 'creativity': 0.65, 'unexpected_insights': 0.6}, justification='Moderately innovative approach to problem-solving')",
+        "clarity": "EvaluationScore(dimension='clarity', score=np.float64(0.7666666666666666), weight=0.2, sub_scores={'understandability': 0.85, 'structure': 0.75, 'coherence': 0.7}, justification='Clear conceptual framework')",
+        "depth": "EvaluationScore(dimension='depth', score=np.float64(0.7833333333333333), weight=0.15, sub_scores={'thoroughness': 0.9, 'nuance': 0.65, 'edge_cases': 0.8}, justification='Provides moderate analytical insight')",
+        "practicality": "EvaluationScore(dimension='practicality', score=np.float64(0.75), weight=0.1, sub_scores={'implementability': 0.85, 'real_world_applicability': 0.75, 'actionability': 0.65}, justification='More theoretical approach')",
+        "elegance": "EvaluationScore(dimension='elegance', score=np.float64(0.6833333333333332), weight=0.1, sub_scores={'simplicity': 0.7, 'beauty': 0.7, 'minimalism': 0.65}, justification='Standard conceptual design')"
+      },
+      "overall_score": 0.707,
+      "strengths": [
+        "Good clarity (0.77)",
+        "Good depth (0.78)",
+        "Good practicality (0.75)"
+      ],
+      "weaknesses": [
+        "Moderate effectiveness (0.65)",
+        "Moderate innovation (0.65)",
+        "Moderate elegance (0.68)"
+      ],
+      "best_use_cases": [
+        "Long-term planning",
+        "Historical analysis",
+        "Educational contexts"
+      ],
+      "recommendation": "SITUATIONAL - Useful in appropriate contexts"
+    }
+  ],
+  "evaluation_summary": {
+    "category_leaders": {
+      "mathematical": {
+        "technique": "Smooth Reasoning Manifold",
+        "score": 0.751
+      },
+      "formal": {
+        "technique": "Metamathematical Compass",
+        "score": 0.725
+      },
+      "creative": {
+        "technique": "Reality Refactoring Pattern",
+        "score": 0.72
+      },
+      "meta_cognitive": {
+        "technique": "Recursive Meta-Prompt Pattern",
+        "score": 0.707
+      },
+      "temporal": {
+        "technique": "Temporal Braiding Technique",
+        "score": 0.707
+      },
+      "self_reference": {
+        "technique": "G\u00f6del Loop Instruction",
+        "score": 0.703
+      },
+      "paradoxical": {
+        "technique": "Bootstrap Paradox Prompt",
+        "score": 0.702
+      },
+      "perspective_shift": {
+        "technique": "Consciousness Bridge Protocol",
+        "score": 0.7
+      },
+      "distributed": {
+        "technique": "Emergent Intelligence Protocol",
+        "score": 0.697
+      },
+      "dynamical": {
+        "technique": "Strange Attractor Method",
+        "score": 0.695
+      },
+      "quantum": {
+        "technique": "Quantum Superposition Approach",
+        "score": 0.692
+      },
+      "abstract_reasoning": {
+        "technique": "Dimensional Collapse Technique",
+        "score": 0.687
+      },
+      "dimensional": {
+        "technique": "Hyperdimensional Projection Method",
+        "score": 0.687
+      },
+      "reverse_engineering": {
+        "technique": "Alien Archaeology Method",
+        "score": 0.687
+      },
+      "perspective": {
+        "technique": "Cognitive Parallax Technique",
+        "score": 0.687
+      }
+    },
+    "breakthrough_techniques": [],
+    "most_versatile": [
+      [
+        "Smooth Reasoning Manifold",
+        0.65
+      ],
+      [
+        "Metamathematical Compass",
+        0.65
+      ],
+      [
+        "Reality Refactoring Pattern",
+        0.6499999999999999
+      ]
+    ],
+    "evaluation_insights": [
+      "Average technique score: 0.703 - Moderate overall performance",
+      "Strongest category: mathematical (avg: 0.751)",
+      "Strong trade-off between innovation and practicality observed"
+    ]
+  }
+}
