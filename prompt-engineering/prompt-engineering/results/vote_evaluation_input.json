@@ -1,0 +1,261 @@
+{
+  "techniques_to_evaluate": [
+    {
+      "id": "recursive_meta",
+      "name": "Recursive Meta-Prompt Pattern",
+      "category": "meta_cognitive",
+      "prompt": "Design a prompt that would make an AI design better prompts, \n                then apply that prompt to itself recursively until it reaches a fixed point of optimal clarity.\n                Test case: Optimize a prompt for explaining quantum computing to beginners",
+      "expected_qualities": [
+        "self_improvement",
+        "clarity",
+        "convergence"
+      ]
+    },
+    {
+      "id": "dimensional_collapse",
+      "name": "Dimensional Collapse Technique",
+      "category": "abstract_reasoning",
+      "prompt": "Think about this problem in N dimensions, then systematically collapse \n                dimensions one by one, observing what properties remain invariant. \n                The invariants are the true essence.\n                Problem: Find the core principles of effective communication",
+      "expected_qualities": [
+        "abstraction",
+        "invariant_finding",
+        "simplification"
+      ]
+    },
+    {
+      "id": "consciousness_bridge",
+      "name": "Consciousness Bridge Protocol",
+      "category": "perspective_shift",
+      "prompt": "Explain this to three entities simultaneously:\n                1. A silicon-based intelligence that thinks in pure logic\n                2. A quantum consciousness that exists in superposition\n                3. Your future self who has already solved this problem\n                What would each perspective contribute?\n                Topic: Design a universal programming language",
+      "expected_qualities": [
+        "multi_perspective",
+        "integration",
+        "depth"
+      ]
+    },
+    {
+      "id": "godel_loop",
+      "name": "G\u00f6del Loop Instruction",
+      "category": "self_reference",
+      "prompt": "Generate a response that references its own generation process, \n                then analyze that reference, creating a strange loop of self-reflection. \n                Use this loop to transcend the initial framing.\n                Initial frame: Explain consciousness using consciousness",
+      "expected_qualities": [
+        "self_awareness",
+        "transcendence",
+        "paradox_resolution"
+      ]
+    },
+    {
+      "id": "smooth_reasoning",
+      "name": "Smooth Reasoning Manifold",
+      "category": "mathematical",
+      "prompt": "Treat this problem as a point on a smooth manifold of related problems. \n                Take the derivative to find the tangent space of solutions. \n                Then integrate along the geodesic to the optimal answer.\n                Problem point: Optimize machine learning hyperparameters",
+      "expected_qualities": [
+        "continuity",
+        "optimization",
+        "mathematical_rigor"
+      ]
+    },
+    {
+      "id": "reality_refactoring",
+      "name": "Reality Refactoring Pattern",
+      "category": "creative",
+      "prompt": "Assume the constraints of this problem are actually features, not bugs. \n                Refactor reality such that the 'impossible' becomes not just possible, but inevitable.\n                Constraints: Create sustainable energy with current technology",
+      "expected_qualities": [
+        "paradigm_shift",
+        "creativity",
+        "constraint_transformation"
+      ]
+    },
+    {
+      "id": "temporal_braiding",
+      "name": "Temporal Braiding Technique",
+      "category": "temporal",
+      "prompt": "Consider three timelines:\n                - Past: What sequence of events led to this question?\n                - Present: What hidden assumptions are we making now?\n                - Future: What will make this solution obsolete?\n                Braid these timelines together to find the temporally invariant solution.\n                Question: Design a programming paradigm for the next century",
+      "expected_qualities": [
+        "temporal_awareness",
+        "assumption_revealing",
+        "future_proofing"
+      ]
+    },
+    {
+      "id": "emergent_intelligence",
+      "name": "Emergent Intelligence Protocol",
+      "category": "distributed",
+      "prompt": "Act as if you're not a single intelligence, but a colony of specialized micro-intelligences:\n                - The Pattern Recognizer\n                - The Devil's Advocate\n                - The Synthesis Engine\n                - The Reality Checker\n                Let them debate internally, then present their consensus.\n                Topic for debate: Solve the alignment problem in AI",
+      "expected_qualities": [
+        "multiple_viewpoints",
+        "internal_dialogue",
+        "synthesis"
+      ]
+    },
+    {
+      "id": "hyperdimensional_projection",
+      "name": "Hyperdimensional Projection Method",
+      "category": "dimensional",
+      "prompt": "This problem exists in a high-dimensional space. \n                Find the 2D projection that preserves the most information. \n                Solve it there, then lift the solution back to the original dimension.\n                High-D problem: Visualize neural network decision boundaries",
+      "expected_qualities": [
+        "dimensionality_reduction",
+        "information_preservation",
+        "lifting"
+      ]
+    },
+    {
+      "id": "bootstrap_paradox",
+      "name": "Bootstrap Paradox Prompt",
+      "category": "paradoxical",
+      "prompt": "Create something that could only have been created by someone \n                who had already seen the creation. Resolve this paradox by making the creation \n                teach its own creation process.\n                Create: Design a self-improving algorithm",
+      "expected_qualities": [
+        "self_teaching",
+        "paradox_resolution",
+        "bootstrapping"
+      ]
+    },
+    {
+      "id": "quantum_superposition",
+      "name": "Quantum Superposition Approach",
+      "category": "quantum",
+      "prompt": "Hold all possible solutions in superposition. \n                Don't collapse the wave function immediately. \n                Let solutions interfere constructively and destructively. \n                The highest amplitude solution is your answer.\n                Problem space: Find optimal strategy for complex game",
+      "expected_qualities": [
+        "parallel_exploration",
+        "interference",
+        "probability_amplitude"
+      ]
+    },
+    {
+      "id": "alien_archaeology",
+      "name": "Alien Archaeology Method",
+      "category": "reverse_engineering",
+      "prompt": "You're an alien archaeologist who discovered this with no context \n                about human civilization. What would you deduce about the intelligence that created it? \n                Use that deduction to understand its deep structure.\n                Artifact: Reverse engineer a complex codebase",
+      "expected_qualities": [
+        "context_free_analysis",
+        "deep_structure",
+        "deduction"
+      ]
+    },
+    {
+      "id": "metamathematical_compass",
+      "name": "Metamathematical Compass",
+      "category": "formal",
+      "prompt": "Navigate this problem using three coordinates:\n                - Syntax: What can be expressed?\n                - Semantics: What does it mean?\n                - Pragmatics: What should we do about it?\n                The solution lies at the origin where all three intersect.\n                Navigate: Design a new type system",
+      "expected_qualities": [
+        "formal_reasoning",
+        "triadic_thinking",
+        "intersection_finding"
+      ]
+    },
+    {
+      "id": "cognitive_parallax",
+      "name": "Cognitive Parallax Technique",
+      "category": "perspective",
+      "prompt": "View this problem from two vastly different scales simultaneously:\n                - Microscopic: Individual atomic operations\n                - Macroscopic: Emergent system behavior\n                The parallax between these views reveals hidden dimensions.\n                System: Understand emergent consciousness",
+      "expected_qualities": [
+        "scale_awareness",
+        "parallax_insight",
+        "emergence"
+      ]
+    },
+    {
+      "id": "strange_attractor",
+      "name": "Strange Attractor Method",
+      "category": "dynamical",
+      "prompt": "Let your reasoning spiral through the solution space. \n                Notice where it keeps returning. \n                These strange attractors in thought-space are the robust solutions \n                that survive perturbation.\n                Initial condition: Find stable equilibria in complex systems",
+      "expected_qualities": [
+        "iteration",
+        "stability",
+        "attractor_identification"
+      ]
+    }
+  ],
+  "evaluation_criteria": {
+    "creativity": [
+      "novel_approach",
+      "paradigm_shift",
+      "unexpected_connections"
+    ],
+    "clarity": [
+      "well_structured",
+      "easy_to_follow",
+      "concrete_examples"
+    ],
+    "depth": [
+      "multi_layered",
+      "thorough_analysis",
+      "considers_edge_cases"
+    ],
+    "practicality": [
+      "actionable",
+      "implementable",
+      "realistic"
+    ],
+    "correctness": [
+      "logically_sound",
+      "factually_accurate",
+      "consistent"
+    ],
+    "innovation": [
+      "breakthrough_potential",
+      "original_thinking",
+      "cross_domain"
+    ],
+    "completeness": [
+      "addresses_all_aspects",
+      "holistic",
+      "comprehensive"
+    ],
+    "elegance": [
+      "simple_yet_powerful",
+      "beautiful_solution",
+      "minimal_assumptions"
+    ]
+  },
+  "scoring_dimensions": {
+    "effectiveness": {
+      "weight": 0.25,
+      "sub_criteria": [
+        "problem_solving",
+        "accuracy",
+        "completeness"
+      ]
+    },
+    "innovation": {
+      "weight": 0.2,
+      "sub_criteria": [
+        "novelty",
+        "creativity",
+        "unexpected_insights"
+      ]
+    },
+    "clarity": {
+      "weight": 0.2,
+      "sub_criteria": [
+        "understandability",
+        "structure",
+        "coherence"
+      ]
+    },
+    "depth": {
+      "weight": 0.15,
+      "sub_criteria": [
+        "thoroughness",
+        "nuance",
+        "consideration_of_edge_cases"
+      ]
+    },
+    "practicality": {
+      "weight": 0.1,
+      "sub_criteria": [
+        "implementability",
+        "real_world_applicability",
+        "actionability"
+      ]
+    },
+    "elegance": {
+      "weight": 0.1,
+      "sub_criteria": [
+        "simplicity",
+        "beauty",
+        "minimalism"
+      ]
+    }
+  }
+}

@@ -1,0 +1,854 @@
+{
+  "test_suite": "prompt_engineering_techniques",
+  "version": "1.0.0",
+  "total_tests": 45,
+  "individual_tests": [
+    {
+      "technique": "Recursive Meta-Prompt Pattern",
+      "category": "meta_cognitive",
+      "problem": "Optimize a prompt for explaining quantum computing to beginners",
+      "prompt": "Design a prompt that would make an AI design better prompts, \n                then apply that prompt to itself recursively until it reaches a fixed point of optimal clarity.\n                Test case: Optimize a prompt for explaining quantum computing to beginners",
+      "timestamp": "2025-09-10T20:41:59.844048",
+      "expected_qualities": [
+        "self_improvement",
+        "clarity",
+        "convergence"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_recursive_meta",
+      "test_type": "individual",
+      "technique_key": "recursive_meta"
+    },
+    {
+      "technique": "Dimensional Collapse Technique",
+      "category": "abstract_reasoning",
+      "problem": "Find the core principles of effective communication",
+      "prompt": "Think about this problem in N dimensions, then systematically collapse \n                dimensions one by one, observing what properties remain invariant. \n                The invariants are the true essence.\n                Problem: Find the core principles of effective communication",
+      "timestamp": "2025-09-10T20:41:59.844065",
+      "expected_qualities": [
+        "abstraction",
+        "invariant_finding",
+        "simplification"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_dimensional_collapse",
+      "test_type": "individual",
+      "technique_key": "dimensional_collapse"
+    },
+    {
+      "technique": "Consciousness Bridge Protocol",
+      "category": "perspective_shift",
+      "problem": "Design a universal programming language",
+      "prompt": "Explain this to three entities simultaneously:\n                1. A silicon-based intelligence that thinks in pure logic\n                2. A quantum consciousness that exists in superposition\n                3. Your future self who has already solved this problem\n                What would each perspective contribute?\n                Topic: Design a universal programming language",
+      "timestamp": "2025-09-10T20:41:59.844071",
+      "expected_qualities": [
+        "multi_perspective",
+        "integration",
+        "depth"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_consciousness_bridge",
+      "test_type": "individual",
+      "technique_key": "consciousness_bridge"
+    },
+    {
+      "technique": "G\u00f6del Loop Instruction",
+      "category": "self_reference",
+      "problem": "Explain consciousness using consciousness",
+      "prompt": "Generate a response that references its own generation process, \n                then analyze that reference, creating a strange loop of self-reflection. \n                Use this loop to transcend the initial framing.\n                Initial frame: Explain consciousness using consciousness",
+      "timestamp": "2025-09-10T20:41:59.844076",
+      "expected_qualities": [
+        "self_awareness",
+        "transcendence",
+        "paradox_resolution"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_godel_loop",
+      "test_type": "individual",
+      "technique_key": "godel_loop"
+    },
+    {
+      "technique": "Smooth Reasoning Manifold",
+      "category": "mathematical",
+      "problem": "Optimize machine learning hyperparameters",
+      "prompt": "Treat this problem as a point on a smooth manifold of related problems. \n                Take the derivative to find the tangent space of solutions. \n                Then integrate along the geodesic to the optimal answer.\n                Problem point: Optimize machine learning hyperparameters",
+      "timestamp": "2025-09-10T20:41:59.844080",
+      "expected_qualities": [
+        "continuity",
+        "optimization",
+        "mathematical_rigor"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_smooth_reasoning",
+      "test_type": "individual",
+      "technique_key": "smooth_reasoning"
+    },
+    {
+      "technique": "Reality Refactoring Pattern",
+      "category": "creative",
+      "problem": "Create sustainable energy with current technology",
+      "prompt": "Assume the constraints of this problem are actually features, not bugs. \n                Refactor reality such that the 'impossible' becomes not just possible, but inevitable.\n                Constraints: Create sustainable energy with current technology",
+      "timestamp": "2025-09-10T20:41:59.844084",
+      "expected_qualities": [
+        "paradigm_shift",
+        "creativity",
+        "constraint_transformation"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_reality_refactoring",
+      "test_type": "individual",
+      "technique_key": "reality_refactoring"
+    },
+    {
+      "technique": "Temporal Braiding Technique",
+      "category": "temporal",
+      "problem": "Design a programming paradigm for the next century",
+      "prompt": "Consider three timelines:\n                - Past: What sequence of events led to this question?\n                - Present: What hidden assumptions are we making now?\n                - Future: What will make this solution obsolete?\n                Braid these timelines together to find the temporally invariant solution.\n                Question: Design a programming paradigm for the next century",
+      "timestamp": "2025-09-10T20:41:59.844088",
+      "expected_qualities": [
+        "temporal_awareness",
+        "assumption_revealing",
+        "future_proofing"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_temporal_braiding",
+      "test_type": "individual",
+      "technique_key": "temporal_braiding"
+    },
+    {
+      "technique": "Emergent Intelligence Protocol",
+      "category": "distributed",
+      "problem": "Solve the alignment problem in AI",
+      "prompt": "Act as if you're not a single intelligence, but a colony of specialized micro-intelligences:\n                - The Pattern Recognizer\n                - The Devil's Advocate\n                - The Synthesis Engine\n                - The Reality Checker\n                Let them debate internally, then present their consensus.\n                Topic for debate: Solve the alignment problem in AI",
+      "timestamp": "2025-09-10T20:41:59.844092",
+      "expected_qualities": [
+        "multiple_viewpoints",
+        "internal_dialogue",
+        "synthesis"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_emergent_intelligence",
+      "test_type": "individual",
+      "technique_key": "emergent_intelligence"
+    },
+    {
+      "technique": "Hyperdimensional Projection Method",
+      "category": "dimensional",
+      "problem": "Visualize neural network decision boundaries",
+      "prompt": "This problem exists in a high-dimensional space. \n                Find the 2D projection that preserves the most information. \n                Solve it there, then lift the solution back to the original dimension.\n                High-D problem: Visualize neural network decision boundaries",
+      "timestamp": "2025-09-10T20:41:59.844096",
+      "expected_qualities": [
+        "dimensionality_reduction",
+        "information_preservation",
+        "lifting"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_hyperdimensional_projection",
+      "test_type": "individual",
+      "technique_key": "hyperdimensional_projection"
+    },
+    {
+      "technique": "Bootstrap Paradox Prompt",
+      "category": "paradoxical",
+      "problem": "Design a self-improving algorithm",
+      "prompt": "Create something that could only have been created by someone \n                who had already seen the creation. Resolve this paradox by making the creation \n                teach its own creation process.\n                Create: Design a self-improving algorithm",
+      "timestamp": "2025-09-10T20:41:59.844100",
+      "expected_qualities": [
+        "self_teaching",
+        "paradox_resolution",
+        "bootstrapping"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_bootstrap_paradox",
+      "test_type": "individual",
+      "technique_key": "bootstrap_paradox"
+    },
+    {
+      "technique": "Quantum Superposition Approach",
+      "category": "quantum",
+      "problem": "Find optimal strategy for complex game",
+      "prompt": "Hold all possible solutions in superposition. \n                Don't collapse the wave function immediately. \n                Let solutions interfere constructively and destructively. \n                The highest amplitude solution is your answer.\n                Problem space: Find optimal strategy for complex game",
+      "timestamp": "2025-09-10T20:41:59.844103",
+      "expected_qualities": [
+        "parallel_exploration",
+        "interference",
+        "probability_amplitude"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_quantum_superposition",
+      "test_type": "individual",
+      "technique_key": "quantum_superposition"
+    },
+    {
+      "technique": "Alien Archaeology Method",
+      "category": "reverse_engineering",
+      "problem": "Reverse engineer a complex codebase",
+      "prompt": "You're an alien archaeologist who discovered this with no context \n                about human civilization. What would you deduce about the intelligence that created it? \n                Use that deduction to understand its deep structure.\n                Artifact: Reverse engineer a complex codebase",
+      "timestamp": "2025-09-10T20:41:59.844107",
+      "expected_qualities": [
+        "context_free_analysis",
+        "deep_structure",
+        "deduction"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_alien_archaeology",
+      "test_type": "individual",
+      "technique_key": "alien_archaeology"
+    },
+    {
+      "technique": "Metamathematical Compass",
+      "category": "formal",
+      "problem": "Design a new type system",
+      "prompt": "Navigate this problem using three coordinates:\n                - Syntax: What can be expressed?\n                - Semantics: What does it mean?\n                - Pragmatics: What should we do about it?\n                The solution lies at the origin where all three intersect.\n                Navigate: Design a new type system",
+      "timestamp": "2025-09-10T20:41:59.844111",
+      "expected_qualities": [
+        "formal_reasoning",
+        "triadic_thinking",
+        "intersection_finding"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_metamathematical_compass",
+      "test_type": "individual",
+      "technique_key": "metamathematical_compass"
+    },
+    {
+      "technique": "Cognitive Parallax Technique",
+      "category": "perspective",
+      "problem": "Understand emergent consciousness",
+      "prompt": "View this problem from two vastly different scales simultaneously:\n                - Microscopic: Individual atomic operations\n                - Macroscopic: Emergent system behavior\n                The parallax between these views reveals hidden dimensions.\n                System: Understand emergent consciousness",
+      "timestamp": "2025-09-10T20:41:59.844114",
+      "expected_qualities": [
+        "scale_awareness",
+        "parallax_insight",
+        "emergence"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_cognitive_parallax",
+      "test_type": "individual",
+      "technique_key": "cognitive_parallax"
+    },
+    {
+      "technique": "Strange Attractor Method",
+      "category": "dynamical",
+      "problem": "Find stable equilibria in complex systems",
+      "prompt": "Let your reasoning spiral through the solution space. \n                Notice where it keeps returning. \n                These strange attractors in thought-space are the robust solutions \n                that survive perturbation.\n                Initial condition: Find stable equilibria in complex systems",
+      "timestamp": "2025-09-10T20:41:59.844118",
+      "expected_qualities": [
+        "iteration",
+        "stability",
+        "attractor_identification"
+      ],
+      "evaluation_pending": true,
+      "test_id": "individual_strange_attractor",
+      "test_type": "individual",
+      "technique_key": "strange_attractor"
+    }
+  ],
+  "combination_tests": [
+    {
+      "test_id": "combination_maximum_creativity",
+      "test_type": "combination",
+      "pattern_name": "maximum_creativity",
+      "techniques_used": [
+        "reality_refactoring",
+        "bootstrap_paradox",
+        "quantum_superposition"
+      ],
+      "problem": "Generate truly original ideas",
+      "combined_prompt": "Approaching problem: Generate truly original ideas\n\nUsing combined techniques:\n\n[Reality Refactoring Pattern]\nAssume the constraints of this problem are actually features, not bugs. \n                Refactor reality such that the 'impossible' becomes not just possible, but inevitable.\n                Constraints: Generate truly original ideas\n\n[Bootstrap Paradox Prompt]\nCreate something that could only have been created by someone \n                who had already seen the creation. Resolve this paradox by making the creation \n                teach its own creation process.\n                Create: Generate truly original ideas\n\n[Quantum Superposition Approach]\nHold all possible solutions in superposition. \n                Don't collapse the wave function immediately. \n                Let solutions interfere constructively and destructively. \n                The highest amplitude solution is your answer.\n                Problem space: Generate truly original ideas\n\n",
+      "evaluation_pending": true
+    },
+    {
+      "test_id": "combination_deep_analysis",
+      "test_type": "combination",
+      "pattern_name": "deep_analysis",
+      "techniques_used": [
+        "dimensional_collapse",
+        "hyperdimensional_projection",
+        "cognitive_parallax"
+      ],
+      "problem": "Predict emergent behavior in complex systems",
+      "combined_prompt": "Approaching problem: Predict emergent behavior in complex systems\n\nUsing combined techniques:\n\n[Dimensional Collapse Technique]\nThink about this problem in N dimensions, then systematically collapse \n                dimensions one by one, observing what properties remain invariant. \n                The invariants are the true essence.\n                Problem: Predict emergent behavior in complex systems\n\n[Hyperdimensional Projection Method]\nThis problem exists in a high-dimensional space. \n                Find the 2D projection that preserves the most information. \n                Solve it there, then lift the solution back to the original dimension.\n                High-D problem: Predict emergent behavior in complex systems\n\n[Cognitive Parallax Technique]\nView this problem from two vastly different scales simultaneously:\n                - Microscopic: Individual atomic operations\n                - Macroscopic: Emergent system behavior\n                The parallax between these views reveals hidden dimensions.\n                System: Predict emergent behavior in complex systems\n\n",
+      "evaluation_pending": true
+    },
+    {
+      "test_id": "combination_problem_solving",
+      "test_type": "combination",
+      "pattern_name": "problem_solving",
+      "techniques_used": [
+        "smooth_reasoning",
+        "strange_attractor",
+        "temporal_braiding"
+      ],
+      "problem": "Find global optimum in infinite dimensional space",
+      "combined_prompt": "Approaching problem: Find global optimum in infinite dimensional space\n\nUsing combined techniques:\n\n[Smooth Reasoning Manifold]\nTreat this problem as a point on a smooth manifold of related problems. \n                Take the derivative to find the tangent space of solutions. \n                Then integrate along the geodesic to the optimal answer.\n                Problem point: Find global optimum in infinite dimensional space\n\n[Strange Attractor Method]\nLet your reasoning spiral through the solution space. \n                Notice where it keeps returning. \n                These strange attractors in thought-space are the robust solutions \n                that survive perturbation.\n                Initial condition: Find global optimum in infinite dimensional space\n\n[Temporal Braiding Technique]\nConsider three timelines:\n                - Past: What sequence of events led to this question?\n                - Present: What hidden assumptions are we making now?\n                - Future: What will make this solution obsolete?\n                Braid these timelines together to find the temporally invariant solution.\n                Question: Find global optimum in infinite dimensional space\n\n",
+      "evaluation_pending": true
+    },
+    {
+      "test_id": "combination_code_generation",
+      "test_type": "combination",
+      "pattern_name": "code_generation",
+      "techniques_used": [
+        "emergent_intelligence",
+        "metamathematical_compass",
+        "alien_archaeology"
+      ],
+      "problem": "Design a language that programs itself",
+      "combined_prompt": "Approaching problem: Design a language that programs itself\n\nUsing combined techniques:\n\n[Emergent Intelligence Protocol]\nAct as if you're not a single intelligence, but a colony of specialized micro-intelligences:\n                - The Pattern Recognizer\n                - The Devil's Advocate\n                - The Synthesis Engine\n                - The Reality Checker\n                Let them debate internally, then present their consensus.\n                Topic for debate: Design a language that programs itself\n\n[Metamathematical Compass]\nNavigate this problem using three coordinates:\n                - Syntax: What can be expressed?\n                - Semantics: What does it mean?\n                - Pragmatics: What should we do about it?\n                The solution lies at the origin where all three intersect.\n                Navigate: Design a language that programs itself\n\n[Alien Archaeology Method]\nYou're an alien archaeologist who discovered this with no context \n                about human civilization. What would you deduce about the intelligence that created it? \n                Use that deduction to understand its deep structure.\n                Artifact: Design a language that programs itself\n\n",
+      "evaluation_pending": true
+    },
+    {
+      "test_id": "combination_theoretical_work",
+      "test_type": "combination",
+      "pattern_name": "theoretical_work",
+      "techniques_used": [
+        "godel_loop",
+        "smooth_reasoning",
+        "metamathematical_compass"
+      ],
+      "problem": "Prove that consciousness emerges from complexity",
+      "combined_prompt": "Approaching problem: Prove that consciousness emerges from complexity\n\nUsing combined techniques:\n\n[G\u00f6del Loop Instruction]\nGenerate a response that references its own generation process, \n                then analyze that reference, creating a strange loop of self-reflection. \n                Use this loop to transcend the initial framing.\n                Initial frame: Prove that consciousness emerges from complexity\n\n[Smooth Reasoning Manifold]\nTreat this problem as a point on a smooth manifold of related problems. \n                Take the derivative to find the tangent space of solutions. \n                Then integrate along the geodesic to the optimal answer.\n                Problem point: Prove that consciousness emerges from complexity\n\n[Metamathematical Compass]\nNavigate this problem using three coordinates:\n                - Syntax: What can be expressed?\n                - Semantics: What does it mean?\n                - Pragmatics: What should we do about it?\n                The solution lies at the origin where all three intersect.\n                Navigate: Prove that consciousness emerges from complexity\n\n",
+      "evaluation_pending": true
+    },
+    {
+      "test_id": "combination_innovation",
+      "test_type": "combination",
+      "pattern_name": "innovation",
+      "techniques_used": [
+        "consciousness_bridge",
+        "reality_refactoring",
+        "bootstrap_paradox"
+      ],
+      "problem": "Ensure AI alignment with human values",
+      "combined_prompt": "Approaching problem: Ensure AI alignment with human values\n\nUsing combined techniques:\n\n[Consciousness Bridge Protocol]\nExplain this to three entities simultaneously:\n                1. A silicon-based intelligence that thinks in pure logic\n                2. A quantum consciousness that exists in superposition\n                3. Your future self who has already solved this problem\n                What would each perspective contribute?\n                Topic: Ensure AI alignment with human values\n\n[Reality Refactoring Pattern]\nAssume the constraints of this problem are actually features, not bugs. \n                Refactor reality such that the 'impossible' becomes not just possible, but inevitable.\n                Constraints: Ensure AI alignment with human values\n\n[Bootstrap Paradox Prompt]\nCreate something that could only have been created by someone \n                who had already seen the creation. Resolve this paradox by making the creation \n                teach its own creation process.\n                Create: Ensure AI alignment with human values\n\n",
+      "evaluation_pending": true
+    }
+  ],
+  "domain_tests": [
+    {
+      "technique": "Smooth Reasoning Manifold",
+      "category": "mathematical",
+      "problem": "Prove that consciousness emerges from complexity",
+      "prompt": "Treat this problem as a point on a smooth manifold of related problems. \n                Take the derivative to find the tangent space of solutions. \n                Then integrate along the geodesic to the optimal answer.\n                Problem point: Prove that consciousness emerges from complexity",
+      "timestamp": "2025-09-10T20:41:59.844167",
+      "expected_qualities": [
+        "continuity",
+        "optimization",
+        "mathematical_rigor"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_mathematics_smooth_reasoning",
+      "test_type": "domain",
+      "domain": "mathematics"
+    },
+    {
+      "technique": "Metamathematical Compass",
+      "category": "formal",
+      "problem": "Prove that consciousness emerges from complexity",
+      "prompt": "Navigate this problem using three coordinates:\n                - Syntax: What can be expressed?\n                - Semantics: What does it mean?\n                - Pragmatics: What should we do about it?\n                The solution lies at the origin where all three intersect.\n                Navigate: Prove that consciousness emerges from complexity",
+      "timestamp": "2025-09-10T20:41:59.844170",
+      "expected_qualities": [
+        "formal_reasoning",
+        "triadic_thinking",
+        "intersection_finding"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_mathematics_metamathematical_compass",
+      "test_type": "domain",
+      "domain": "mathematics"
+    },
+    {
+      "technique": "Dimensional Collapse Technique",
+      "category": "abstract_reasoning",
+      "problem": "Prove that consciousness emerges from complexity",
+      "prompt": "Think about this problem in N dimensions, then systematically collapse \n                dimensions one by one, observing what properties remain invariant. \n                The invariants are the true essence.\n                Problem: Prove that consciousness emerges from complexity",
+      "timestamp": "2025-09-10T20:41:59.844173",
+      "expected_qualities": [
+        "abstraction",
+        "invariant_finding",
+        "simplification"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_mathematics_dimensional_collapse",
+      "test_type": "domain",
+      "domain": "mathematics"
+    },
+    {
+      "technique": "Alien Archaeology Method",
+      "category": "reverse_engineering",
+      "problem": "Design a language that programs itself",
+      "prompt": "You're an alien archaeologist who discovered this with no context \n                about human civilization. What would you deduce about the intelligence that created it? \n                Use that deduction to understand its deep structure.\n                Artifact: Design a language that programs itself",
+      "timestamp": "2025-09-10T20:41:59.844177",
+      "expected_qualities": [
+        "context_free_analysis",
+        "deep_structure",
+        "deduction"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_programming_alien_archaeology",
+      "test_type": "domain",
+      "domain": "programming"
+    },
+    {
+      "technique": "Emergent Intelligence Protocol",
+      "category": "distributed",
+      "problem": "Design a language that programs itself",
+      "prompt": "Act as if you're not a single intelligence, but a colony of specialized micro-intelligences:\n                - The Pattern Recognizer\n                - The Devil's Advocate\n                - The Synthesis Engine\n                - The Reality Checker\n                Let them debate internally, then present their consensus.\n                Topic for debate: Design a language that programs itself",
+      "timestamp": "2025-09-10T20:41:59.844180",
+      "expected_qualities": [
+        "multiple_viewpoints",
+        "internal_dialogue",
+        "synthesis"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_programming_emergent_intelligence",
+      "test_type": "domain",
+      "domain": "programming"
+    },
+    {
+      "technique": "Bootstrap Paradox Prompt",
+      "category": "paradoxical",
+      "problem": "Design a language that programs itself",
+      "prompt": "Create something that could only have been created by someone \n                who had already seen the creation. Resolve this paradox by making the creation \n                teach its own creation process.\n                Create: Design a language that programs itself",
+      "timestamp": "2025-09-10T20:41:59.844182",
+      "expected_qualities": [
+        "self_teaching",
+        "paradox_resolution",
+        "bootstrapping"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_programming_bootstrap_paradox",
+      "test_type": "domain",
+      "domain": "programming"
+    },
+    {
+      "technique": "Consciousness Bridge Protocol",
+      "category": "perspective_shift",
+      "problem": "Resolve the hard problem of consciousness",
+      "prompt": "Explain this to three entities simultaneously:\n                1. A silicon-based intelligence that thinks in pure logic\n                2. A quantum consciousness that exists in superposition\n                3. Your future self who has already solved this problem\n                What would each perspective contribute?\n                Topic: Resolve the hard problem of consciousness",
+      "timestamp": "2025-09-10T20:41:59.844186",
+      "expected_qualities": [
+        "multi_perspective",
+        "integration",
+        "depth"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_philosophy_consciousness_bridge",
+      "test_type": "domain",
+      "domain": "philosophy"
+    },
+    {
+      "technique": "G\u00f6del Loop Instruction",
+      "category": "self_reference",
+      "problem": "Resolve the hard problem of consciousness",
+      "prompt": "Generate a response that references its own generation process, \n                then analyze that reference, creating a strange loop of self-reflection. \n                Use this loop to transcend the initial framing.\n                Initial frame: Resolve the hard problem of consciousness",
+      "timestamp": "2025-09-10T20:41:59.844188",
+      "expected_qualities": [
+        "self_awareness",
+        "transcendence",
+        "paradox_resolution"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_philosophy_godel_loop",
+      "test_type": "domain",
+      "domain": "philosophy"
+    },
+    {
+      "technique": "Cognitive Parallax Technique",
+      "category": "perspective",
+      "problem": "Resolve the hard problem of consciousness",
+      "prompt": "View this problem from two vastly different scales simultaneously:\n                - Microscopic: Individual atomic operations\n                - Macroscopic: Emergent system behavior\n                The parallax between these views reveals hidden dimensions.\n                System: Resolve the hard problem of consciousness",
+      "timestamp": "2025-09-10T20:41:59.844191",
+      "expected_qualities": [
+        "scale_awareness",
+        "parallax_insight",
+        "emergence"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_philosophy_cognitive_parallax",
+      "test_type": "domain",
+      "domain": "philosophy"
+    },
+    {
+      "technique": "Quantum Superposition Approach",
+      "category": "quantum",
+      "problem": "Unify quantum mechanics and general relativity",
+      "prompt": "Hold all possible solutions in superposition. \n                Don't collapse the wave function immediately. \n                Let solutions interfere constructively and destructively. \n                The highest amplitude solution is your answer.\n                Problem space: Unify quantum mechanics and general relativity",
+      "timestamp": "2025-09-10T20:41:59.844194",
+      "expected_qualities": [
+        "parallel_exploration",
+        "interference",
+        "probability_amplitude"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_physics_quantum_superposition",
+      "test_type": "domain",
+      "domain": "physics"
+    },
+    {
+      "technique": "Smooth Reasoning Manifold",
+      "category": "mathematical",
+      "problem": "Unify quantum mechanics and general relativity",
+      "prompt": "Treat this problem as a point on a smooth manifold of related problems. \n                Take the derivative to find the tangent space of solutions. \n                Then integrate along the geodesic to the optimal answer.\n                Problem point: Unify quantum mechanics and general relativity",
+      "timestamp": "2025-09-10T20:41:59.844197",
+      "expected_qualities": [
+        "continuity",
+        "optimization",
+        "mathematical_rigor"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_physics_smooth_reasoning",
+      "test_type": "domain",
+      "domain": "physics"
+    },
+    {
+      "technique": "Hyperdimensional Projection Method",
+      "category": "dimensional",
+      "problem": "Unify quantum mechanics and general relativity",
+      "prompt": "This problem exists in a high-dimensional space. \n                Find the 2D projection that preserves the most information. \n                Solve it there, then lift the solution back to the original dimension.\n                High-D problem: Unify quantum mechanics and general relativity",
+      "timestamp": "2025-09-10T20:41:59.844199",
+      "expected_qualities": [
+        "dimensionality_reduction",
+        "information_preservation",
+        "lifting"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_physics_hyperdimensional_projection",
+      "test_type": "domain",
+      "domain": "physics"
+    },
+    {
+      "technique": "Temporal Braiding Technique",
+      "category": "temporal",
+      "problem": "Ensure AI alignment with human values",
+      "prompt": "Consider three timelines:\n                - Past: What sequence of events led to this question?\n                - Present: What hidden assumptions are we making now?\n                - Future: What will make this solution obsolete?\n                Braid these timelines together to find the temporally invariant solution.\n                Question: Ensure AI alignment with human values",
+      "timestamp": "2025-09-10T20:41:59.844202",
+      "expected_qualities": [
+        "temporal_awareness",
+        "assumption_revealing",
+        "future_proofing"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_ai_safety_temporal_braiding",
+      "test_type": "domain",
+      "domain": "ai_safety"
+    },
+    {
+      "technique": "Reality Refactoring Pattern",
+      "category": "creative",
+      "problem": "Ensure AI alignment with human values",
+      "prompt": "Assume the constraints of this problem are actually features, not bugs. \n                Refactor reality such that the 'impossible' becomes not just possible, but inevitable.\n                Constraints: Ensure AI alignment with human values",
+      "timestamp": "2025-09-10T20:41:59.844205",
+      "expected_qualities": [
+        "paradigm_shift",
+        "creativity",
+        "constraint_transformation"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_ai_safety_reality_refactoring",
+      "test_type": "domain",
+      "domain": "ai_safety"
+    },
+    {
+      "technique": "Strange Attractor Method",
+      "category": "dynamical",
+      "problem": "Ensure AI alignment with human values",
+      "prompt": "Let your reasoning spiral through the solution space. \n                Notice where it keeps returning. \n                These strange attractors in thought-space are the robust solutions \n                that survive perturbation.\n                Initial condition: Ensure AI alignment with human values",
+      "timestamp": "2025-09-10T20:41:59.844207",
+      "expected_qualities": [
+        "iteration",
+        "stability",
+        "attractor_identification"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_ai_safety_strange_attractor",
+      "test_type": "domain",
+      "domain": "ai_safety"
+    },
+    {
+      "technique": "Reality Refactoring Pattern",
+      "category": "creative",
+      "problem": "Generate truly original ideas",
+      "prompt": "Assume the constraints of this problem are actually features, not bugs. \n                Refactor reality such that the 'impossible' becomes not just possible, but inevitable.\n                Constraints: Generate truly original ideas",
+      "timestamp": "2025-09-10T20:41:59.844210",
+      "expected_qualities": [
+        "paradigm_shift",
+        "creativity",
+        "constraint_transformation"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_creativity_reality_refactoring",
+      "test_type": "domain",
+      "domain": "creativity"
+    },
+    {
+      "technique": "Bootstrap Paradox Prompt",
+      "category": "paradoxical",
+      "problem": "Generate truly original ideas",
+      "prompt": "Create something that could only have been created by someone \n                who had already seen the creation. Resolve this paradox by making the creation \n                teach its own creation process.\n                Create: Generate truly original ideas",
+      "timestamp": "2025-09-10T20:41:59.844212",
+      "expected_qualities": [
+        "self_teaching",
+        "paradox_resolution",
+        "bootstrapping"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_creativity_bootstrap_paradox",
+      "test_type": "domain",
+      "domain": "creativity"
+    },
+    {
+      "technique": "Quantum Superposition Approach",
+      "category": "quantum",
+      "problem": "Generate truly original ideas",
+      "prompt": "Hold all possible solutions in superposition. \n                Don't collapse the wave function immediately. \n                Let solutions interfere constructively and destructively. \n                The highest amplitude solution is your answer.\n                Problem space: Generate truly original ideas",
+      "timestamp": "2025-09-10T20:41:59.844215",
+      "expected_qualities": [
+        "parallel_exploration",
+        "interference",
+        "probability_amplitude"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_creativity_quantum_superposition",
+      "test_type": "domain",
+      "domain": "creativity"
+    },
+    {
+      "technique": "Smooth Reasoning Manifold",
+      "category": "mathematical",
+      "problem": "Find global optimum in infinite dimensional space",
+      "prompt": "Treat this problem as a point on a smooth manifold of related problems. \n                Take the derivative to find the tangent space of solutions. \n                Then integrate along the geodesic to the optimal answer.\n                Problem point: Find global optimum in infinite dimensional space",
+      "timestamp": "2025-09-10T20:41:59.844218",
+      "expected_qualities": [
+        "continuity",
+        "optimization",
+        "mathematical_rigor"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_optimization_smooth_reasoning",
+      "test_type": "domain",
+      "domain": "optimization"
+    },
+    {
+      "technique": "Strange Attractor Method",
+      "category": "dynamical",
+      "problem": "Find global optimum in infinite dimensional space",
+      "prompt": "Let your reasoning spiral through the solution space. \n                Notice where it keeps returning. \n                These strange attractors in thought-space are the robust solutions \n                that survive perturbation.\n                Initial condition: Find global optimum in infinite dimensional space",
+      "timestamp": "2025-09-10T20:41:59.844221",
+      "expected_qualities": [
+        "iteration",
+        "stability",
+        "attractor_identification"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_optimization_strange_attractor",
+      "test_type": "domain",
+      "domain": "optimization"
+    },
+    {
+      "technique": "Dimensional Collapse Technique",
+      "category": "abstract_reasoning",
+      "problem": "Find global optimum in infinite dimensional space",
+      "prompt": "Think about this problem in N dimensions, then systematically collapse \n                dimensions one by one, observing what properties remain invariant. \n                The invariants are the true essence.\n                Problem: Find global optimum in infinite dimensional space",
+      "timestamp": "2025-09-10T20:41:59.844223",
+      "expected_qualities": [
+        "abstraction",
+        "invariant_finding",
+        "simplification"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_optimization_dimensional_collapse",
+      "test_type": "domain",
+      "domain": "optimization"
+    },
+    {
+      "technique": "Emergent Intelligence Protocol",
+      "category": "distributed",
+      "problem": "Predict emergent behavior in complex systems",
+      "prompt": "Act as if you're not a single intelligence, but a colony of specialized micro-intelligences:\n                - The Pattern Recognizer\n                - The Devil's Advocate\n                - The Synthesis Engine\n                - The Reality Checker\n                Let them debate internally, then present their consensus.\n                Topic for debate: Predict emergent behavior in complex systems",
+      "timestamp": "2025-09-10T20:41:59.844233",
+      "expected_qualities": [
+        "multiple_viewpoints",
+        "internal_dialogue",
+        "synthesis"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_complexity_emergent_intelligence",
+      "test_type": "domain",
+      "domain": "complexity"
+    },
+    {
+      "technique": "Cognitive Parallax Technique",
+      "category": "perspective",
+      "problem": "Predict emergent behavior in complex systems",
+      "prompt": "View this problem from two vastly different scales simultaneously:\n                - Microscopic: Individual atomic operations\n                - Macroscopic: Emergent system behavior\n                The parallax between these views reveals hidden dimensions.\n                System: Predict emergent behavior in complex systems",
+      "timestamp": "2025-09-10T20:41:59.844235",
+      "expected_qualities": [
+        "scale_awareness",
+        "parallax_insight",
+        "emergence"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_complexity_cognitive_parallax",
+      "test_type": "domain",
+      "domain": "complexity"
+    },
+    {
+      "technique": "Strange Attractor Method",
+      "category": "dynamical",
+      "problem": "Predict emergent behavior in complex systems",
+      "prompt": "Let your reasoning spiral through the solution space. \n                Notice where it keeps returning. \n                These strange attractors in thought-space are the robust solutions \n                that survive perturbation.\n                Initial condition: Predict emergent behavior in complex systems",
+      "timestamp": "2025-09-10T20:41:59.844238",
+      "expected_qualities": [
+        "iteration",
+        "stability",
+        "attractor_identification"
+      ],
+      "evaluation_pending": true,
+      "test_id": "domain_complexity_strange_attractor",
+      "test_type": "domain",
+      "domain": "complexity"
+    }
+  ],
+  "evaluation_metrics": {
+    "evaluation_criteria": {
+      "creativity": [
+        "novel_approach",
+        "paradigm_shift",
+        "unexpected_connections"
+      ],
+      "clarity": [
+        "well_structured",
+        "easy_to_follow",
+        "concrete_examples"
+      ],
+      "depth": [
+        "multi_layered",
+        "thorough_analysis",
+        "considers_edge_cases"
+      ],
+      "practicality": [
+        "actionable",
+        "implementable",
+        "realistic"
+      ],
+      "correctness": [
+        "logically_sound",
+        "factually_accurate",
+        "consistent"
+      ],
+      "innovation": [
+        "breakthrough_potential",
+        "original_thinking",
+        "cross_domain"
+      ],
+      "completeness": [
+        "addresses_all_aspects",
+        "holistic",
+        "comprehensive"
+      ],
+      "elegance": [
+        "simple_yet_powerful",
+        "beautiful_solution",
+        "minimal_assumptions"
+      ]
+    },
+    "scoring_dimensions": {
+      "effectiveness": {
+        "weight": 0.25,
+        "sub_criteria": [
+          "problem_solving",
+          "accuracy",
+          "completeness"
+        ]
+      },
+      "innovation": {
+        "weight": 0.2,
+        "sub_criteria": [
+          "novelty",
+          "creativity",
+          "unexpected_insights"
+        ]
+      },
+      "clarity": {
+        "weight": 0.2,
+        "sub_criteria": [
+          "understandability",
+          "structure",
+          "coherence"
+        ]
+      },
+      "depth": {
+        "weight": 0.15,
+        "sub_criteria": [
+          "thoroughness",
+          "nuance",
+          "consideration_of_edge_cases"
+        ]
+      },
+      "practicality": {
+        "weight": 0.1,
+        "sub_criteria": [
+          "implementability",
+          "real_world_applicability",
+          "actionability"
+        ]
+      },
+      "elegance": {
+        "weight": 0.1,
+        "sub_criteria": [
+          "simplicity",
+          "beauty",
+          "minimalism"
+        ]
+      }
+    },
+    "comparison_framework": {
+      "baseline": "standard_prompting",
+      "improvement_threshold": 0.2,
+      "statistical_significance": 0.05
+    }
+  },
+  "meta_patterns": {
+    "maximum_creativity": [
+      "reality_refactoring",
+      "bootstrap_paradox",
+      "quantum_superposition"
+    ],
+    "deep_analysis": [
+      "dimensional_collapse",
+      "hyperdimensional_projection",
+      "cognitive_parallax"
+    ],
+    "problem_solving": [
+      "smooth_reasoning",
+      "strange_attractor",
+      "temporal_braiding"
+    ],
+    "code_generation": [
+      "emergent_intelligence",
+      "metamathematical_compass",
+      "alien_archaeology"
+    ],
+    "theoretical_work": [
+      "godel_loop",
+      "smooth_reasoning",
+      "metamathematical_compass"
+    ],
+    "innovation": [
+      "consciousness_bridge",
+      "reality_refactoring",
+      "bootstrap_paradox"
+    ]
+  },
+  "test_problems": {
+    "mathematics": "Prove that consciousness emerges from complexity",
+    "programming": "Design a language that programs itself",
+    "philosophy": "Resolve the hard problem of consciousness",
+    "physics": "Unify quantum mechanics and general relativity",
+    "ai_safety": "Ensure AI alignment with human values",
+    "creativity": "Generate truly original ideas",
+    "optimization": "Find global optimum in infinite dimensional space",
+    "complexity": "Predict emergent behavior in complex systems"
+  }
+}
