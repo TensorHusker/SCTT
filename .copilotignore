@@ -1,0 +1,98 @@
+# GitHub Copilot Ignore File for SCTT Project
+
+# Build outputs and binaries
+/target/
+/dist/
+/build/
+sctt-server
+*.wasm
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Dependencies and package directories
+/node_modules/
+/python/__pycache__/
+/python/**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+/Cargo.lock
+
+# Generated documentation
+/docs/generated/
+/docs/api/
+
+# Test outputs
+/test-results/
+/coverage/
+*.prof
+*.coverage
+
+# IDE and editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.#*
+
+# Logs and temporary files
+*.log
+*.tmp
+/tmp/
+/temp/
+
+# Version control
+.git/
+.gitignore
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+secrets/
+*.key
+*.pem
+
+# Large data files
+*.pdf
+*.zip
+*.tar.gz
+/papers/*.pdf
+/Books/*.pdf
+
+# Chat logs and sessions
+SCTT-firstChat-*.txt
+*-session-*.txt
+
+# Deployment specific
+.vercel/
+.netlify/
+netlify.toml
+vercel.json
+
+# WASM build artifacts
+pkg/
+wasm-pack.log
+
+# Python virtual environments
+venv/
+env/
+.venv/
+.python-version
+
+# Rust build artifacts
+**/*.rs.bk
+*.pdb
+
+# OS specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Project specific generated files
+/static/generated/
+/content/generated/
