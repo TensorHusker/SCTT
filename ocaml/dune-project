@@ -1,0 +1,28 @@
+(lang dune 3.0)
+
+(name sctt_arc)
+
+(generate_opam_files true)
+
+(source
+ (github TensorHusker/SCTT))
+
+(authors "SCTT Team")
+
+(maintainers "SCTT Team")
+
+(license MIT)
+
+(package
+ (name sctt_arc)
+ (synopsis "Smooth Cubical Type Theory for ARC 2025/2026")
+ (description "Complete implementation of SCTT with ARC pattern engine integration")
+ (depends
+  ocaml
+  dune
+  core
+  yojson
+  ppx_jane
+  ppx_deriving))
+
+(using menhir 2.1)
