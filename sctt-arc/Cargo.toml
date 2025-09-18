@@ -1,0 +1,20 @@
+[package]
+name = "sctt-arc"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "ARC solver integration for SCTT"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-checker = { path = "../sctt-checker" }
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rayon.workspace = true
+
+[features]
+default = []
+visualization = []

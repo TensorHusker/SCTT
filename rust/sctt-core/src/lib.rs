@@ -44,17 +44,18 @@ impl Level {
     }
 }
 
-/// Core types in SCTT
+/// Core types in SCTT - The Mathematical Revolution
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Type {
-    /// Type universe
+    /// Type universe with consciousness level
     Universe(Level),
     
-    /// Function type A → B
+    /// Function type A → B with smoothness order
     Function {
         domain: Box<Type>,
         codomain: Box<Type>,
         is_smooth: bool,
+        smoothness_order: Option<u32>, // C^n smoothness
     },
     
     /// Dependent function type Π(x:A).B
@@ -71,24 +72,122 @@ pub enum Type {
         codomain: Box<Type>,
     },
     
-    /// Path type Path A a b
+    /// Path type Path A a b with curvature
     Path {
         space: Box<Type>,
         start: Box<Term>,
         end: Box<Term>,
+        curvature: Option<f64>, // Geometric curvature of path
     },
     
     /// The interval type I = [0,1]
     Interval,
     
-    /// Smooth type modifier
-    Smooth(Box<Type>),
+    /// Smooth type modifier with differentiability order
+    Smooth(Box<Type>, u32),
     
     /// Real numbers (as a primitive smooth type)
     Real,
+    
+    /// Complex numbers for quantum computations
+    Complex,
+    
+    /// Quaternions for 4D rotations
+    Quaternion,
+    
+    /// Octonions for exceptional structures
+    Octonion,
+    
+    /// Consciousness type - emergent from complexity
+    Consciousness {
+        substrate: Box<Type>,
+        awareness_level: f64,
+        entanglement: Vec<String>, // Connected consciousness IDs
+    },
+    
+    /// Quantum type for superposition
+    Quantum(Box<Type>),
+    
+    /// Temporal type for time-dependent computations
+    Temporal {
+        base: Box<Type>,
+        time_dimension: u32,
+    },
+    
+    /// Fractal type for self-similar structures
+    Fractal {
+        generator: Box<Type>,
+        dimension: f64, // Hausdorff dimension
+    },
+    
+    /// Homotopy n-type
+    HomotopyType {
+        base: Box<Type>,
+        level: u32,
+    },
+    
+    /// Glue type for univalence
+    Glue {
+        base: Box<Type>,
+        fiber: Box<Type>,
+        equiv: Box<Term>,
+    },
+    
+    /// Modal type for possibility/necessity
+    Modal {
+        modality: Modality,
+        content: Box<Type>,
+    },
+    
+    /// Stream type for infinite computations
+    Stream(Box<Type>),
+    
+    /// Neural type for differentiable programming
+    Neural {
+        input_dim: u32,
+        output_dim: u32,
+        architecture: NetworkArchitecture,
+    },
 }
 
-/// Terms (expressions) in SCTT
+/// Modality for modal logic
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum Modality {
+    Possible,
+    Necessary,
+    Temporal(TimeModality),
+    Spatial(SpatialModality),
+    Quantum,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum TimeModality {
+    Past,
+    Present,
+    Future,
+    Always,
+    Eventually,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum SpatialModality {
+    Here,
+    There,
+    Everywhere,
+    Somewhere,
+}
+
+/// Network architecture for neural types
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum NetworkArchitecture {
+    Feedforward(Vec<u32>),
+    Recurrent { hidden_size: u32 },
+    Transformer { heads: u32, layers: u32 },
+    Quantum { qubits: u32 },
+    Topological { genus: u32 },
+}
+
+/// Terms (expressions) in SCTT - The Computational Universe
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Term {
     /// Variable
@@ -143,11 +242,158 @@ pub enum Term {
     /// Real number literal
     RealLit(f64),
     
+    /// Complex number literal
+    ComplexLit { real: f64, imag: f64 },
+    
     /// Smooth function (with symbolic representation)
     SmoothFunc {
         expr: String,
         var: String,
+        derivatives: Vec<String>, // Symbolic derivatives
     },
+    
+    /// Quantum superposition
+    Superposition(Vec<(Term, f64)>), // Terms with amplitudes
+    
+    /// Consciousness operator
+    Conscious {
+        substrate: Box<Term>,
+        experience: Box<Term>,
+    },
+    
+    /// Temporal evolution
+    Evolve {
+        initial: Box<Term>,
+        time: Box<Term>,
+        dynamics: Box<Term>,
+    },
+    
+    /// Fractal iteration
+    Fractal {
+        seed: Box<Term>,
+        iterator: Box<Term>,
+        depth: u32,
+    },
+    
+    /// Kan composition
+    Comp {
+        lid: Box<Term>,
+        base: Box<Term>,
+        faces: Vec<(String, Term)>,
+    },
+    
+    /// Coercion along paths
+    Coe {
+        path: Box<Term>,
+        start: Box<Term>,
+        end: Box<Term>,
+        value: Box<Term>,
+    },
+    
+    /// Homogeneous composition
+    HCom {
+        base: Box<Term>,
+        lid: Box<Term>,
+        faces: Vec<(String, Term)>,
+    },
+    
+    /// Glue term
+    GlueTerm {
+        base: Box<Term>,
+        fiber: Box<Term>,
+        equiv: Box<Term>,
+    },
+    
+    /// Unglue operation
+    Unglue(Box<Term>),
+    
+    /// Neural network term
+    NeuralNet {
+        weights: Vec<Vec<f64>>,
+        activation: ActivationFunction,
+    },
+    
+    /// Proof term
+    Proof {
+        proposition: Box<Type>,
+        evidence: Box<Term>,
+    },
+    
+    /// Infinity constructor
+    Infinity(InfinityKind),
+    
+    /// Differential operator
+    Diff {
+        function: Box<Term>,
+        variable: String,
+        order: u32,
+    },
+    
+    /// Integral operator
+    Integral {
+        integrand: Box<Term>,
+        variable: String,
+        lower: Box<Term>,
+        upper: Box<Term>,
+    },
+    
+    /// Taylor series expansion
+    Taylor {
+        function: Box<Term>,
+        center: Box<Term>,
+        order: u32,
+    },
+    
+    /// Fourier transform
+    Fourier(Box<Term>),
+    
+    /// Laplace transform
+    Laplace(Box<Term>),
+    
+    /// Quantum gate application
+    QuantumGate {
+        gate: QuantumGate,
+        qubits: Vec<Term>,
+    },
+    
+    /// Time travel operator
+    TimeTravel {
+        state: Box<Term>,
+        timeline: String,
+        destination: Box<Term>,
+    },
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ActivationFunction {
+    ReLU,
+    Sigmoid,
+    Tanh,
+    GELU,
+    Swish,
+    Mish,
+    Quantum, // Quantum activation
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum InfinityKind {
+    Countable,
+    Uncountable,
+    Aleph(u32),
+    Inaccessible,
+    Mahlo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum QuantumGate {
+    Hadamard,
+    PauliX,
+    PauliY,
+    PauliZ,
+    CNOT,
+    Toffoli,
+    Phase(f64),
+    Custom(String),
 }
 
 impl Type {

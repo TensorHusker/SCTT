@@ -1,0 +1,18 @@
+[package]
+name = "sctt-gpu"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "GPU acceleration for SCTT operations"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+wgpu.workspace = true
+bytemuck.workspace = true
+anyhow.workspace = true
+
+[features]
+default = []
+compute-shaders = []

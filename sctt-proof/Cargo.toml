@@ -1,0 +1,14 @@
+[package]
+name = "sctt-proof"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Interactive theorem proving for SCTT"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-checker = { path = "../sctt-checker" }
+anyhow.workspace = true
+serde.workspace = true

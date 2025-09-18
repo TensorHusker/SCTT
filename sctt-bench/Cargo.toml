@@ -1,0 +1,15 @@
+[package]
+name = "sctt-bench"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Comprehensive benchmarks for SCTT"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-checker = { path = "../sctt-checker" }
+criterion.workspace = true
+pprof.workspace = true
+

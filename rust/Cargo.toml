@@ -5,7 +5,16 @@ members = [
     "sctt-cubical",
     "sctt-checker",
     "sctt-playground",
-    "sctt-game", "sctt-server", "sctt-web",
+    "sctt-game",
+    "sctt-server",
+    "sctt-web",
+    "sctt-wasm",
+    "sctt-consciousness",
+    "sctt-quantum",
+    "sctt-physics",
+    "sctt-gpu",
+    "sctt-ai",
+    "sctt-demo",
 ]
 resolver = "2"
 

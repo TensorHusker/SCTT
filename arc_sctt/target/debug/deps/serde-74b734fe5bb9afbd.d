@@ -1,0 +1,14 @@
+/Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/deps/serde-74b734fe5bb9afbd.d: /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/lib.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/integer128.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/mod.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/de.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/ser.rs /Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/build/serde-f328fed8135dc029/out/private.rs
+
+/Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/deps/libserde-74b734fe5bb9afbd.rlib: /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/lib.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/integer128.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/mod.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/de.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/ser.rs /Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/build/serde-f328fed8135dc029/out/private.rs
+
+/Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/deps/libserde-74b734fe5bb9afbd.rmeta: /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/lib.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/integer128.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/mod.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/de.rs /Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/ser.rs /Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/build/serde-f328fed8135dc029/out/private.rs
+
+/Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/lib.rs:
+/Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/integer128.rs:
+/Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/mod.rs:
+/Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/de.rs:
+/Users/tensorhusker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.225/src/private/ser.rs:
+/Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/build/serde-f328fed8135dc029/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/tensorhusker/Git/SCTT/arc_sctt/target/debug/build/serde-f328fed8135dc029/out

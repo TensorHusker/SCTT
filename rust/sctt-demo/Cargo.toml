@@ -1,0 +1,21 @@
+[package]
+name = "sctt-demo"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "consciousness-demo"
+path = "src/main.rs"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-consciousness = { path = "../sctt-consciousness" }
+sctt-quantum = { path = "../sctt-quantum" }
+sctt-physics = { path = "../sctt-physics" }
+eframe = "0.24"
+egui = "0.24"
+egui_plot = "0.24"
+env_logger = "0.10"
+
+[features]
+default = []

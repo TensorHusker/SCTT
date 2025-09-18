@@ -1,0 +1,18 @@
+[package]
+name = "sctt-smooth"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Extended smooth operations for SCTT"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+anyhow.workspace = true
+nalgebra.workspace = true
+approx.workspace = true
+
+[features]
+default = []
+gpu-acceleration = []
