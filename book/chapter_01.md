@@ -40,9 +40,9 @@ Traditional type theories excel at discrete reasoning but struggle with continui
 3. The univalence axiom holds computationally via Glue types
 4. Differentiation is a definitional operation on smooth functions
 
-**Important Note**: While this theorem establishes the existence of SCTT, practical implementation faces significant challenges including EXPTIME-complete type checking and undecidable smooth function equality (see Chapter 6 for limitations).
+**Important Note**: While this theorem establishes the existence of SCTT, practical implementation faces significant challenges including EXPTIME-complete type checking and undecidable smooth function equality (see [Chapter 6](./chapter_06.md) for detailed analysis of limitations and workarounds).
 
-**Proof sketch**: We construct this model using cubical sets enriched with smooth structure, where the interval [0,1] has its standard smooth structure, and composition operations preserve smoothness. Full details in Chapter 8.
+**Proof sketch**: We construct this model using cubical sets enriched with smooth structure, where the interval [0,1] has its standard smooth structure, and composition operations preserve smoothness. Full details in [Chapter 8](./chapter_08.md) on metatheory.
 
 ```sctt
 -- A smooth function with its derivative as a proof
@@ -101,7 +101,7 @@ Self-driving cars and robots need smooth control with safety guarantees. SCTT pr
 
 #### 4. **Cryptographic Protocols (Theoretical)**
 
-While SCTT's deterministic nature limits traditional cryptographic applications (see Chapter 6), it enables novel theoretical approaches:
+While SCTT's deterministic nature limits traditional cryptographic applications (see [Chapter 6](./chapter_06.md) for detailed discussion of cryptographic limitations and topological alternatives), it enables novel theoretical approaches:
 - Topological cryptographic primitives
 - Type-theoretic security proofs
 - Verification of cryptographic properties
@@ -131,7 +131,7 @@ This isn't hypothetical. SCTT programs come with strong mathematical guarantees 
 - Missing redundancy checks (when specified in the type)
 - Unstable feedback loops (when stability requirements are encoded)
 
-However, SCTT has fundamental limitations (see Chapter 6):
+However, SCTT has fundamental limitations (see [Chapter 6](./chapter_06.md) for complete analysis):
 - Type checking is EXPTIME-complete, limiting practical scalability
 - Cannot handle discontinuous phenomena or true randomness
 - Chaotic systems remain unpredictable despite smooth structure
@@ -267,24 +267,24 @@ SCTT is the first system achieving all four properties simultaneously.
 ### For Different Audiences
 
 #### **For Mathematicians**
-- Start with Chapter 2 (Type Theory) for foundations
-- Focus on Chapters 3-4 (Cubical and Smooth structures)
-- See Chapter 6 for differential geometry applications
+- Start with [Chapter 2](./chapter_02.md) (Type Theory) for foundations
+- Focus on [Chapter 3](./chapter_03.md) (Cubical) and [Chapter 4](./chapter_04.md) (Smooth structures)
+- See [Chapter 15](./chapter_15.md) for higher-categorical applications
 
 #### **For Computer Scientists**
-- Begin with Chapter 2 if unfamiliar with dependent types
-- Jump to Chapters 7-9 for implementation
-- Chapter 10 shows programming techniques
+- Begin with [Chapter 2](./chapter_02.md) if unfamiliar with dependent types
+- Jump to [Chapter 7](./chapter_07.md) (formal rules), [Chapter 8](./chapter_08.md) (metatheory), and [Chapter 9](./chapter_09.md) (implementation)
+- [Chapter 10](./chapter_10.md) shows programming techniques
 
 #### **For Engineers/Scientists**
 - Read this introduction thoroughly
-- Skip to Chapter 11-12 for applications
+- Skip to [Chapter 11](./chapter_11.md) (Scientific Computing), [Chapter 12](./chapter_12.md) (Physics/Engineering), and [Chapter 13](./chapter_13.md) (Machine Learning) for applications
 - Return to theory chapters as needed
 
 #### **For Philosophers**
 - This chapter provides conceptual overview
-- Chapter 3 explores the nature of equality
-- Chapter 15 discusses foundational questions
+- [Chapter 3](./chapter_03.md) explores the nature of equality and homotopy
+- [Chapter 15](./chapter_15.md) discusses foundational questions about higher categories
 
 ### How This Book Works
 

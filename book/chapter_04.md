@@ -8,7 +8,7 @@
 
 We now reach the heart of SCTT's innovation: adding smooth structure to our cubical foundation. While traditional type theory excels at discrete mathematics and cubical type theory captures topological structure, neither directly supports the differential geometry essential to physics, optimization, and continuous systems.
 
-This chapter introduces smooth types—types equipped with differential structure that computes. We'll see how every type can be made smooth, how functions become differentiable by construction, and how the cubical structure from Chapter 3 naturally extends to support calculus.
+This chapter introduces smooth types—types equipped with differential structure that computes. We'll see how every type can be made smooth, how functions become differentiable by construction, and how the cubical structure from [Chapter 3](./chapter_03.md) naturally extends to support calculus. The computational aspects developed here will be formalized with differential operators in [Chapter 5](./chapter_05.md).
 
 ### Synthetic vs Analytic Approach
 

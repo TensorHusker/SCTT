@@ -8,7 +8,7 @@
 
 Traditional type theory treats equality as a mere proposition: either two things are equal or they aren't. But mathematics is richer than this. The way two things are equal matters. A circle can be equal to itself in infinitely many ways—by rotating it through any angle. Cubical type theory captures this richness by making paths first-class citizens.
 
-This chapter introduces the revolutionary cubical structure that gives SCTT its power. We'll see how paths become computational objects, how spaces emerge from types, and how the univalence axiom becomes a theorem rather than an axiom.
+This chapter introduces the revolutionary cubical structure that gives SCTT its power. We'll see how paths become computational objects, how spaces emerge from types, and how the univalence axiom becomes a theorem rather than an axiom. The foundations established in [Chapter 2](./chapter_02.md) are essential background, and this cubical structure will be enriched with smooth geometry in [Chapter 4](./chapter_04.md).
 
 ### Mathematical Foundations
 

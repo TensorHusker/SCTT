@@ -6,6 +6,8 @@
 
 Before we can add smooth structures to type theory, we need a solid foundation. This chapter introduces dependent type theory—the bedrock upon which SCTT is built. If you're familiar with languages like Haskell or ML, you'll recognize many concepts, but with a crucial twist: types can depend on values.
 
+The concepts developed here will be essential for understanding the cubical structure in [Chapter 3](./chapter_03.md), smooth types in [Chapter 4](./chapter_04.md), and the formal rules presented in [Chapter 7](./chapter_07.md).
+
 ### Chapter Overview
 
 We present type theory in three layers:
@@ -13,7 +15,7 @@ We present type theory in three layers:
 2. **Semantics**: What types and terms mean
 3. **Pragmatics**: How to use types effectively
 
-By the end of this chapter, you'll understand the formal rules governing dependent types and how they provide a computational foundation for mathematics.
+By the end of this chapter, you'll understand the formal rules governing dependent types and how they provide a computational foundation for mathematics. These foundations will be extended with cubical structure in [Chapter 3](./chapter_03.md) and enriched with smooth geometry in [Chapter 4](./chapter_04.md).
 
 ## 2.1 Types and Terms {#types-and-terms}
 
@@ -649,7 +651,7 @@ Everything we've learned extends naturally to smooth structures:
 -- Regular function type
 f : Real → Real
 
--- Smooth function type (preview of Chapter 4)
+-- Smooth function type (preview of [Chapter 4](./chapter_04.md))
 g : C∞(Real, Real)
 
 -- Dependent smooth function
@@ -686,7 +688,7 @@ h : (x : Real) → C∞(Interval x (x+1), Real)
 1. How would you extend the type system to handle sized types?
 2. What would quotient types look like in this system?
 3. How might we add effects (IO, exceptions) while preserving purity?
-4. Can you design a type for continuous functions before seeing Chapter 4?
+4. Can you design a type for continuous functions before seeing [Chapter 4](./chapter_04.md)?
 
 ---
 
@@ -700,7 +702,7 @@ We've built our foundation:
 - **Universe hierarchy** avoids paradoxes
 - **Propositions as types** unifies logic and computation
 
-These concepts power everything in SCTT. Next, we'll add the cubical structure that makes types behave like spaces, setting the stage for smooth geometry.
+These concepts power everything in SCTT. Next, we'll add the cubical structure in [Chapter 3](./chapter_03.md) that makes types behave like spaces, setting the stage for smooth geometry in [Chapter 4](./chapter_04.md).
 
 ---
 

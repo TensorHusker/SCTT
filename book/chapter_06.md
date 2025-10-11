@@ -48,7 +48,7 @@ With this sober perspective, let us examine the boundaries of smooth computation
 
 ## Introduction
 
-Having established the powerful capabilities of SCTT in previous chapters, we must now honestly confront its limitations. Every mathematical framework, no matter how revolutionary, has boundaries—and understanding these boundaries is crucial for both theoretical development and practical application.
+Having established the powerful capabilities of SCTT in [Chapters 3-5](./chapter_03.md) covering cubical structure, smooth types, and differential operators, we must now honestly confront its limitations. Every mathematical framework, no matter how revolutionary, has boundaries—and understanding these boundaries is crucial for both theoretical development and practical application.
 
 This chapter addresses the fundamental challenges and limitations of SCTT:
 1. **What SCTT cannot express** - The inherent boundaries of smooth computation
@@ -57,7 +57,7 @@ This chapter addresses the fundamental challenges and limitations of SCTT:
 4. **Undecidability boundaries** - What remains fundamentally uncomputable
 5. **Practical engineering challenges** - Real-world implementation obstacles
 
-By understanding these limitations, we can work around them, develop extensions, and know when SCTT is—and isn't—the right tool.
+By understanding these limitations, we can work around them, develop extensions, and know when SCTT is—and isn't—the right tool. The implementation strategies discussed here will inform the practical approaches in [Chapter 9](./chapter_09.md) and [Chapter 10](./chapter_10.md).
 
 ## 6.1 Fundamental Expressivity Limitations {#expressivity-limits}
 

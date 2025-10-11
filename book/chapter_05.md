@@ -6,7 +6,7 @@
 
 ## Introduction  
 
-Having established smooth types in Chapter 4, we now turn to computation with differential structures. This chapter shows how SCTT makes differentiation a first-class computational operation, with derivatives that are guaranteed correct by type checking.
+Having established smooth types in [Chapter 4](./chapter_04.md), we now turn to computation with differential structures. This chapter shows how SCTT makes differentiation a first-class computational operation, with derivatives that are guaranteed correct by type checking. The theoretical foundations will be complemented by practical applications in [Chapter 11](./chapter_11.md) (Scientific Computing) and [Chapter 12](./chapter_12.md) (Physics and Engineering).
 
 Traditional calculus relies on limiting processes that may not converge. Numerical differentiation suffers from truncation and roundoff errors. SCTT solves both problems: derivatives exist by construction and compute exactly. We'll see how the chain rule becomes a theorem rather than a rule, how integration respects types, and how differential forms provide coordinate-free calculus.
 
