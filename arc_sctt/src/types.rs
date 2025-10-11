@@ -33,7 +33,7 @@ pub enum SCTTError {
 }
 
 /// A 2D grid representing a visual pattern
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Grid {
     pub data: ndarray::Array2<u8>,
     pub width: usize,
@@ -248,7 +248,7 @@ impl Morphism {
 }
 
 /// Geometric transformations that can be applied to grids
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Transform {
     /// Identity transformation (does nothing)
     Identity,
@@ -310,8 +310,6 @@ impl Transform {
             Transform::Identity => u32::MAX, // Infinitely smooth
             Transform::Rotate90 | Transform::Rotate180 | Transform::Rotate270 => 0, // Discontinuous
             Transform::FlipHorizontal | Transform::FlipVertical => 0,
-            Transform::SmoothMorph { .. } => 3, // C^3 smooth
-            Transform::DifferentialTransform { .. } => 2, // C^2 smooth
             Transform::Sequence(transforms) => transforms.iter().map(|t| t.smoothness_order()).min().unwrap_or(0),
             _ => 1, // C^1 smooth by default
         }

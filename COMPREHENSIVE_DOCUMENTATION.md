@@ -33,7 +33,7 @@ This repository contains the **world's first complete implementation** of Smooth
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/SCTT.git
+git clone https://github.com/TensorHusker/SCTT.git
 cd SCTT
 
 # Build the complete system

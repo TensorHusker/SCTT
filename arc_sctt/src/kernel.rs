@@ -13,7 +13,8 @@ use std::collections::HashMap;
 pub struct Kernel {
     dimension: usize,
     smoothness_threshold: f64,
-    composition_cache: HashMap<(Transform, Transform), Transform>,
+    // Note: Composition caching removed due to Transform not implementing Hash
+    // (Transform contains Vec and Grid which don't implement Hash)
 }
 
 impl Kernel {
@@ -22,7 +23,6 @@ impl Kernel {
         Kernel {
             dimension: 2,
             smoothness_threshold: 0.01,
-            composition_cache: HashMap::new(),
         }
     }
     

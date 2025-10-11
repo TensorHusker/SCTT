@@ -2,7 +2,7 @@ name: Deploy SCTT Book
 
 on:
   push:
-    branches: [ main, sctt-arc-revolution ]
+    branches: [ main ]
     paths:
       - 'book/**'
       - '.github/workflows/deploy-book.yml'
@@ -39,7 +39,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs
+        publish_dir: ./book/book
         publish_branch: gh-pages
         force_orphan: true
         user_name: 'github-actions[bot]'

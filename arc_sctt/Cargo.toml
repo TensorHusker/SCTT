@@ -7,7 +7,7 @@ license = "MIT"
 authors = ["SCTT Collective <sctt@collective.ai>"]
 
 [dependencies]
-ndarray = "0.15"
+ndarray = { version = "0.15", features = ["serde"] }
 num-traits = "0.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

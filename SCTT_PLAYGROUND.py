@@ -20,8 +20,6 @@ from scipy.interpolate import interp1d
 from scipy.integrate import odeint
 from scipy.optimize import minimize
 import networkx as nx
-from IPython.display import display, HTML, clear_output
-import ipywidgets as widgets
 
 
 # ============================================================================

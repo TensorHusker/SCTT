@@ -1,8 +1,9 @@
 [workspace]
 resolver = "2"
 members = [
+    "arc_sctt",
     "sctt-core",
-    "sctt-checker", 
+    "sctt-checker",
     "sctt-smooth",
     "sctt-arc",
     "sctt-wasm",
