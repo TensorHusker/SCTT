@@ -10,6 +10,30 @@ We now reach the heart of SCTT's innovation: adding smooth structure to our cubi
 
 This chapter introduces smooth types—types equipped with differential structure that computes. We'll see how every type can be made smooth, how functions become differentiable by construction, and how the cubical structure from [Chapter 3](./chapter_03.md) naturally extends to support calculus. The computational aspects developed here will be formalized with differential operators in [Chapter 5](./chapter_05.md).
 
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 20 minutes**, read:
+- [§4.1 Smooth Real Numbers](#smooth-reals) — The type `ℝ` with differentiation
+- [§4.2 Smooth Functions](#smooth-functions) — `C∞(A, B)`
+- [§4.3 Tangent Bundles](#tangent-bundles) — Derivatives as linear maps
+
+**Core takeaways**:
+- Smooth reals `ℝ` support the derivative operator `D`
+- Smooth functions `C∞(A, B)` are infinitely differentiable
+- The tangent bundle `T M` captures all tangent vectors
+- Infinitesimals are realized via the Kock-Lawvere axiom
+- **Chain rule holds definitionally**: `D[g ∘ f] ≡ Dg ∘ Df`
+
+**Prerequisites**: [Chapter 2](./chapter_02.md), [Chapter 3](./chapter_03.md), multivariable calculus
+
+**Time**: 4-5 hours for full chapter with exercises
+
+> **🔬 Running Example**: Particle worldlines are smooth paths through spacetime. Velocities are tangent vectors. See [running example §Chapter 4](./running_example.md#chapter-4-smooth-types).
+
+---
+
 ### Synthetic vs Analytic Approach
 
 Classical differential geometry builds smooth structures analytically through limits and epsilon-delta arguments. Synthetic Differential Geometry (SDG), pioneered by Lawvere and Kock, takes the opposite approach: smoothness is primitive, and all maps are smooth by construction.

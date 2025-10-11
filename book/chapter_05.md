@@ -4,11 +4,35 @@
 >
 > "In SCTT, derivatives are not just operations—they are morphisms in the category of smooth types."
 
-## Introduction  
+## Introduction
 
 Having established smooth types in [Chapter 4](./chapter_04.md), we now turn to computation with differential structures. This chapter shows how SCTT makes differentiation a first-class computational operation, with derivatives that are guaranteed correct by type checking. The theoretical foundations will be complemented by practical applications in [Chapter 11](./chapter_11.md) (Scientific Computing) and [Chapter 12](./chapter_12.md) (Physics and Engineering).
 
 Traditional calculus relies on limiting processes that may not converge. Numerical differentiation suffers from truncation and roundoff errors. SCTT solves both problems: derivatives exist by construction and compute exactly. We'll see how the chain rule becomes a theorem rather than a rule, how integration respects types, and how differential forms provide coordinate-free calculus.
+
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 20 minutes**, read:
+- [§5.1 Differentiation](#differentiation) — The `D` operator
+- [§5.2 Chain Rule](#chain-rule) — Automatic composition
+- [§5.4 Differential Forms](#differential-forms) — Coordinate-free calculus
+
+**Core takeaways**:
+- `D : C∞(ℝ, ℝ) → C∞(ℝ, ℝ)` computes derivatives exactly
+- **Chain rule is automatic**: `D[g ∘ f] = Dg ∘ Df` (definitionally!)
+- Integration via `∫ : Ω¹(M) → ℝ`
+- Stokes' theorem: `∫_∂Ω ω = ∫_Ω dω`
+- Differential forms generalize gradients, curls, and divergence
+
+**Prerequisites**: [Chapter 4](./chapter_04.md), vector calculus recommended
+
+**Time**: 3-4 hours for full chapter with exercises
+
+> **🔬 Running Example**: Forces are derivatives of potential energy. Lagrangian mechanics and Noether's theorem emerge naturally. See [running example §Chapter 5](./running_example.md#chapter-5-differential-operators).
+
+---
 
 ### Three Perspectives on Differentiation
 

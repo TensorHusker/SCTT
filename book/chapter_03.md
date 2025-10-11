@@ -10,6 +10,30 @@ Traditional type theory treats equality as a mere proposition: either two things
 
 This chapter introduces the revolutionary cubical structure that gives SCTT its power. We'll see how paths become computational objects, how spaces emerge from types, and how the univalence axiom becomes a theorem rather than an axiom. The foundations established in [Chapter 2](./chapter_02.md) are essential background, and this cubical structure will be enriched with smooth geometry in [Chapter 4](./chapter_04.md).
 
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 20 minutes**, read:
+- [§3.1 The Interval Type](#interval) — The dimension `I`
+- [§3.2 Path Types](#paths) — Paths as functions from `I`
+- [§3.5 Univalence](#univalence) — Equivalent types are equal
+
+**Core takeaways**:
+- The interval type `I` has endpoints `i0` and `i1`
+- `Path A x y` is a continuous function `I → A` from `x` to `y`
+- Paths can be composed like paths in topology
+- **Univalence**: `A ≃ B → Path Type A B` (equivalence implies equality)
+- Unlike axioms, univalence **computes** via Glue types
+
+**Prerequisites**: [Chapter 2](./chapter_02.md) — Dependent type theory
+
+**Time**: 3-4 hours for full chapter with exercises
+
+> **🔬 Running Example**: Particle trajectories are paths through space. Path composition models sequential motion. See [running example §Chapter 3](./running_example.md#chapter-3-cubical-structure).
+
+---
+
 ### Mathematical Foundations
 
 Cubical type theory is based on a model in cubical sets—presheaves on the category of cubes with connections and symmetries. The key insight is that:

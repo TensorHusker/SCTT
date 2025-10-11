@@ -8,6 +8,27 @@ Before we can add smooth structures to type theory, we need a solid foundation. 
 
 The concepts developed here will be essential for understanding the cubical structure in [Chapter 3](./chapter_03.md), smooth types in [Chapter 4](./chapter_04.md), and the formal rules presented in [Chapter 7](./chapter_07.md).
 
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 15 minutes**, read:
+- [§2.1 Types and Terms](#types-and-terms) — Basic syntax
+- [§2.2 Dependent Types](#dependent-types) — Types depending on values
+- [Running Example](#running-example) — Physical dimensions
+
+**Core takeaways**:
+- Types can depend on values (e.g., `Vec n` is a vector of length `n`)
+- Dependent functions `Π (x : A), B(x)` generalize regular functions
+- The type system prevents errors at compile time
+- **Curry-Howard**: Propositions are types, proofs are programs
+
+**Prerequisites**: Basic programming (functions, types), high school math
+
+**Time**: 2-3 hours for full chapter with exercises
+
+---
+
 ### Chapter Overview
 
 We present type theory in three layers:
@@ -18,6 +39,8 @@ We present type theory in three layers:
 By the end of this chapter, you'll understand the formal rules governing dependent types and how they provide a computational foundation for mathematics. These foundations will be extended with cubical structure in [Chapter 3](./chapter_03.md) and enriched with smooth geometry in [Chapter 4](./chapter_04.md).
 
 ## 2.1 Types and Terms {#types-and-terms}
+
+> **🔬 Running Example Preview**: Throughout this book, we'll build a complete particle physics simulation using SCTT. In this chapter, we'll use **dependent types** to ensure dimensional correctness in physical quantities. See the [complete running example](./running_example.md) for the full story.
 
 ### What is a Type?
 
@@ -150,6 +173,31 @@ three_vector : Vec 3
 -- wrong : Vec 2
 -- wrong = three_vector  -- Error: Vec 3 ≠ Vec 2
 ```
+
+> **🔬 Running Example: Physical Dimensions**
+>
+> Just as vectors depend on their length, physical quantities depend on their **dimensions**:
+> ```sctt
+> -- Dimensions as types
+> data Dimension : Type where
+>   L : Dimension  -- Length
+>   T : Dimension  -- Time
+>   M : Dimension  -- Mass
+>   _⊗_ : Dimension → Dimension → Dimension
+>
+> Quantity : Dimension → Type
+> Quantity d = Σ (value : Real), (dim : d)
+>
+> -- Type-safe quantities
+> position : Quantity (L ⊗ L ⊗ L)  -- 3D position
+> velocity : Quantity (L ⊗ T⁻¹)     -- Speed
+> mass : Quantity M
+>
+> -- This prevents dimensional errors at compile time!
+> -- error : Quantity L
+> -- error = mass + velocity  -- TYPE ERROR: M ≠ L·T⁻¹
+> ```
+> The type system catches physics errors automatically! See [full example](./running_example.md#chapter-2-type-theory-foundations).
 
 ### Pi Types (Dependent Functions)
 
