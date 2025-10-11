@@ -1,0 +1,59 @@
+[book]
+title = "Smooth Cubical Type Theory: A Revolutionary Foundation for Mathematics and Computation"
+authors = ["SCTT Research Team"]
+description = "The definitive guide to Smooth Cubical Type Theory, unifying homotopy type theory with differential geometry"
+language = "en"
+multilingual = false
+src = "."
+
+[build]
+build-dir = "../docs"  # Output to docs/ for GitHub Pages
+create-missing = false
+
+[output.html]
+default-theme = "ayu"
+preferred-dark-theme = "ayu"
+smart-punctuation = true
+mathjax-support = true
+copy-fonts = true
+no-section-label = false
+git-repository-url = "https://github.com/tensorhusker/SCTT"
+edit-url-template = "https://github.com/tensorhusker/SCTT/edit/main/book/{path}"
+site-url = "/SCTT/"
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.search]
+enable = true
+limit-results = 30
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+boost-paragraph = 1
+expand = true
+heading-split-level = 2
+
+[output.html.playground]
+editable = true
+copyable = true
+line-numbers = true
+
+# Custom theme for code blocks
+[output.html.code.highlight]
+theme = "ayu-dark"
+
+# PDF output configuration (requires mdbook-pdf)
+[output.pdf]
+enable = false  # Set to true when mdbook-pdf is installed
+
+# Preprocessor for mathematical notation
+[preprocessor.katex]
+
+# Preprocessor for mermaid diagrams (if using)
+[preprocessor.mermaid]
+
+# Link checker to ensure all references work
+[output.linkcheck]
+warning-policy = "warn"
