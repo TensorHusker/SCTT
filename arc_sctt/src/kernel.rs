@@ -119,38 +119,25 @@ impl Kernel {
     }
     
     /// Compose two morphisms if possible
-    pub fn compose_morphisms(&mut self, m1: &Morphism, m2: &Morphism) -> Result<Morphism, SCTTError> {
+    pub fn compose_morphisms(&self, m1: &Morphism, m2: &Morphism) -> Result<Morphism, SCTTError> {
         if !m1.composable_with(m2) {
             return Err(SCTTError::CompositionFailed {
                 source: format!("{:?}", m1.transform),
                 target: format!("{:?}", m2.transform),
             });
         }
-        
-        // Check cache first
-        let cache_key = (m1.transform.clone(), m2.transform.clone());
-        if let Some(cached_transform) = self.composition_cache.get(&cache_key) {
-            return Ok(Morphism::new(
-                m2.source.clone(),
-                m1.target.clone(),
-                cached_transform.clone(),
-            ));
-        }
-        
+
         // Compute composition
         let composed_transform = m1.transform.compose(&m2.transform)?;
-        
-        // Cache result
-        self.composition_cache.insert(cache_key, composed_transform.clone());
-        
+
         // Verify composition maintains smoothness
         let composed_smoothness = composed_transform.smoothness_order();
         if composed_smoothness < m1.smoothness_order.min(m2.smoothness_order) {
-            return Err(SCTTError::SmoothnessViolation { 
-                order: composed_smoothness 
+            return Err(SCTTError::SmoothnessViolation {
+                order: composed_smoothness
             });
         }
-        
+
         Ok(Morphism::new(
             m2.source.clone(),
             m1.target.clone(),
@@ -519,7 +506,7 @@ mod tests {
     
     #[test]
     fn test_morphism_composition() {
-        let mut kernel = Kernel::new();
+        let kernel = Kernel::new();
         let sig = GridSignature {
             width: 2,
             height: 2,
@@ -527,10 +514,10 @@ mod tests {
             shape_features: vec![],
             complexity: 0.0,
         };
-        
+
         let m1 = Morphism::new(sig.clone(), sig.clone(), Transform::Rotate90);
         let m2 = Morphism::new(sig.clone(), sig.clone(), Transform::Rotate90);
-        
+
         let composed = kernel.compose_morphisms(&m1, &m2).unwrap();
         assert_eq!(composed.transform, Transform::Rotate180);
     }
