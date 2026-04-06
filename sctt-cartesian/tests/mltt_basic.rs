@@ -1,5 +1,6 @@
 use sctt_cartesian::dim::*;
 use sctt_cartesian::cof::*;
+use sctt_cartesian::syntax::Term;
 
 #[test]
 fn dim_substitution_zero() {
@@ -50,4 +51,25 @@ fn cof_conjunction() {
     );
     let result = cof.subst_dim(DimIndex(0), &Dim::Zero);
     assert!(!result.is_false());
+}
+
+#[test]
+fn subst_identity() {
+    let t = Term::lambda(Term::var(0));
+    let result = t.subst_term(0, &Term::Nat);
+    assert_eq!(result, Term::lambda(Term::var(0)));
+}
+
+#[test]
+fn subst_free_var() {
+    let t = Term::var(0);
+    let result = t.subst_term(0, &Term::Nat);
+    assert_eq!(result, Term::Nat);
+}
+
+#[test]
+fn subst_dim_in_path_app() {
+    let t = Term::path_app(Term::var(0), Dim::Var(DimIndex(0)));
+    let result = t.subst_dim(DimIndex(0), &Dim::Zero);
+    assert_eq!(result, Term::path_app(Term::var(0), Dim::Zero));
 }
