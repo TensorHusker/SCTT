@@ -36,7 +36,7 @@ This chapter introduces the revolutionary cubical structure that gives SCTT its 
 
 ### Mathematical Foundations
 
-Cubical type theory is based on a model in cubical sets—presheaves on the category of cubes with connections and symmetries. The key insight is that:
+Cubical type theory is based on a model in cubical sets—presheaves on the Cartesian cube category. The key insight is that:
 
 1. **Cubes model higher equalities**: An n-cube represents an n-dimensional path
 2. **Composition is geometric**: Kan filling operations give computational content
@@ -62,22 +62,40 @@ i1 : I  -- right endpoint (1)
 
 But `I` is not an ordinary type—it's a pretype that represents "dimension" or "direction".
 
-#### De Morgan Algebra Structure
+#### Cartesian Interval Structure
 
-The interval forms a de Morgan algebra:
+SCTT uses the Cartesian cube category (ABCFHL) rather than the De Morgan variant (CCHM). The interval has no algebraic operations on its elements—only endpoints, face maps, and the diagonal:
 
 ```sctt
--- Operations on I
-_∧_ : I → I → I  -- meet (minimum)
-_∨_ : I → I → I  -- join (maximum)
-~_ : I → I        -- involution (1 - i)
+-- The Cartesian interval (ABCFHL)
+-- No connections (∧, ∨) or reversal (~)
+-- Only: endpoints, faces, degeneracies, and diagonals
 
--- De Morgan laws:
--- ~(i ∧ j) = ~i ∨ ~j
--- ~(i ∨ j) = ~i ∧ ~j
--- ~~i = i
--- i ∧ (j ∨ k) = (i ∧ j) ∨ (i ∧ k)
+i0 : I  -- left endpoint
+i1 : I  -- right endpoint
+
+-- Face maps: restriction to endpoints
+_[i0/i] : (I → A) → A  -- evaluate at left
+_[i1/i] : (I → A) → A  -- evaluate at right
+
+-- Diagonal: the key cofibration replacing connections
+(i = j) : Cofibration  -- diagonal constraint
+
+-- Face formulas (cofibrations)
+-- Built from: ⊥ | ⊤ | (i = 0) | (i = 1) | (i = j) | φ ∧ ψ | φ ∨ ψ
+-- Note: NO negation (~), NO meets/joins on interval elements
 ```
+
+> **Design Note: Why Cartesian over De Morgan?**
+>
+> SCTT uses the Cartesian cube category (ABCFHL) rather than the De Morgan variant (CCHM).
+> The Cartesian interval has a simpler algebra — no connections (∧, ∨) or reversal (~) — which
+> means fewer equational obligations in the normalizer. The diagonal cofibration (i = j) replaces
+> connections for constructing univalent universes. This is the variant implemented by cctt
+> (Kovács), which demonstrates that a high-performance cubical evaluator fits in a few thousand
+> lines. The simpler cube category also interacts more cleanly with the smooth layer's
+> equational theory (ε² = 0), since there are fewer cubical reduction rules to check
+> confluence against.
 
 #### Why Not an Inductive Type?
 
@@ -90,10 +108,15 @@ The interval cannot be an inductive type because:
 -- We can have expressions involving interval variables
 -- If i : I, then i represents a point in the interval
 
--- Examples of interval expressions:
--- i ∧ j     (minimum/meet)
--- i ∨ j     (maximum/join)  
--- ~i        (reversal: 1-i)
+-- In Cartesian cubical, interval expressions are just variables:
+-- i          (a dimension variable)
+-- i0, i1     (the two endpoints)
+-- There are NO operations (∧, ∨, ~) on interval elements themselves
+
+-- Structure lives in *cofibrations* (face formulas):
+-- (i = i0)   (left face)
+-- (i = i1)   (right face)
+-- (i = j)    (diagonal)
 ```
 
 ### Computing with the Interval
@@ -115,9 +138,9 @@ start = line_segment i0  -- evaluates to 1
 end : Real  
 end = line_segment i1    -- evaluates to 3
 
--- And at symbolic points
-middle : I → Real
-middle i = line_segment (i ∧ ~i)  -- stays at midpoint
+-- Paths respect the interval endpoints
+_ : line_segment i0 ≡ line_segment i0  -- trivially
+_ = refl
 ```
 
 ### Constraints and Faces
@@ -127,14 +150,17 @@ The interval supports constraints through face formulas:
 #### Face Lattice
 
 ```sctt
--- Face formulas form a Boolean algebra
-data FaceFormula : Type where
-  ⊤ : FaceFormula              -- true (everywhere)
-  ⊥ : FaceFormula              -- false (nowhere)
-  _=ᵢ_ : I → I → FaceFormula  -- equality constraint
-  _∧_ : FaceFormula → FaceFormula → FaceFormula
-  _∨_ : FaceFormula → FaceFormula → FaceFormula
-  ¬_ : FaceFormula → FaceFormula
+-- Face formulas (cofibrations) in Cartesian cubical type theory
+-- Note: ∧ and ∨ combine *cofibrations*, not interval elements
+data Cof : Type where
+  ⊤ : Cof               -- true (everywhere)
+  ⊥ : Cof               -- false (nowhere)
+  _=0 : I → Cof         -- left face: (i = i0)
+  _=1 : I → Cof         -- right face: (i = i1)
+  _=_ : I → I → Cof     -- diagonal: (i = j)
+  _∧_ : Cof → Cof → Cof -- conjunction of cofibrations
+  _∨_ : Cof → Cof → Cof -- disjunction of cofibrations
+  -- No negation (¬): cofibrations are NOT a Boolean algebra
 ```
 
 #### Partial Elements
@@ -143,7 +169,7 @@ A partial element is defined only where a formula holds:
 
 ```sctt
 -- Partial type former
-Partial : FaceFormula → Type → Type
+Partial : Cof → Type → Type
 
 -- Example: boundary of a square
 square_boundary : (i j : I) → 
@@ -161,7 +187,7 @@ Systems must be compatible on overlapping faces:
 
 ```sctt
 -- Compatibility condition
-IsCompatible : {φ ψ : FaceFormula} → 
+IsCompatible : {φ ψ : Cof} → 
                Partial φ A → Partial ψ A → Type
 IsCompatible u v = ∀ (i : I), (φ ∧ ψ)(i) → u(i) ≡ v(i)
 ```
@@ -232,7 +258,7 @@ app : {A : Type} {x y : A} → Path A x y → I → A
 
 -- Examples
 midpoint : Real
-midpoint = linear_path (i0 ∨ i1) / 2
+midpoint = linear_path @ i0  -- evaluates to 0
 
 -- Paths compute!
 _ : linear_path i0 ≡ 0
@@ -270,7 +296,7 @@ We can compose paths using the sophisticated composition operations:
 
 ```sctt
 -- Horizontal composition for homogeneous types
-hcomp : {A : Type} → {φ : FaceFormula} →
+hcomp : {A : Type} → {φ : Cof} →
         (u : (i : I) → Partial φ A) →
         (u0 : A [φ ↦ u i0]) → A
 
@@ -281,6 +307,20 @@ p ∙ q = λ i → hcomp (λ j → λ {
   (i = i0) → x;         -- left boundary
   (i = i1) → q j        -- right boundary  
 }) (p i)                 -- bottom
+```
+
+#### Path Inverse (Symmetry)
+
+In De Morgan cubical type theory, path inverse is trivially `λ i → p @ ~i` using interval reversal. Without reversal, Cartesian cubical constructs inverse via Kan filling:
+
+```sctt
+-- Path inverse in Cartesian cubical type theory
+-- Without reversal (~), inverse is constructed via Kan filling:
+sym : Path A x y → Path A y x
+sym p = λ i → comp (λ _ → A) ((i = i0) ∨ (i = i1))
+                    (λ j → [ (i = i0) ↦ p @ j , (i = i1) ↦ x ])
+                    (p @ i)
+-- The absence of ~ means inverse requires more work but keeps the interval algebra simpler
 ```
 
 #### The Double Composition Square
@@ -321,7 +361,7 @@ The fundamental composition operation for dependent types:
 
 ```sctt
 -- Composition in type families
-comp : (A : I → Type) → {φ : FaceFormula} →
+comp : (A : I → Type) → {φ : Cof} →
        (u : (i : I) → Partial φ (A i)) →
        (u0 : A i0 [φ ↦ u i0]) → A i1
 
@@ -335,16 +375,16 @@ comp : (A : I → Type) → {φ : FaceFormula} →
 
 ```sctt
 -- Kan filling (composition with intermediate results)
-fill : (A : I → Type) → {φ : FaceFormula} →
+fill : (A : I → Type) → {φ : Cof} →
        (u : (i : I) → Partial φ (A i)) →
        (u0 : A i0 [φ ↦ u i0]) →
        (i : I) → A i
-fill A {φ} u u0 i = comp (λj → A (i ∧ j)) {φ ∨ (i = i0)}
-                          (λj → λ { (φ = 1) → u (i ∧ j);
-                                   (i = i0) → u0 })
-                          u0
-
--- Crucial: fill i0 = u0, fill i1 = comp A u u0
+-- In Cartesian cubical (ABCFHL), fill is a *primitive* operation
+-- — not defined via comp with connections, since we have no connections.
+-- It satisfies:
+--   fill A φ u u0 i0 = u0
+--   fill A φ u u0 i1 = comp A φ u u0
+--   fill A φ u u0 i  agrees with u i on φ
 ```
 
 #### Example: Path Lifting
@@ -354,7 +394,7 @@ fill A {φ} u u0 i = comp (λj → A (i ∧ j)) {φ ∨ (i = i0)}
 path_lifting : {A : Type} {x y : A} →
                (p : Path A x y) →
                Path (Path A x x) refl p
-path_lifting p = λi j → fill A {i0 ∨ i1}
+path_lifting p = λi j → fill (λ _ → A) {(j = i0) ∨ (j = i1)}
                              (λk → λ { (j = i0) → x;
                                       (j = i1) → p k })
                              x i
@@ -423,7 +463,12 @@ Square p q r s = Path (Path A _ _)
 comm_square : {A : Type} {x y : A} →
               (p : Path A x y) →
               Square p p refl refl
-comm_square p = λ i j → p (i ∧ j)
+comm_square p = λ i j → hfill (λ k → λ {
+  (j = i0) → x;
+  (j = i1) → p k
+}) (inS x) i
+-- In De Morgan cubical, this would be simply p (i ∧ j).
+-- Without connections, we construct the square via Kan filling.
 ```
 
 ### Cubes and Higher Dimensions
@@ -561,14 +606,14 @@ unglue : {A : Type} {φ : 𝔽} {Te : Partial φ (Σ Type (_≃ A))} →
 ```sctt
 -- The interval as glued type
 I_as_glue : Type
-I_as_glue = Glue Bool (i0 ∨ i1) (λ {
+I_as_glue = Glue Bool ((i = i0) ∨ (i = i1)) (λ {
   (i = i0) → (Unit, unit_to_bool_equiv);
   (i = i1) → (Unit, unit_to_bool_equiv')
 })
 
 -- Constructing non-trivial paths
 twist : Path Type (A × B) (B × A)
-twist = λ i → Glue (A × B) (i ∨ ~i) (λ {
+twist = λ i → Glue (A × B) ((i = i0) ∨ (i = i1)) (λ {
   (i = i0) → (A × B, id_equiv);
   (i = i1) → (B × A, swap_equiv)
 })

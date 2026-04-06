@@ -2,21 +2,28 @@
 
 > "The foundations of mathematics are not cast in concrete. They are living, breathing structures that grow and evolve with our understanding." — Vladimir Voevodsky
 >
-> "In SCTT, metatheory becomes executable—we don't just prove consistency, we compute with it."
+> "In SCTT, metatheory becomes executable—the proof sketches guide implementation, and the conjectures tell us what to verify."
 
 ## Introduction
 
 Metatheory studies mathematical systems from the outside—asking whether they are consistent, whether proofs terminate, whether equality is decidable. For SCTT, metatheory becomes especially important because we're combining three sophisticated systems: dependent type theory, cubical structure, and smooth mathematics.
 
-This chapter establishes the theoretical foundations that make SCTT trustworthy:
+This chapter examines the metatheoretical properties we expect SCTT to enjoy:
 
-1. **Consistency** - SCTT cannot prove false statements
-2. **Canonicity** - Every closed term has a canonical form
-3. **Decidability** - Type checking and equality are algorithmically decidable
-4. **Normalization** - All computations terminate
+1. **Consistency** - SCTT should not prove false statements
+2. **Canonicity** - Every closed term should have a canonical form
+3. **Decidability** - Type checking and equality should be algorithmically decidable
+4. **Normalization** - All computations should terminate
 5. **Computational Complexity** - Bounds on the computational cost
 
-The key insight is that SCTT's metatheory is not just theoretical—it's computational. We can implement these properties and verify them mechanically.
+The metatheory of SCTT draws on several established results:
+- **Cubical canonicity**: Huber (2016) for CCHM; Sterling and Angiuli (LICS 2021) for Cartesian cubical via Synthetic Tait Computability
+- **Rewrite rule safety**: Cockx, Tabareau, and Winterhalter (POPL 2021) — the RTT framework
+- **Normal form specification**: Huang (arXiv:2603.24923, 2026) — explicit normal forms for Cartesian cubical TT
+- **Mechanized metatheory**: The Rewster (Leray et al., ITP 2024) — MetaCoq verification of rewrite rule safety
+- **Sensitivity metatheory**: Azevedo de Amorim et al. (POPL 2017) — metric preservation for sensitivity types
+
+Where these results cover only individual components, we state the combined SCTT result as a **conjecture** and describe the evidence supporting it. The proof sketches in this chapter remain pedagogically valuable: they show the shape a full metatheoretic argument would take, and they are largely complete for the individual subsystems. The gap lies in the interaction of all three structures simultaneously.
 
 ### Why Metatheory Matters for SCTT
 
@@ -44,14 +51,14 @@ integration_coherence = "All three structures must work together"
 ### The SCTT Metatheoretical Picture
 
 ```sctt
--- SCTT metatheory as a verified system
+-- SCTT metatheory: target properties (status indicated)
 SCTT_Metatheory : MetatheoreticalFramework
 SCTT_Metatheory = {
-  -- Core properties
-  consistency : ¬∃(Γ : Context)(t : Term), Γ ⊢ t : ⊥,
-  canonicity : ∀(t : ClosedTerm)(A : Type), (⊢ t : A) → HasCanonicalForm t,
-  decidability : Decidable TypeChecking ∧ Decidable DefEq,
-  normalization : StronglyNormalizing SCTT_reduction,
+  -- Core properties (CONJECTURED for full SCTT; proven for subsystems)
+  consistency : ¬∃(Γ : Context)(t : Term), Γ ⊢ t : ⊥,           -- Conjecture 8.1
+  canonicity : ∀(t : ClosedTerm)(A : Type), (⊢ t : A) → HasCanonicalForm t,  -- Conjecture 8.2
+  decidability : Decidable TypeChecking ∧ Decidable DefEq,       -- Theorem 8.3 (algorithmic)
+  normalization : StronglyNormalizing SCTT_reduction,              -- Conjecture 8.4
   
   -- Smooth-specific properties  
   smooth_consistency : SmoothOperations preserve TypeStructure,
@@ -65,24 +72,44 @@ SCTT_Metatheory = {
 
 ## 8.1 Consistency {#consistency}
 
-### The Consistency Theorem
+### The Consistency Conjecture
 
 The fundamental requirement: SCTT must not prove false statements.
 
-#### Statement and Proof Strategy
+#### Statement and Status
 
 ```sctt
--- Main consistency theorem
-theorem sctt_consistency : Consistent SCTT
+-- Consistency conjecture for SCTT
+conjecture sctt_consistency : Consistent SCTT
 sctt_consistency = ¬∃(Γ : Context)(t : Term), Γ ⊢ t : ⊥
 
--- Proof by logical relations
-proof sctt_consistency = 
+-- Status: OPEN for the full combined system
+-- Partial results:
+--   ✓ MLTT consistency: classical (Martin-Löf, 1984)
+--   ✓ Cubical (CCHM) consistency: Huber's canonicity theorem (2016)
+--   ✓ Cartesian cubical consistency: model in Cartesian cubical sets (Angiuli et al., 2021)
+--   ✗ Combined cubical + smooth + sensitivity: OPEN
+--   ✗ With rewrite rules (ε² = 0): requires RTT metatheory verification
+```
+
+#### Proof Strategy (Sketch)
+
+The standard approach would proceed by logical relations:
+
+```sctt
+-- Proof sketch by logical relations
+proof_sketch sctt_consistency = 
   logical_relations_model models SCTT ∧
   logical_relations_model ⊨ ⊥ → Empty ∧
   soundness : (Γ ⊢ t : A) → (logical_relations_model ⊨ Γ ⊢ t : A)
   ⟹ ¬∃(t : Term), ⊢ t : ⊥
 ```
+
+> **Honest Assessment**: No published proof establishes consistency of the **full** SCTT
+> system combining Cartesian cubical types, nilsquare infinitesimals (ε² = 0 as a rewrite rule),
+> and Lipschitz sensitivity types. The individual components have consistency results, and the
+> RTT framework (Cockx et al., 2021) provides conditions under which rewrite rules preserve
+> consistency, but the combined system's consistency remains a conjecture.
 
 #### The Logical Relations Model
 
@@ -201,17 +228,31 @@ transport_consistency :
 
 ## 8.2 Canonicity {#canonicity}
 
-### The Canonicity Theorem
+### The Canonicity Conjecture
 
-Every closed term of base type has a canonical form.
+Every closed term of base type should have a canonical form.
 
-#### Statement and Proof
+#### Statement and Status
 
 ```sctt
--- Canonicity for SCTT
-theorem sctt_canonicity :
+-- Canonicity for SCTT (CONJECTURE)
+conjecture sctt_canonicity :
   ∀(t : ClosedTerm)(A : BaseType), 
   (⊢ t : A) → ∃(canonical : CanonicalForm A), t →* canonical
+
+-- Known results:
+--   ✓ MLTT canonicity: classical
+--   ✓ CCHM canonicity: Huber (2016), via Tait computability
+--   ✓ Cartesian cubical canonicity: Sterling & Angiuli (LICS 2021),
+--     via Synthetic Tait Computability (STC) — a type-theoretic
+--     abstraction over algebraic gluing
+--   ✗ Canonicity for cubical + ε² = 0: OPEN
+--   ✗ Canonicity for full SCTT: OPEN
+--
+-- The Sterling-Angiuli proof provides the most promising path forward:
+-- STC reduces canonicity to "trivial theorems of topos theory," and
+-- Huang (arXiv:2603.24923, 2026) extracts explicit normal form specifications
+-- from this proof that could be extended with nilpotent-reduced forms.
 
 -- Base types have specific canonical forms
 BaseType : Type → Type
@@ -230,14 +271,22 @@ CanonicalForm Bool = BoolLiteral
 CanonicalForm (Path A x y) = PathLiteral A x y
 ```
 
-#### Proof by Logical Relations
+> **Honest Assessment**: Canonicity for **Cartesian cubical type theory** alone is a theorem
+> (Sterling & Angiuli, LICS 2021). What remains open is whether canonicity survives the addition
+> of nilsquare infinitesimals (ε² = 0 as a rewrite rule) and Lipschitz sensitivity annotations.
+> The RTT framework (Cockx et al., 2021) gives conditions for rewrite rules to preserve canonicity,
+> but verifying these conditions for SCTT's specific rules is ongoing work.
+
+#### Proof Sketch by Logical Relations
+
+The following sketch shows how a canonicity proof would proceed, following the structure of known proofs for cubical type theory:
 
 ```sctt
--- Canonicity via logical relations
+-- Canonicity via logical relations (proof sketch)
 canonical_logical_relations : 
   ∀(A : BaseType), ⟦A⟧ ∅ ⊆ CanonicalForm A
 
-proof canonical_logical_relations A =
+proof_sketch canonical_logical_relations A =
   case A of
     ℕ → naturals_are_numerals
     ℝ → reals_are_literals  
@@ -249,7 +298,7 @@ closed_terms_canonical :
   ∀(t : ClosedTerm)(A : BaseType),
   (⊢ t : A) → ∃(c : CanonicalForm A), t →* c
 
-proof closed_terms_canonical t A typing =
+proof_sketch closed_terms_canonical t A typing =
   fundamental_lemma ∅ t A typing >>=
   canonical_logical_relations A
 ```
@@ -496,14 +545,22 @@ data Config = Config {
 
 ## 8.4 Normalization {#normalization}
 
-### Strong Normalization Theorem
+### The Strong Normalization Conjecture
 
-All SCTT computations terminate:
+We conjecture that all well-typed SCTT computations terminate:
 
 ```sctt
--- Strong normalization for SCTT
-theorem strong_normalization :
+-- Strong normalization for SCTT (CONJECTURE)
+conjecture strong_normalization :
   ∀(t : WellTypedTerm), StronglyNormalizing t
+
+-- Known: MLTT is strongly normalizing
+-- Known: Cubical type theories terminate for well-typed terms (cctt demonstrates this empirically)
+-- OPEN: Termination with locally-scoped rewrite rules (ε² = 0)
+-- OPEN: Interaction of smooth computations with cubical Kan operations
+--
+-- Note: Earlier chapters stated this as a theorem. We correct this here:
+-- it is a well-supported conjecture with strong partial evidence, not a theorem.
 
 -- Definition of strong normalization
 StronglyNormalizing : Term → Type
@@ -512,12 +569,21 @@ StronglyNormalizing t = ¬∃(infinite_sequence : ℕ → Term),
   ∀(n : ℕ), infinite_sequence n → infinite_sequence (n+1)
 
 -- Equivalently: all reduction sequences terminate
-theorem termination :
+conjecture termination :
   ∀(t : WellTypedTerm)(reduction_sequence : ReductionSequence t),
   ∃(n : ℕ), IsNormalForm (reduction_sequence n)
 ```
 
-#### Proof by Logical Relations
+> **Honest Assessment**: Strong normalization is proven for MLTT and holds empirically for
+> cubical implementations (e.g., `cctt`, `cubicaltt`). The RTT framework (Cockx et al., 2021)
+> shows that rewrite rules satisfying certain conditions preserve normalization, and the Rewster
+> tool (Leray et al., ITP 2024) can mechanically check these conditions. However, no one has
+> yet verified SCTT's specific rewrite rules (particularly ε² = 0) through this pipeline.
+> The conjecture is well-motivated but unproven for the full system.
+
+#### Proof Sketch by Logical Relations
+
+The following sketch shows the standard structure a strong normalization proof would follow:
 
 ```sctt
 -- Strongly normalizing logical relations
@@ -534,8 +600,8 @@ SN_closure_lam :
   ∀(body : Term), (∀(a : SN_logical_relations A), SN_logical_relations B (body[a/x])) →
                   SN_logical_relations (A → B) (λ x → body)
 
--- Main theorem follows
-proof strong_normalization t typing = 
+-- Main conjecture would follow from a fundamental lemma for SN
+proof_sketch strong_normalization t typing = 
   fundamental_lemma_SN t typing
 ```
 
@@ -711,43 +777,53 @@ performant_architecture = {
 
 ## Summary
 
-SCTT's metatheory provides solid foundations for trustworthy mathematical computation:
+SCTT's metatheory combines established results for individual subsystems with open conjectures for the full combined system:
 
-### Core Results
+### Status of Core Properties
 
-1. **Consistency**: SCTT cannot prove false statements - even with smooth operations
-2. **Canonicity**: All closed terms reduce to canonical forms  
-3. **Decidability**: Type checking and equality checking are algorithmic
-4. **Normalization**: All computations terminate
-5. **Complexity**: Manageable computational costs for practical fragments
+| Property | Subsystem Status | Full SCTT Status |
+|---|---|---|
+| **Consistency** (§8.1) | Proven for MLTT, CCHM, Cartesian cubical | **Conjecture** |
+| **Canonicity** (§8.2) | Proven for Cartesian cubical (Sterling & Angiuli, 2021) | **Conjecture** |
+| **Decidability** (§8.3) | Standard for dependent TT; fragments characterized | Theorem (algorithmic) |
+| **Normalization** (§8.4) | Proven for MLTT; empirically holds for cubical | **Conjecture** |
+| **Complexity** (§8.5) | Bounds known for fragments | Partially characterized |
 
-### Key Innovations
+The key open problem is the **interaction** of Cartesian cubical structure, nilsquare infinitesimals (ε² = 0 as rewrite rules), and Lipschitz sensitivity types. Each component has strong metatheoretic backing; the gap is in the combined system.
 
-- **Computational Metatheory**: Properties are implemented and verified
-- **Smooth Integration**: Differential operations preserve logical structure
-- **Practical Decidability**: Undecidable fragments are isolated and managed
-- **Performance**: Optimization maintains correctness guarantees
+### What Is Proven vs. Conjectured
+
+**Proven** (by cited work):
+- Canonicity for Cartesian cubical type theory via Synthetic Tait Computability (Sterling & Angiuli, LICS 2021)
+- Conditions under which rewrite rules preserve type-theoretic properties (Cockx et al., POPL 2021)
+- Metric preservation for sensitivity types (Azevedo de Amorim et al., POPL 2017)
+- Explicit normal form specifications for Cartesian cubical TT (Huang, arXiv:2603.24923, 2026)
+
+**Conjectured** (well-motivated but open):
+- Consistency, canonicity, and normalization for SCTT with all three extensions simultaneously
+- That SCTT's specific rewrite rules satisfy the RTT framework's safety conditions
 
 ### Implementation Implications
 
-The metatheory directly informs implementation:
-- Type checker algorithms with termination guarantees
-- Normal form computations with complexity bounds  
-- Error handling for undecidable fragments
-- Optimization strategies with correctness preservation
+The metatheory directly informs implementation even at the conjecture stage:
+- Type checker algorithms follow the decidability results (§8.3)
+- Normal form computations follow the canonical form specifications
+- Error handling for undecidable fragments (§8.3) is well-characterized
+- Optimization strategies (§8.5) are independent of the open conjectures
 
-This establishes SCTT as both theoretically sound and practically implementable.
+The proof sketches in this chapter show the structure that a full metatheoretic development would take, and remain valuable as implementation guides.
 
 ## Exercises
 
 ### Theoretical
-1. Extend the consistency proof to modal SCTT from Chapter 13
-2. Prove canonicity for smooth higher inductive types
+1. Identify the specific conditions from the RTT framework (Cockx et al., 2021) that SCTT's ε² = 0 rule must satisfy, and attempt to verify them
+2. Extend the Sterling-Angiuli STC proof technique to handle one additional SCTT feature (e.g., nilsquare infinitesimals)
 3. Characterize the exact complexity of smooth function equality
 4. Develop termination measures for general recursive smooth functions
+5. *(Open problem)* Prove or disprove canonicity for cubical type theory extended with the rewrite rule ε² = 0
 
 ### Computational  
-1. Implement a verified type checker that provably terminates
+1. Implement a verified type checker that provably terminates for the decidable fragments (§8.3)
 2. Build a canonical form computation with complexity bounds
 3. Create decidability procedures for key SCTT fragments
 4. Develop optimization strategies for smooth computations

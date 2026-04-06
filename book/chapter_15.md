@@ -1,45 +1,15 @@
-# Chapter 15: Future Directions
+# Chapter 15: Open Problems and Research Frontiers
 
 > "The best way to predict the future is to invent it." — Alan Kay
->
-> "In SCTT, we don't just predict the mathematical future—we compute it with certainty."
 
 ## Introduction
 
-We stand at the threshold of a new era in mathematical computation. SCTT represents not just another formal system, but a fundamental shift in how we think about the relationship between mathematics, computation, and physical reality. Building on the foundations laid in [Chapters 1-14](./chapter_01.md), this final chapter explores the exciting possibilities that lie ahead.
+This chapter catalogues the open problems and research frontiers surrounding SCTT. Each problem is stated precisely enough that a motivated reader can begin working on it. For hands-on implementation pathways, see the chapters that follow:
 
-The future of SCTT encompasses several interconnected domains:
-
-1. **Theoretical Extensions** - New mathematical foundations and capabilities
-2. **Computational Breakthroughs** - Revolutionary algorithms and implementations  
-3. **Scientific Applications** - Transforming how we model and understand the world
-4. **Technological Integration** - Merging SCTT with emerging computing paradigms
-5. **Educational Revolution** - New ways of teaching and learning mathematics
-
-But the true power of SCTT lies not in any single application, but in the synergistic combination of verified computation (from [Chapter 9](./chapter_09.md)), smooth mathematics (from [Chapters 4-5](./chapter_04.md)), and homotopical reasoning (from [Chapter 3](./chapter_03.md)). This chapter maps the landscape of possibilities that this combination opens.
-
-### The SCTT Vision
-
-```sctt
--- The dream: Mathematics that computes with certainty
-future_mathematics : Type
-future_mathematics = {
-  -- Every mathematical statement has computational content
-  constructive : ∀ (theorem : Proposition), 
-                 Proof theorem → Computation (evidence theorem),
-  
-  -- Every computation has mathematical guarantees  
-  verified : ∀ (computation : Algorithm),
-             Specification computation → Correctness_proof,
-             
-  -- Every smooth process is exactly modeled
-  smooth : ∀ (physical_system : RealWorldSystem),
-           SmoothModel physical_system → Verified_simulation,
-           
-  -- Everything connects through higher structure
-  coherent : MathematicalUniverse ≃ ComputationalUniverse
-}
-```
+- [Chapter 16](./chapter_16.md) walks through building the v0 kernel in Rust
+- [Chapter 17](./chapter_17.md) applies SCTT to certified machine learning
+- [Chapter 18](./chapter_18.md) tackles the hardest open problem: equational theories
+- [Chapter 19](./chapter_19.md) connects SCTT to existing proof assistants
 
 ## 15.1 Open Problems {#problems}
 
@@ -528,428 +498,64 @@ educational_transformation = {
 }
 ```
 
-### Long-Term Research (7-15 years)
+### Long-Term Research (7+ years)
 
-#### Artificial General Intelligence
+#### Smooth Higher Inductive Types
 
-```sctt
--- SCTT as foundation for AGI reasoning systems
-agi_applications : SpeculativeDirection
-agi_applications = {
-  mathematical_reasoning = {
-    vision = "AI systems that discover new mathematics",
-    approach = "SCTT as internal reasoning language",
-    requirements = ["Proof search", "Conjecture generation", "Pattern recognition"],
-    timeline = "10-15 years"
-  },
-  
-  scientific_discovery = {
-    vision = "AI scientists with mathematical intuition",
-    approach = "Verified hypothesis testing in SCTT",
-    requirements = ["Experimental design", "Model selection", "Causal reasoning"],
-    timeline = "12-20 years" 
-  },
-  
-  creative_mathematics = {
-    vision = "AI mathematicians that create beautiful theorems",
-    approach = "Aesthetic measures for mathematical beauty",
-    requirements = ["Creativity models", "Beauty metrics", "Human collaboration"],
-    timeline = "15-25 years"
-  }
-}
-```
+Can higher inductive types be given smooth structure? If the circle HIT `S¹` carries a smooth manifold structure preserved by its constructors, this would unify synthetic differential topology with homotopy type theory. See [Chapter 14](./chapter_14.md) for the higher-categorical background.
 
-#### Post-Digital Computing
+#### Directed Smooth Type Theory
 
-```sctt
--- SCTT in future computing paradigms
-future_computing : List ComputingParadigm
-future_computing = [
-  {
-    paradigm = "Biological Computing",
-    sctt_role = "Programming language for cellular computations",
-    advantages = ["Natural continuous computation", "Self-repair", "Energy efficiency"],
-    challenges = ["Reliability", "Programming abstraction", "Interface"]
-  },
-  
-  {
-    paradigm = "Optical Computing", 
-    sctt_role = "Controlling light-based differential equations",
-    advantages = ["Speed of light", "Parallel processing", "Low energy"],
-    challenges = ["Digital interface", "Nonlinearity", "Stability"]
-  },
-  
-  {
-    paradigm = "Molecular Computing",
-    sctt_role = "Programming molecular machines", 
-    advantages = ["Chemical reactions as computation", "Massive parallelism"],
-    challenges = ["Error rates", "Programming model", "Observability"]
-  },
-  
-  {
-    paradigm = "Quantum-Classical Hybrid",
-    sctt_role = "Coordinating quantum and classical components",
-    advantages = ["Best of both worlds", "Error correction", "Practicality"],
-    challenges = ["Interface design", "Optimization", "Verification"]
-  }
-]
-```
+Not all smooth processes are invertible. Directed type theory replaces ∞-groupoids with ∞-categories, admitting asymmetric morphisms. Combining directedness with smoothness would model irreversible thermodynamic processes, causal structure in relativity, and resource-sensitive computation.
 
 ## 15.3 Vision {#vision}
 
-### The Mathematical Renaissance
+### What Comes Next: The Implementation Pathways
 
-We envision SCTT catalyzing a new mathematical renaissance:
+The open problems above are theoretical. But SCTT is not purely theoretical — it is a system meant to be built and used. The remaining chapters of this book shift from "what remains to be proved" to "how to build it":
 
-```sctt
--- The vision: Mathematics comes alive
-mathematical_renaissance : Vision
-mathematical_renaissance = {
-  living_mathematics = {
-    description = "Mathematical objects that compute and evolve",
-    examples = [
-      "Theorems that adapt to new evidence",
-      "Proofs that optimize themselves", 
-      "Mathematical structures that grow and learn",
-      "Equations that solve themselves"
-    ]
-  },
-  
-  participatory_mathematics = {
-    description = "Mathematics accessible to everyone",
-    examples = [
-      "Visual proof assistants for non-experts",
-      "AI collaborators for professional mathematicians",
-      "Interactive exploration of mathematical worlds",
-      "Crowdsourced theorem proving"
-    ]
-  },
-  
-  applied_pure_synthesis = {
-    description = "Pure and applied mathematics reunited",
-    examples = [
-      "Abstract algebra solving engineering problems",
-      "Category theory optimizing algorithms",
-      "Topology designing materials",
-      "Number theory securing communications"
-    ]
-  }
-}
-```
+| Chapter | Focus | What You Build |
+|---------|-------|----------------|
+| [16](./chapter_16.md) | **v0 Kernel** | A working type checker in Rust, four phases from TTT to full SCTT |
+| [17](./chapter_17.md) | **Certified ML** | Lipschitz-typed neural networks, exact AD via Kock-Lawvere, neural ODEs |
+| [18](./chapter_18.md) | **Rewrite Rules** | The `ε² = 0` engine, RTT → LRTT pipeline, confluence testing |
+| [19](./chapter_19.md) | **Ecosystem Bridges** | Integration with Cubical Agda, Lean 4, Rocq/Rewster, Dedukti |
 
-### Democratizing Mathematical Power
+### The Convergence Thesis
 
-SCTT has the potential to democratize access to mathematical power:
+SCTT sits at the intersection of three independently maturing fields:
 
-```sctt
--- Making advanced mathematics accessible to all
-democratization : SocietalImpact
-democratization = {
-  for_students = {
-    vision = "Every student can explore mathematical infinity",
-    tools = [
-      "Interactive theorem provers",
-      "Visual proof assistants", 
-      "AI tutors and guides",
-      "Gamified learning platforms"
-    ]
-  },
-  
-  for_professionals = {
-    vision = "Every engineer and scientist has mathematical superpowers",
-    tools = [
-      "Verified simulation environments",
-      "Automatic error bound computation",
-      "Optimization with guarantees",
-      "Risk assessment with proofs"
-    ]
-  },
-  
-  for_researchers = {
-    vision = "Every researcher can verify their most complex theories",
-    tools = [
-      "Collaborative proof development",
-      "Conjecture generation systems",
-      "Automated proof search",
-      "Cross-domain knowledge transfer"
-    ]
-  }
-}
+1. **Cubical type theory** — production-quality implementations exist (cctt, Cubical Agda, cooltt)
+2. **Rewriting type theory** — the RTT → LRTT chain reached its POPL 2026 milestone
+3. **Sensitivity/metric type theory** — Fuzz, DFuzz, and recent work on Lipschitz types in dependent settings
 
--- The ultimate vision: Mathematical literacy for all
-universal_mathematical_literacy : Goal
-universal_mathematical_literacy = {
-  definition = "Basic mathematical reasoning as common as reading and writing",
-  
-  enabled_by_sctt = [
-    "Mathematics becomes visual and interactive",
-    "Proof checking provides immediate feedback", 
-    "Complex calculations become simple operations",
-    "Abstract concepts gain concrete manifestations"
-  ],
-  
-  societal_benefits = [
-    "Better decision making in complex situations",
-    "Improved scientific literacy and critical thinking",
-    "More informed democratic participation", 
-    "Enhanced problem-solving capabilities"
-  ]
-}
-```
-
-### Solving Humanity's Grand Challenges
-
-```sctt
--- SCTT contributions to grand challenge problems
-grand_challenges : List GlobalChallenge
-grand_challenges = [
-  {
-    challenge = "Climate Change",
-    sctt_contribution = "Verified climate models with uncertainty quantification",
-    impact = "Policy decisions based on mathematical certainties",
-    timeline = "5-10 years"
-  },
-  
-  {
-    challenge = "Pandemic Preparedness", 
-    sctt_contribution = "Verified epidemiological models and drug discovery",
-    impact = "Faster, safer medical interventions",
-    timeline = "3-7 years"
-  },
-  
-  {
-    challenge = "Energy Transition",
-    sctt_contribution = "Optimal renewable energy systems with guarantees",
-    impact = "Efficient, reliable clean energy infrastructure", 
-    timeline = "5-15 years"
-  },
-  
-  {
-    challenge = "Space Exploration",
-    sctt_contribution = "Mission-critical systems with mathematical safety",
-    impact = "Safer, more ambitious space missions",
-    timeline = "10-20 years"
-  },
-  
-  {
-    challenge = "Artificial Intelligence Safety",
-    sctt_contribution = "Provably safe AI systems",
-    impact = "AI systems aligned with human values",
-    timeline = "10-25 years"
-  }
-]
-```
-
-### The Computational Universe
-
-The ultimate vision is a computational universe where mathematics and reality converge:
-
-```sctt
--- The final frontier: Reality as computation
-computational_reality : PhilosophicalVision
-computational_reality = {
-  hypothesis = "Physical reality is mathematical computation",
-  
-  sctt_perspective = {
-    spacetime = SmoothManifold,
-    matter_fields = SmoothSections BundleOverSpacetime,
-    interactions = ConnectionsAndCurvature,
-    evolution = VerifiedDifferentialEquations,
-    
-    -- Everything computes
-    physics_as_computation = "Natural laws are algorithms",
-    consciousness_as_computation = "Minds are mathematical structures", 
-    emergence_as_computation = "Complex systems are higher-level types"
-  },
-  
-  implications = [
-    "Universe is fundamentally comprehensible",
-    "Mathematics is not invented but discovered",
-    "Computation is the deepest reality",
-    "Understanding and creating converge"
-  ]
-}
-
--- The SCTT universe: Where mathematics lives and breathes
-sctt_universe : MetaphysicalClaim
-sctt_universe = {
-  claim = "SCTT describes the computational structure of reality itself",
-  
-  evidence = [
-    "Mathematics describes physics with unreasonable effectiveness",
-    "Computation appears throughout nature",
-    "Smoothness seems fundamental to physical law",
-    "Higher categories appear in quantum field theory"
-  ],
-  
-  predictions = [
-    "New physics will be naturally expressible in SCTT",
-    "Consciousness will have mathematical structure",
-    "AI systems will naturally evolve toward SCTT-like reasoning",
-    "Mathematics and physics will eventually merge"
-  ]
-}
-```
-
-## Call to Action
-
-### For Researchers
-
-```sctt
--- What you can do to advance SCTT
-researcher_opportunities : List Opportunity
-researcher_opportunities = [
-  {
-    area = "Theory",
-    projects = [
-      "Prove the smooth univalence conjecture",
-      "Characterize decidable fragments of SCTT",
-      "Develop smooth higher inductive types",
-      "Extend to directed and linear type theory"
-    ]
-  },
-  
-  {
-    area = "Implementation", 
-    projects = [
-      "Build efficient SCTT compilers",
-      "Create user-friendly theorem provers",
-      "Develop optimization algorithms",
-      "Design parallel computation frameworks"
-    ]
-  },
-  
-  {
-    area = "Applications",
-    projects = [
-      "Apply SCTT to your research domain",
-      "Develop domain-specific libraries",
-      "Create educational materials",
-      "Build verification tools"
-    ]
-  }
-]
-```
-
-### For Educators
-
-```sctt
--- Transforming mathematical education
-education_revolution : ActionPlan
-education_revolution = [
-  "Experiment with interactive mathematical content",
-  "Develop SCTT-based curriculum materials", 
-  "Train teachers in computational mathematics",
-  "Create assessment methods for verified reasoning",
-  "Build communities of practice around mathematical computing"
-]
-```
-
-### For Industry
-
-```sctt
--- Commercial opportunities and responsibilities
-industry_engagement : BusinessStrategy
-industry_engagement = {
-  opportunities = [
-    "Develop SCTT tools and platforms",
-    "Apply verification to safety-critical systems",
-    "Create mathematical consulting services", 
-    "Build educational technology products"
-  ],
-  
-  responsibilities = [
-    "Support open-source SCTT development",
-    "Contribute to foundational research",
-    "Ensure equitable access to mathematical tools",
-    "Maintain ethical standards in AI mathematics"
-  ]
-}
-```
-
-### For Society
-
-```sctt
--- Building a mathematically literate society
-societal_transformation : CivicAgenda
-societal_transformation = {
-  short_term = [
-    "Increase support for mathematical research and education",
-    "Promote computational thinking in schools",
-    "Demand transparency in algorithmic decision making",
-    "Support open access to mathematical knowledge"
-  ],
-  
-  long_term = [
-    "Integrate mathematical reasoning into democratic processes",
-    "Build mathematical literacy as a human right",
-    "Create institutions for participatory mathematics",
-    "Ensure mathematical tools serve human flourishing"
-  ]
-}
-```
+The central bet of SCTT is that these three can be combined into a single coherent system. The pieces exist; the integration is the research frontier.
 
 ## Conclusion
 
-SCTT represents more than a new mathematical formalism—it embodies a new way of thinking about the relationship between mind, mathematics, and reality. By making mathematical reasoning computational and computation mathematical, SCTT opens possibilities we are only beginning to imagine.
+This chapter has catalogued what remains to be proved and what remains to be built. The problems are hard but precisely stated. The implementation pathway, detailed in the chapters that follow, is concrete.
 
-The journey ahead is both challenging and exhilarating. We must solve deep theoretical problems, build complex implementation systems, and navigate the social implications of mathematical power becoming accessible to all. But the potential rewards—for mathematics, for science, and for human understanding—are immeasurable.
-
-```sctt
--- The beginning, not the end
-future_sctt : Promise
-future_sctt = {
-  commitment = "To build mathematical tools that serve human flourishing",
-  vision = "A world where everyone can participate in mathematical creation",
-  path = "Through rigorous research, careful implementation, and inclusive community",
-  destination = "Mathematical understanding as natural as language itself"
-}
-
--- An invitation
-join_us : Call
-join_us = 
-  "The future of mathematics is not predetermined.
-   It will be shaped by the choices we make today.
-   Come help us build a world where mathematics computes,
-   computation verifies, and understanding deepens.
-   The future is smooth, cubical, and computational.
-   The future is SCTT."
-```
+The reader who has made it this far has the theoretical vocabulary to begin working on any of these problems. Chapter 16 starts with the simplest possible dependent type checker and builds up, phase by phase, to a system that handles cubical paths, smooth infinitesimals, and sensitivity bounds — the full SCTT vision, in working Rust code.
 
 ---
 
 ## Exercises
 
-### Vision Development
-1. Identify a problem in your field that could benefit from verified smooth computation
-2. Design a research program for applying SCTT to your area of interest
-3. Envision what mathematical education might look like in an SCTT world
-4. Consider the ethical implications of democratizing mathematical power
+### Open Problems
+1. State the smooth univalence conjecture precisely. What would a counterexample look like?
+2. Identify the critical pairs between `ε² = 0` and the cubical `coe` operation. Are any non-joinable?
+3. Sketch a proof that SCTT type checking is in EXPTIME. What is the source of exponential blowup?
 
-### Technical Challenges
-1. Propose solutions to the expression swell problem in term normalization
-2. Design algorithms for distributed SCTT computation
-3. Develop metrics for measuring the "smoothness" of computational processes
-4. Create benchmarks for comparing SCTT implementations
+### Research Planning
+1. Choose one of the conjectures from Section 15.1. Outline a three-year research program to resolve it, including prerequisites and intermediate milestones.
+2. Identify a fragment of SCTT where type checking is decidable in polynomial time. Characterize it precisely.
 
-### Applications Research
-1. Choose a grand challenge problem and outline how SCTT might contribute to its solution
-2. Design an SCTT-based system for your professional domain
-3. Develop educational materials that make advanced mathematics accessible
-4. Create a business plan for an SCTT-based product or service
-
-### Philosophical Reflection
-1. What does it mean for mathematics to "compute"?
-2. How might SCTT change our understanding of mathematical truth?
-3. What are the risks and benefits of making mathematical reasoning accessible to all?
-4. How should we ensure that powerful mathematical tools serve humanity?
-
----
-
-The future of mathematics is in our hands. Let's build it together.
+### Implementation
+1. Begin [Chapter 16](./chapter_16.md) and implement Phase 1 (TTT). How many lines of Rust does it take?
+2. After implementing Phase 2 (cubical), attempt the Brunerie number computation. Report whether it terminates and how long it takes.
 
 ---
 
 *Previous: [Chapter 14: Higher Categories](./chapter_14.md) ←*
 
-*Next: [Appendices](./appendix_a.md) →*
+*Next: [Chapter 16: Building the v0 Kernel](./chapter_16.md) →*

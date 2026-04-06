@@ -116,7 +116,10 @@ States that A is a smooth type (has differential structure).
 
 **Face formulas** F are built from:
 ```
-φ, ψ : F ::= ⊥ | ⊤ | (i = i0) | (i = i1) | φ ∧ ψ | φ ∨ ψ
+-- Cartesian cubical face formulas (ABCFHL)
+φ, ψ : F ::= ⊥ | ⊤ | (i = 0) | (i = 1) | (i = j) | φ ∧ ψ | φ ∨ ψ
+-- Note: (i = j) is the diagonal cofibration, replacing De Morgan connections
+-- ∧ and ∨ combine cofibrations, NOT interval elements
 ```
 
 #### Smooth Equality Judgment
@@ -227,6 +230,65 @@ data S¹ : SmoothType where
   base : S¹
   loop : SmoothPath S¹ base base
 ```
+
+### Lipschitz / Sensitivity Types
+
+SCTT tracks how much a function's output changes given input perturbations via Lipschitz types:
+
+```
+Γ ⊢ A : Type    Γ ⊢ B : Type    Γ ⊢ k : ℝ≥0
+————————————————————————————————————————————————  (Lip-form)
+Γ ⊢ Lip(A, B, k) : Type
+```
+
+A term `f : Lip(A, B, k)` is a function from A to B that stretches distances by at most factor k:
+```
+∀ (a a' : A), d_B(f a, f a') ≤ k · d_A(a, a')
+```
+
+**Introduction:**
+```
+Γ ⊢ f : A → B    Γ ⊢ proof : ∀ (a a' : A), d_B(f a, f a') ≤ k · d_A(a, a')
+——————————————————————————————————————————————————————————————————————————————  (Lip-intro)
+Γ ⊢ lip(f, proof) : Lip(A, B, k)
+```
+
+**Elimination:**
+```
+Γ ⊢ f : Lip(A, B, k)    Γ ⊢ a : A
+————————————————————————————————————  (Lip-elim)
+Γ ⊢ f a : B
+```
+
+**Composition (chain rule for sensitivity):**
+```
+Γ ⊢ f : Lip(A, B, k₁)    Γ ⊢ g : Lip(B, C, k₂)
+——————————————————————————————————————————————————  (Lip-comp)
+Γ ⊢ g ∘ f : Lip(A, C, k₁ · k₂)
+```
+
+**Additive combination:**
+```
+Γ ⊢ f : Lip(A, B, k₁)    Γ ⊢ g : Lip(A, B, k₂)
+——————————————————————————————————————————————————  (Lip-add)
+Γ ⊢ f + g : Lip(A, B, k₁ + k₂)
+```
+
+> **📐 Design Note: Why Sensitivity Types?**
+>
+> Sensitivity types (originating from Reed and Pierce's Fuzz, ICFP 2010) provide three key
+> capabilities for SCTT:
+>
+> 1. **Certified robustness**: A neural network typed as `Lip(ℝⁿ, ℝᵐ, k)` has a provable
+>    bound on how much its output changes under input perturbation — adversarial robustness
+>    by construction.
+> 2. **ODE well-posedness**: A dynamics function `f : Lip(ℝⁿ, ℝⁿ, k)` guarantees existence
+>    and uniqueness of ODE solutions via Picard-Lindelöf.
+> 3. **Differential privacy**: A query typed `Lip(Database, ℝ, ε)` is automatically
+>    ε-differentially private.
+>
+> The chain rule for Lipschitz constants (`k₁ · k₂` under composition) mirrors the chain
+> rule for derivatives — sensitivity types are the "quantitative" companion to smooth types.
 
 ## 7.3 Introduction Rules {#introduction}
 
@@ -410,7 +472,69 @@ Path η-expansion is more complex due to boundary conditions.
   where F is antiderivative of f
 ```
 
-## 7.6 Uniqueness Rules {#uniqueness}
+## 7.6 Equational Theories and Rewrite Rules {#rewrite-rules}
+
+SCTT extends standard computation rules with **user-defined rewrite rules** following the RTT framework (Cockx, Tabareau, Winterhalter, POPL 2021).
+
+### Rewrite Rule Framework
+
+A rewrite rule `l ⇒ r` extends definitional equality:
+
+```
+Γ ⊢ l : A    Γ ⊢ r : A    TriangleProperty(l ⇒ r)    TypePreserving(l ⇒ r)
+———————————————————————————————————————————————————————————————————————————  (Rewrite)
+Γ ⊢ l ≡ r : A
+```
+
+The **triangle property** is a modular, decidable syntactic check ensuring confluence: applying the first matching rule then the maximal parallel reduct equals applying the maximal parallel reduct directly. This can be checked automatically for each new rule.
+
+### The Nilsquare Rule
+
+The central rewrite rule for SCTT's smooth layer:
+
+```
+-- Declare ring multiplication as commutative (equational theory)
+mul : ℝ → ℝ → ℝ  [commutative]
+
+-- Add the nilsquare rewrite rule
+rewrite mul(ε, ε) ⇒ 0 : ℝ    where ε : D
+```
+
+This rule fires during normalization whenever two copies of a nilsquare infinitesimal are multiplied, regardless of syntactic order (matching modulo commutativity).
+
+### Locally-Scoped Rules (LRTT)
+
+Following Leray and Winterhalter (POPL 2026), rewrite rules can be **locally scoped**:
+
+```
+-- Local abstraction over rewrite rules
+smooth_block [nilsquare : mul(ε,ε) ⇒ 0] {
+  -- Within this block, ε² = 0 holds definitionally
+  -- Outside, it does not fire
+  
+  derivative : C∞(ℝ,ℝ) → C∞(ℝ,ℝ)
+  derivative f x = the_unique_b_such_that (∀ ε : D, f(x + ε) = f(x) + b · ε)
+}
+```
+
+**Conservativity**: The monomorphization procedure compiles away the local abstraction, ensuring that any theorem proved using locally-scoped rules could in principle be proved without them.
+
+**Encapsulation**: Local scoping limits the blast radius — confluence and termination need only be checked within the local scope, preventing ε² = 0 from interacting with cubical Kan operations or other rules in unexpected ways.
+
+### Metatheoretic Guarantees
+
+For any rewrite rule `l ⇒ r` added to SCTT:
+
+1. **Subject reduction**: If `Γ ⊢ t : A` and `t` reduces to `t'` using the rule, then `Γ ⊢ t' : A`
+2. **Confluence**: The rule satisfies the triangle property with respect to all existing rules
+3. **Type preservation**: Verified via BiTTs' bidirectional type-preservation criterion (Felicissimo, ESOP 2024)
+
+> **🔬 Open Problem**: The interaction of nilpotent ring equations with higher-order cubical
+> rewrite rules — specifically, whether matching modulo commutativity preserves confluence
+> in the presence of cubical composition — remains an active area of research
+> (Barras, Felicissimo, Winterhalter, 2024).
+
+## 7.7 Uniqueness Rules {#uniqueness}
 
 ### Standard Uniqueness (η-rules)
 
@@ -458,7 +582,7 @@ Antiderivatives are unique up to constants:
 Γ ⊢ ∃! (c : ℝ), G ≡ F + constant_function c : C∞(ℝ,ℝ)
 ```
 
-## 7.7 Advanced Rules
+## 7.8 Advanced Rules
 
 ### Cubical Composition
 
@@ -528,7 +652,7 @@ Extension of cubical composition to smooth types:
 Γ ⊢ smooth_proof : IsSmooth (smooth_comp M φ u u0)
 ```
 
-## 7.8 Definitional Equality Rules
+## 7.9 Definitional Equality Rules
 
 ### Congruence Rules
 
@@ -574,11 +698,11 @@ Definitional equality is preserved by all type formers:
 Γ ⊢ a ≡ c : A
 ```
 
-## 7.9 Consistency and Normalization
+## 7.10 Consistency and Normalization
 
 ### Consistency Theorem
 
-**Theorem 7.9.1 (Consistency of SCTT)**: SCTT is consistent, i.e., there is no term of the empty type:
+**Theorem 7.10.1 (Consistency of SCTT)**: SCTT is consistent, i.e., there is no term of the empty type:
 ```
 ¬∃(Γ : Context)(t : Term), Γ ⊢ t : ⊥
 ```
@@ -587,13 +711,13 @@ Definitional equality is preserved by all type formers:
 
 ### Strong Normalization
 
-**Theorem 7.9.2 (Strong Normalization)**: Every well-typed SCTT term has a normal form, and every reduction sequence terminates.
+**Theorem 7.10.2 (Strong Normalization)**: Every well-typed SCTT term has a normal form, and every reduction sequence terminates.
 
 **Note**: This is more complex in SCTT due to smooth computations potentially involving infinite data, but holds for the purely type-theoretic fragment.
 
 ### Canonicity
 
-**Theorem 7.9.3 (Canonicity)**: Every closed term of natural number type is definitionally equal to a numeral.
+**Theorem 7.10.3 (Canonicity)**: Every closed term of natural number type is definitionally equal to a numeral.
 
 ```
 ∀(t : Term), (⊢ t : ℕ) → ∃(n : Numeral), ⊢ t ≡ n : ℕ
@@ -601,7 +725,7 @@ Definitional equality is preserved by all type formers:
 
 This extends to smooth types in a more sophisticated way involving smooth canonical forms.
 
-## 7.10 Implementation Notes
+## 7.11 Implementation Notes
 
 ### Bidirectional Type Checking
 

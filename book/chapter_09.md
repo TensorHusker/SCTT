@@ -412,6 +412,12 @@ normalize : Context → Term → Term
 normalize Γ t = quote Γ (evaluate (env_from_context Γ) t)
 ```
 
+> **⚠️ Implementation Warning**: The HOAS representation above (`VLam (Value → Value)`) is
+> suitable for textbook exposition but **cannot** be used in a cubical type checker. Cubical
+> evaluation requires inspecting and substituting inside closures (for interval variables),
+> which host-language closures do not support. Production implementations use
+> **defunctionalized closures** as described in the cctt architecture section below.
+
 #### Evaluation
 
 ```sctt
@@ -603,6 +609,101 @@ smooth_function_equal Γ f g =
       
     -- Undecidable cases - approximate
     (f', g') → approximate_smooth_equal Γ f' g'
+```
+
+### The cctt Evaluation Architecture
+
+SCTT's implementation targets the evaluation architecture pioneered by Kovács's **cctt** — a high-performance Cartesian cubical evaluator that computed the Brunerie number (a feat no other implementation achieved). The key architectural decisions differ from the textbook NbE presentation above:
+
+#### Triple-Context Structure
+
+Unlike standard NbE which uses a single environment, cctt-style evaluation uses **triple contexts**:
+
+```sctt
+-- The three evaluation contexts
+EvalState = {
+  ivar_count : Nat,        -- Number of interval variables in scope
+  cofib      : Cofibration, -- Current cofibration constraint (φ)
+  env        : Environment   -- Fibrant variable environment (Γ)
+}
+
+-- Interval variables are NOT in the regular environment
+-- They live in a separate counter, enabling O(1) interval operations
+```
+
+#### Defunctionalized Closures
+
+The textbook NbE above uses **HOAS** (Higher-Order Abstract Syntax) where closures are host-language functions (`VLam (Value → Value)`). This is impossible for cubical evaluation because **interval substitution must inspect closure internals** — you cannot substitute an interval variable inside a host-language closure.
+
+Instead, SCTT uses **defunctionalized closures**:
+
+```sctt
+-- Defunctionalized closure representation
+data Closure = 
+  Closure {
+    env  : Environment,  -- Captured environment
+    body : Term           -- Unevaluated body
+  }
+
+-- Application evaluates the body in the extended environment
+apply_closure : Closure → Value → Value
+apply_closure (Closure env body) arg = 
+  evaluate (extend env arg) body
+
+-- This allows interval substitution to inspect the body:
+interval_subst_closure : Closure → IntervalSubst → Closure
+interval_subst_closure (Closure env body) subst = 
+  Closure (subst_env env subst) body
+-- HOAS closures cannot support this operation!
+```
+
+#### The Sub/Force Pattern
+
+The central performance innovation: **interval substitution is O(1)**. Rather than eagerly pushing substitutions through terms, the evaluator stores them lazily:
+
+```sctt
+-- Values carry pending interval substitutions
+data Value = 
+  VSub Value IntervalSubst |  -- Lazy: O(1) to create
+  VLam Closure |
+  VPi Value Closure |
+  VPath Value Value Closure |  -- path with endpoints and body
+  VNeutral Neutral |
+  -- ... cubical values (comp, glue, etc.)
+
+-- sub: Wrap a value with a substitution — O(1)
+sub : Value → IntervalSubst → Value
+sub v s = VSub v s
+
+-- force: Push the substitution down when a rigid head is needed — lazy
+force : Value → Value
+force (VSub v s) = case force v of
+  VLam cl     → VLam (subst_closure cl s)
+  VPi a cl    → VPi (sub a s) (subst_closure cl s)
+  VNeutral ne → force_neutral ne s  -- may trigger computation
+  -- ... pattern match on all value forms
+force v = v  -- Already forced
+
+-- force is called only at pattern-match time
+-- Most interval substitutions never need to be fully pushed down
+```
+
+> **💻 Implementation Note**: The sub/force separation is mandatory for cubical type theory
+> because interval substitution on values is unavoidable (unlike standard NbE where substitution
+> is eliminated), but it need not be expensive. In cctt, closed evaluation exploits canonicity:
+> for strict inductive `hcom`, lazy projection functions force at most one system component
+> rather than all of them.
+
+#### Closed Evaluation Optimization
+
+When evaluating closed terms (no free variables), the evaluator can skip environment lookups entirely. Combined with Cartesian cubical canonicity, this means:
+
+```sctt
+-- If the base of an hcom is a constructor (e.g., suc),
+-- canonicity guarantees ALL system components are also constructors.
+-- So we only need to force ONE component, not all of them.
+-- This eliminates the asymptotic overhead of cubical structure
+-- when univalence is not used.
 ```
 
 ## 9.4 Caching and Optimization {#optimization}
@@ -994,6 +1095,30 @@ adaptive_optimization metrics =
     then return CompactMemory
   else return NoChange
 ```
+
+### Kernel Size and Trust Boundary
+
+Following the principle that everything the user must trust goes inside the kernel and everything checkable goes outside:
+
+```sctt
+-- Inside the kernel (~2-5K lines Rust):
+--   Core syntax types and defunctionalized closures
+--   Evaluation engine (eval, quote, sub/force)
+--   Conversion checking (bidirectional normal form comparison)
+--   Cubical primitives (coe, hcom, Glue/glue/unglue)
+--   Smooth primitives (ε² = 0 rewrite, Kock-Lawvere computation)
+--   Lipschitz typing rules
+--   Context management (triple contexts)
+
+-- Outside the kernel (untrusted, can be arbitrarily large):
+--   Parsing, surface syntax, pretty printing
+--   Implicit argument inference and unification  
+--   Pattern matching compilation
+--   Module system, imports, library management
+--   The Rewster's confluence/type-preservation checker
+```
+
+The ~2-5K line budget is realistic because cctt demonstrates that a complete Cartesian cubical evaluator fits in a few thousand lines of Haskell. Rust's explicit memory management adds some overhead but also eliminates GC pauses via arena allocation.
 
 ## Summary
 

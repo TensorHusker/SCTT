@@ -61,7 +61,8 @@
   - [7.3 Introduction Rules](./chapter_07.md#introduction)
   - [7.4 Elimination Rules](./chapter_07.md#elimination)
   - [7.5 Computation Rules](./chapter_07.md#computation)
-  - [7.6 Uniqueness Rules](./chapter_07.md#uniqueness)
+  - [7.6 Equational Theories and Rewrite Rules](./chapter_07.md#rewrite-rules)
+  - [7.7 Uniqueness Rules](./chapter_07.md#uniqueness)
 
 - [Chapter 8: Metatheory](./chapter_08.md)
   - [8.1 Consistency](./chapter_08.md#consistency)
@@ -112,10 +113,45 @@
   - [14.2 Smooth ∞-Groupoids](./chapter_14.md#smooth-groupoids)
   - [14.3 Higher Gauge Theory](./chapter_14.md#gauge)
 
-- [Chapter 15: Future Directions](./chapter_15.md)
+- [Chapter 15: Open Problems and Research Frontiers](./chapter_15.md)
   - [15.1 Open Problems](./chapter_15.md#problems)
   - [15.2 Research Directions](./chapter_15.md#research)
   - [15.3 Vision](./chapter_15.md#vision)
+
+# Part VII: Implementation Pathways
+
+- [Chapter 16: Building the v0 Kernel](./chapter_16.md)
+  - [16.1 Phase 1: Tiny Type Theory](./chapter_16.md#phase1)
+  - [16.2 Phase 2: Cartesian Cubical Layer](./chapter_16.md#phase2)
+  - [16.3 Phase 3: Smooth Primitives](./chapter_16.md#phase3)
+  - [16.4 Phase 4: Lipschitz Sensitivity Types](./chapter_16.md#phase4)
+  - [16.5 Testing and Verification](./chapter_16.md#testing)
+  - [16.6 Architecture Decisions](./chapter_16.md#architecture)
+
+- [Chapter 17: Certified Machine Learning](./chapter_17.md)
+  - [17.1 Neural Networks as Typed Functions](./chapter_17.md#typed-networks)
+  - [17.2 Certified Adversarial Robustness](./chapter_17.md#robustness)
+  - [17.3 Neural ODEs as Smooth Paths](./chapter_17.md#neural-odes)
+  - [17.4 Automatic Differentiation in SCTT](./chapter_17.md#autodiff)
+  - [17.5 The Curry-Howard-Hinton Correspondence](./chapter_17.md#chh)
+  - [17.6 Practical Implementation Pathway](./chapter_17.md#implementation)
+
+- [Chapter 18: The Equational Theory Frontier](./chapter_18.md)
+  - [18.1 Why Standard Rewriting Fails](./chapter_18.md#why-hard)
+  - [18.2 RTT: The Foundation](./chapter_18.md#rtt)
+  - [18.3 BiTTs: The Checking Algorithm](./chapter_18.md#bitts)
+  - [18.4 LRTT: Local Scoping](./chapter_18.md#lrtt)
+  - [18.5 The Gruissan Gap](./chapter_18.md#gruissan)
+  - [18.6 Implementation Walkthrough](./chapter_18.md#implementation)
+  - [18.7 Testing Your Rewrite Engine](./chapter_18.md#testing)
+
+- [Chapter 19: Connecting to the Ecosystem](./chapter_19.md)
+  - [19.1 Cubical Agda](./chapter_19.md#cubical-agda)
+  - [19.2 Lean 4](./chapter_19.md#lean)
+  - [19.3 Rocq and the Rewster](./chapter_19.md#rocq)
+  - [19.4 Dedukti and Lambdapi](./chapter_19.md#dedukti)
+  - [19.5 Two-Level Type Theory and Staging](./chapter_19.md#2ltt)
+  - [19.6 The Translation Map](./chapter_19.md#translations)
 
 # Appendices
 

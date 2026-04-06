@@ -24,7 +24,7 @@ This chapter introduces smooth types—types equipped with differential structur
 - Smooth functions `C∞(A, B)` are infinitely differentiable
 - The tangent bundle `T M` captures all tangent vectors
 - Infinitesimals are realized via the Kock-Lawvere axiom
-- **Chain rule holds definitionally**: `D[g ∘ f] ≡ Dg ∘ Df`
+- **Chain rule holds**: `D[g ∘ f] ≡ Dg ∘ Df` (Theorem 5.2)
 
 **Prerequisites**: [Chapter 2](./chapter_02.md), [Chapter 3](./chapter_03.md), multivariable calculus
 
@@ -42,6 +42,8 @@ SCTT adapts SDG to our cubical setting:
 - **Classical SDG**: Uses nilpotent infinitesimals in a topos
 - **SCTT Approach**: Uses cubical paths as infinitesimals
 - **Key Innovation**: Computational content via cubical structure
+
+The key challenge is making the nilsquare axiom (ε² = 0) **compute** rather than merely assert — this requires the rewrite-rule machinery described below.
 
 ## 4.1 Smooth Real Numbers {#smooth-reals}
 
@@ -81,7 +83,7 @@ smooth_sqrt : C∞(ℝ₊, ℝ)  -- Guaranteed smooth where defined
 -- The smooth structure ensures:
 -- 1. All operations are infinitely differentiable
 -- 2. Derivatives exist and compute
--- 3. Chain rule holds definitionally
+-- 3. Chain rule holds (Theorem 5.2)
 ```
 
 ### Infinitesimals and Tangent Vectors
@@ -113,6 +115,61 @@ microlinear : (f : C∞(ℝ, ℝ)) → (x : ℝ) → (ε : 𝔻) →
               f(x + ε) ≡ f(x) + f'(x) · ε
 
 -- This holds definitionally in SCTT!
+```
+
+### The Nilsquare Axiom as a Computation Rule
+
+The Kock-Lawvere axiom depends on the **nilsquare infinitesimal** type:
+
+```sctt
+-- The object of nilsquare infinitesimals
+D : Type
+D = { ε : ℝ | ε² = 0 }
+
+-- Kock-Lawvere axiom: every function on D is affine
+kock_lawvere : (f : D → ℝ) → ∃! (a b : ℝ), ∀ (ε : D), f(ε) = a + b · ε
+
+-- The derivative emerges algebraically:
+-- Given f : ℝ → ℝ and x : ℝ,
+-- f(x + ε) = f(x) + f'(x) · ε    for all ε : D
+-- No limits needed — differentiation is purely algebraic
+```
+
+**The central implementation challenge**: The equation ε² = 0 must hold **definitionally** (as a computation rule in the normalizer), not merely propositionally. This means the type checker must **reduce** `mul(ε, ε)` to `0` during normalization.
+
+This is harder than it sounds for three interlocking reasons:
+
+1. **Non-linear pattern matching**: The rule `mul(ε, ε) → 0` requires the same variable to appear twice on the left-hand side
+2. **Ring commutativity**: `mul(a, b) = mul(b, a)` cannot be oriented as a rewrite rule without non-termination
+3. **Higher-order interaction**: The rewrite must coexist with β-reduction, cubical composition, and all other computation rules without breaking confluence
+
+> **🔬 Deep Dive: The RTT → LRTT Solution**
+>
+> The **Rewriting Type Theory (RTT)** framework (Cockx, Tabareau, Winterhalter, POPL 2021) provides
+> the theoretical foundation: user-defined rewrite rules can be added to dependent type theory while
+> preserving subject reduction and consistency, provided they satisfy the **triangle property** — a
+> modular, decidable syntactic check for confluence.
+>
+> **Locally-scoped Rewrite Rules (LRTT)** (Leray, Winterhalter, POPL 2026) adds the crucial
+> architectural insight: ε² = 0 can be **scoped locally** to smooth contexts rather than imposed
+> globally. This means:
+> - The nilsquare rule activates only within smooth-annotated blocks
+> - It does not interfere with purely cubical or discrete code
+> - Conservativity is guaranteed via monomorphization
+>
+> For SCTT's implementation, this transforms the architecture from a monolithic normalizer
+> handling all three layers simultaneously to a **layered design** where smooth reduction rules
+> activate only when needed.
+
+```sctt
+-- How the normalizer handles ε² = 0 (conceptually):
+-- 
+-- 1. Declare multiplication as commutative (equational theory, not rewrite)
+-- 2. Add the rule: mul(ε, ε) → 0 with matching modulo commutativity
+-- 3. Scope this rule locally via LRTT to smooth contexts
+-- 4. Verify confluence via RTT's triangle property
+--
+-- Result: within a smooth block, ε * ε computes to 0 definitionally
 ```
 
 #### Tangent Bundle via Infinitesimals
@@ -147,7 +204,9 @@ smooth_add (x, y) = x +ₛ y
 
 -- Derivatives compute correctly
 _ : D[λ x → x *ₛ x] ≡ λ x → 2 *ₛ x
-_ = refl  -- Holds definitionally!
+_ = refl  -- Reduces via the ε²=0 computation rule (§4.1)
+           -- Only works when the nilsquare rewrite rule is active;
+           -- not valid in arbitrary smooth models.
 
 -- Smooth composition
 example : ℝ → ℝ
@@ -171,15 +230,22 @@ Functions between smooth types automatically carry smooth structure:
 C∞ : SmoothType → SmoothType → SmoothType
 C∞ A B = B^A  -- Exponential object
 
--- Key theorem: All functions are smooth
-all_smooth : (f : A → B) → IsSmooth f
-all_smooth f = axiom  -- By construction in smooth topos!
+-- In SCTT's smooth fragment, the arrow type A → B between smooth types
+-- IS the smooth function space C∞(A,B). There is no separate "non-smooth
+-- function" type between smooth types — smoothness is structural, not a
+-- property to be proved.
+--
+-- This mirrors SDG's smooth topos: every morphism is smooth by construction.
+-- The notation C∞(A,B) is used for emphasis, but it IS the arrow type.
 
--- But we can distinguish smoothness levels:
+-- Smoothness levels track differentiability order:
 C⁰ : Type → Type → Type      -- Continuous
-C¹ : Type → Type → Type      -- Once differentiable
-C∞ : Type → Type → Type      -- Smooth (all derivatives)
-Cω : Type → Type → Type      -- Analytic (Taylor series)
+Cᵏ : Type → Type → ℕ → Type  -- k-times differentiable
+C∞ : Type → Type → Type      -- Smooth (all derivatives exist)
+Cω : Type → Type → Type      -- Analytic (Taylor series converges)
+
+-- Between discrete types, general (non-smooth) functions exist.
+-- The smooth modality (♯) marks the boundary — see §13.
 ```
 
 #### Smooth Evaluation Map
@@ -305,6 +371,14 @@ T S² = Σ (p : S²), (v : ℝ³) × (v ⊥ p)
 -- Point with tangent vector perpendicular to surface
 ```
 
+```sctt
+-- Why ε² = 0 matters computationally for tangent bundles:
+-- The tangent bundle TM = M^D relies on D = {ε | ε² = 0}
+-- When the normalizer reduces ε² to 0, tangent vector arithmetic
+-- becomes exact: no floating-point approximation, no truncation error.
+-- This is what makes SCTT's differentiation "algebraic" rather than "analytic"
+```
+
 ### Differential of Maps
 
 Every smooth map has a differential:
@@ -314,10 +388,13 @@ Every smooth map has a differential:
 dF : (F : C∞(M, N)) → C∞(T M, T N)
 dF F (x, v) = (F x, DF[x](v))
 
--- Chain rule holds definitionally
+-- Chain rule (a theorem, proved via functoriality of the tangent functor)
 chain_rule : (F : C∞(M, N)) → (G : C∞(N, P)) →
              d(G ∘ F) ≡ dG ∘ dF
-chain_rule F G = refl  -- Computational!
+chain_rule F G = chain_proof F G
+  -- Theorem: follows from naturality of the differential and functoriality
+  -- of the tangent bundle construction. NOT definitional — requires a proof
+  -- that pushforward respects composition. See §5.2.
 
 -- Example
 F : C∞(ℝ², ℝ)

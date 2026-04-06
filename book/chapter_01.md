@@ -55,12 +55,17 @@ derivative smooth_function = λx. 2x + 2
 
 -- Proof that our derivative is correct
 derivative_correct : derivative smooth_function ≡ λx. 2x + 2
-derivative_correct = refl  -- Computed automatically!
+derivative_correct = refl
+  -- Definitional: D reduces on polynomial terms via the ε²=0 rewrite rule.
+  -- This works because smooth_function is a concrete polynomial.
 
--- The fundamental theorem of calculus holds definitionally
-FTC : (f : C∞(ℝ, ℝ)) → (a b : ℝ) → 
+-- The fundamental theorem of calculus (a substantial theorem, not a tautology)
+FTC : (f : C∞(ℝ, ℝ)) → (a b : ℝ) →
       ∫ a b (derivative f) ≡ f b - f a
-FTC f a b = refl  -- No proof needed!
+FTC f a b = ftc_proof f a b
+  -- Theorem: requires constructing a smooth antiderivative and applying the
+  -- integral operator. This is NOT definitional equality — it is a propositional
+  -- theorem whose proof uses the smooth structure of ℝ. See §5.3.
 ```
 
 This isn't just notation—it's executable code with mathematical guarantees.
@@ -245,13 +250,17 @@ We synthesize their insights into a practical, computational framework that runs
 #### Comparison with Existing Systems
 
 | System | Computational | Homotopical | Smooth | Efficient |
-|--------|--------------|-------------|---------|----------|
+|-|-|-|-|-|
 | Coq/Agda | ✓ | Partial | ✗ | ✓ |
-| Lean 4 | ✓ | Partial | Classical | ✓ |
+| Lean 4/Mathlib | ✓ | Partial | Library† | ✓ |
 | Cubical Agda | ✓ | ✓ | ✗ | ✓ |
 | HoTT (Book) | ✗ | ✓ | ✗ | N/A |
 | SDG (Kock) | ✗ | ✗ | ✓ | N/A |
-| **SCTT** | **✓** | **✓** | **✓** | **✓** |
+| **SCTT** | **✓** | **✓** | **✓** | **‡** |
+
+> † Lean 4 + Mathlib has constructive smooth manifold formalization (Gouëzel et al.) via library, not native type-theoretic smooth structure.
+>
+> ‡ SCTT type checking is EXPTIME-complete in the worst case (see [Chapter 8](./chapter_08.md)). Practical efficiency depends on term structure and caching strategies.
 
 #### Technical Challenges Solved
 
@@ -308,7 +317,7 @@ Chapter 2 (Type Theory Basics)
     ↓
     ├─→ Chapter 3 (Cubical Structure)
     │      ↓
-    │   Chapter 6 (Smooth Homotopy)
+    │   Chapter 6 (Limitations & Challenges)
     │
     └─→ Chapter 4 (Smooth Types)
            ↓
@@ -387,7 +396,7 @@ We use standard mathematical notation with precise type-theoretic meaning:
 
 ### Getting Started
 
-1. **Install SCTT** (see Appendix A)
+1. **Install SCTT** (see [Getting Started Guide](./README.md))
 2. **Run first example**:
    ```bash
    sctt run examples/hello_smooth.sctt

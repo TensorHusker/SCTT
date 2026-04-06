@@ -101,7 +101,8 @@ example' : ℝ → ℝ
 example' = D[example]
 -- Reduces to: λ x → 3*x² - 6*x + 2
 
--- This equality is definitional!
+-- This equality is definitional for concrete polynomials:
+-- D reduces term-by-term via the ε²=0 rewrite rule (§4.1).
 _ : example' ≡ λ x → 3*x² - 6*x + 2
 _ = refl
 ```
@@ -139,10 +140,13 @@ hessian_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
              ∃! H : ℝⁿˣⁿ, ∀(ε : 𝔻²)ⁿ,
              f(x + ε) = f(x) + ⟨∇f(x), ε⟩ + ½⟨ε, Hε⟩
 
--- Schwarz's theorem is automatic
+-- Schwarz's theorem (symmetry of mixed partials)
 schwarz : (f : C∞(ℝⁿ, ℝ)) →
           ∂ᵢ ∂ⱼ f ≡ ∂ⱼ ∂ᵢ f
-schwarz f = refl  -- By commutativity of 𝔻²!
+schwarz f = schwarz_proof f
+  -- Theorem: uses the commutativity of 𝔻² (the nilsquare infinitesimals),
+  -- but the symmetry must be derived — it is NOT simply refl.
+  -- Proof proceeds by the KL-axiom applied in both directions. See §5.1.
 ```
 
 #### Jacobian Matrix
@@ -173,10 +177,16 @@ L_X X f x = D_X(x) f
 
 -- Properties
 _ : L_X (f * g) ≡ (L_X f) * g + f * (L_X g)
-_ = refl  -- Product rule
+_ = lie_leibniz_proof X f g
+  -- Theorem (Leibniz rule for Lie derivatives): follows from the product rule
+  -- for directional derivatives. NOT definitional — requires the smooth
+  -- Leibniz identity on vector fields. See §5.1.
 
 _ : L_X L_Y f - L_Y L_X f ≡ L_[X,Y] f
-_ = refl  -- Lie bracket relation
+_ = lie_bracket_proof X Y f
+  -- Theorem (Lie bracket identity): characterizes [X,Y] as the commutator
+  -- of derivations. Requires a non-trivial calculation with second-order
+  -- infinitesimals. NOT definitional. See §5.1.
 ```
 
 ## 5.2 Chain Rule {#chain-rule}
@@ -199,7 +209,7 @@ chain_rule g f =
   --                 = f(g(x)) + f'(g(x))·g'(x)ε  (by KL for f)
   --                 = (f ∘ g)(x) + (f' ∘ g)(x)·g'(x)ε
   -- Therefore D[f ∘ g](x) = f'(g(x))·g'(x) = (D[f] ∘ D[g])(x)
-  refl  -- QED, holds definitionally!
+  chain_rule_proof g f  -- Theorem: follows from KL axiom applied twice (see derivation above)
 ```
 
 #### Higher-Order Chain Rule
@@ -249,6 +259,8 @@ reverse_diff f x = (f x, ∇f x)
 ad_correct : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
             π₂ (reverse_diff f x) ≡ ∇f x
 ad_correct f x = refl
+  -- Definitional: π₂ (reverse_diff f x) unfolds to ∇f x by the definition
+  -- of reverse_diff as a pair. This is a β-reduction, not a theorem.
 ```
 
 ### Higher-Order Chain Rule
@@ -256,15 +268,15 @@ ad_correct f x = refl
 ```sctt
 -- Second derivative chain rule
 chain_rule_2 : (g : C∞(ℝ, ℝ)) → (f : C∞(ℝ, ℝ)) →
-               D²[f ∘ g] ≡ 
-               λ x → D²[f](g x) * (D[g] x)² + 
+               D²[f ∘ g] ≡
+               λ x → D²[f](g x) * (D[g] x)² +
                      D[f](g x) * D²[g] x
-chain_rule_2 g f = refl
+chain_rule_2 g f = chain_rule_2_proof g f
+  -- Theorem: the second-order chain rule requires applying the first-order
+  -- chain rule twice and collecting terms. NOT definitional — proof uses
+  -- linearity of D and the product structure of 𝔻². See §5.2.
 
--- Faà di Bruno's formula (higher derivatives)
-faa_di_bruno : (n : ℕ) → 
-               (g : C∞(ℝ, ℝ)) → (f : C∞(ℝ, ℝ)) →
-               Dⁿ[f ∘ g] ≡ (bell_polynomial expression)
+-- For the general n-th derivative (Faà di Bruno), see §5.1 Higher-Order Chain Rule
 ```
 
 ## 5.3 Integration {#integration}
@@ -289,7 +301,10 @@ Integration is the inverse of differentiation:
 -- Fundamental theorem of calculus
 FTC : (f : C∞(ℝ, ℝ)) → (a b : ℝ) →
       ∫ a b (D[f]) ≡ f b - f a
-FTC f a b = refl
+FTC f a b = ftc_proof f a b
+  -- Theorem: requires the existence of smooth antiderivatives and continuity
+  -- of the integral operator over ℝ. NOT definitional — this is a genuine
+  -- analytical result, not a computation rule. See §5.3 for the full proof.
 ```
 
 ### Path and Surface Integrals
@@ -373,11 +388,17 @@ df(X) = X(f)  -- Directional derivative
 
 -- Key properties
 d_squared : (ω : Ωᵏ M) → d(d ω) ≡ 0
-d_squared ω = refl  -- d² = 0
+d_squared ω = d_squared_proof ω
+  -- Theorem (d² = 0): follows from the commutativity of partial derivatives
+  -- (Schwarz's theorem) and the antisymmetry of the wedge product. NOT
+  -- definitional — proof proceeds by local coordinate calculation. See §5.4.
 
 leibniz : (α : Ωᵏ M) → (β : Ωˡ M) →
          d(α ∧ β) ≡ (d α) ∧ β + (-1)ᵏ α ∧ (d β)
-leibniz α β = refl
+leibniz α β = leibniz_proof α β
+  -- Theorem (graded Leibniz rule for d): requires careful bookkeeping of
+  -- the sign (-1)ᵏ arising from anticommutativity of the wedge product.
+  -- NOT definitional — proof by induction on form degree. See §5.4.
 
 -- Coordinate expression
 local_d : Ωᵏ ℝⁿ → Ωᵏ⁺¹ ℝⁿ
@@ -655,16 +676,16 @@ conserved u = energy_conservation_proof
 
 We've developed a complete differential calculus in type theory:
 - **Differentiation** is a computational type operation
-- **Chain rule** holds by construction
+- **Chain rule** follows from the KL axiom (Theorem 5.2)
 - **Integration** inverts differentiation with the FTC
 - **Differential forms** provide coordinate-free calculus
 - **Stokes' theorem** unifies integral theorems
 - **Lie derivatives** describe infinitesimal symmetries
 
-All these operations compute exactly, with correctness guaranteed by types. This isn't symbolic manipulation or numerical approximation—it's exact differential geometry as computation. Next, we'll see how this structure interacts with the homotopy theory from Chapter 3.
+All these operations compute exactly, with correctness guaranteed by types. This isn't symbolic manipulation or numerical approximation—it's exact differential geometry as computation. Next, we examine the limitations and challenges that arise from combining these three structures.
 
 ---
 
-*Next: [Chapter 6: Smooth Homotopy Theory](./chapter_06.md) →*
+*Next: [Chapter 6: Addressing Limitations and Challenges](./chapter_06.md) →*
 
 *Previous: [Chapter 4: Smooth Types](./chapter_04.md) ←*

@@ -243,6 +243,170 @@ In: *Proceedings of the ACM on Programming Languages*, Volume 5, POPL, 2021
 
 ---
 
+## Rewriting and Equational Theories in Type Theory
+
+**Cockx, Jesper; Tabareau, Nicolas; Winterhalter, Théo**
+"The Taming of the Rew: Type Theory with Computational Assumptions"
+In: *Proceedings of the ACM on Programming Languages*, Volume 5, POPL, 2021
+
+**Leray, Yann; Winterhalter, Théo**
+"Encode the Cake and Eat It Too: Locally-Scoped Rewrite Rules in Type Theory"
+In: *Proceedings of the ACM on Programming Languages*, Volume 10, POPL, 2026
+*Distinguished Paper Award*
+
+**Leray, Yann; Gilbert, Gaëtan; Tabareau, Nicolas; Winterhalter, Théo**
+"The Rewster: Type Preserving Rewrite Rules for the Coq Proof Assistant"
+In: *15th International Conference on Interactive Theorem Proving (ITP 2024)*, 2024
+
+**Felicissimo, Thiago**
+"Bidirectional Typing for the Calculus of Inductive Constructions"
+In: *European Symposium on Programming (ESOP 2024)*, 2024
+
+**Felicissimo, Thiago**
+*CompLF: A Computational Logical Framework*
+PhD Thesis, Paris-Saclay University, September 2024
+
+**Barras, Bruno; Felicissimo, Thiago; Winterhalter, Théo**
+"User-Defined Equational Theories for Dedukti/Lambdapi"
+Working notes, EuroProofNet WG1 Meeting, Gruissan, January 2024
+
+---
+
+## Cartesian Cubical Type Theory and Implementation
+
+**Angiuli, Carlo; Brunerie, Guillaume; Coquand, Thierry; Favonia, Kuen-Bang Hou; Harper, Robert; Licata, Daniel R.**
+"Syntax and Models of Cartesian Cubical Type Theory"
+*Mathematical Structures in Computer Science*, 31(4):424-468, 2021
+
+**Kovács, András**
+"cctt: A Performant Cartesian Cubical Type Theory Evaluator"
+Implementation and README, 2023
+Available at: https://github.com/AndrasKovacs/cctt
+
+**Kovács, András**
+"Closure-Free Functional Programming in a Two-Level Type Theory"
+In: *Proceedings of the ACM on Programming Languages*, Volume 8, ICFP, 2024
+
+**Kovács, András**
+"Staged Compilation with Two-Level Type Theory"
+In: *Proceedings of the ACM on Programming Languages*, Volume 6, ICFP, 2022
+
+**Awodey, Steve**
+"A Cartesian Cubical Model Structure"
+*Springer*, 2026
+
+**Sterling, Jonathan; Angiuli, Carlo**
+"Normalization for Cubical Type Theory"
+In: *36th Annual ACM/IEEE Symposium on Logic in Computer Science (LICS)*, 2021
+
+**Huang, Yiyang**
+"Normal Forms for Cartesian Cubical Type Theory"
+arXiv:2603.24923, March 2026
+
+**Brunerie, Guillaume**
+*On the Homotopy Groups of Spheres in Homotopy Type Theory*
+PhD Thesis, Université de Nice, 2016
+
+**Huber, Simon**
+"Canonicity for Cubical Type Theory"
+*Journal of Automated Reasoning*, 63(2):173-210, 2019
+
+---
+
+## Sensitivity and Metric Type Theory
+
+**Reed, Jason; Pierce, Benjamin C.**
+"Distance Makes the Types Grow Stronger: A Calculus for Differential Privacy"
+In: *Proceedings of the 15th ACM SIGPLAN International Conference on Functional Programming (ICFP)*, 2010
+
+**Gaboardi, Marco; Haeberlen, Andreas; Hsu, Justin; Narayan, Arjun; Pierce, Benjamin C.**
+"Linear Dependent Types for Differential Privacy"
+In: *Proceedings of the ACM on Programming Languages*, Volume 1, POPL, 2013
+
+**Bañados Schwerter, Matías; Garcia, Ronald; Tanter, Éric**
+"GSoul: Gradual Sensitivity Typing"
+In: *IEEE Computer Security Foundations Symposium (CSF)*, 2025
+
+**Azevedo de Amorim, Arthur; Gaboardi, Marco; Hsu, Justin; Katsumata, Shin-ya; Cherigui, Ikram**
+"A Semantic Account of Metric Preservation"
+In: *Proceedings of the ACM on Programming Languages*, Volume 1, POPL, 2017
+
+**Dal Lago, Ugo; Gavazzo, Francesco; Yoshimizu, Akira**
+"Differential Logical Relations"
+In: *46th International Colloquium on Automata, Languages, and Programming (ICALP)*, 2019
+
+---
+
+## Parametricity and Cohesion
+
+**Aberlé, C.B.**
+"Parametricity via Cohesion"
+In: *Mathematical Foundations of Programming Semantics (MFPS XL)*, 2024
+arXiv:2404.03825
+
+**Cavallo, Evan; Harper, Robert**
+"Internal Parametricity for Cubical Type Theory"
+In: *28th EACSL Annual Conference on Computer Science Logic (CSL)*, 2020
+Extended version: *Logical Methods in Computer Science*, 2021
+
+**Van Muylder, Antoine; Nuyts, Andreas; Devriese, Dominique**
+"Internal and Observational Parametricity for Cubical Agda"
+In: *Proceedings of the ACM on Programming Languages*, Volume 8, POPL, 2024
+
+**Gratzer, Daniel**
+*Syntax and Semantics of Modal Type Theory*
+PhD Thesis, Aarhus University, 2023
+
+---
+
+## Categorical Foundations of Differentiation and Learning
+
+**Fong, Brendan; Spivak, David; Tuyéras, Rémy**
+"Backprop as Functor: A Compositional Perspective on Supervised Learning"
+In: *34th Annual ACM/IEEE Symposium on Logic in Computer Science (LICS)*, 2019
+
+**Cruttwell, Geoffrey S. H.; Gavranović, Bruno; Ghani, Neil; Wilson, Paul; Zanasi, Fabio**
+"Categorical Foundations of Gradient-Based Learning"
+In: *European Symposium on Programming (ESOP)*, 2022
+
+**Huot, Mathieu; Staton, Sam; Vákár, Matthijs**
+"Correctness of Automatic Differentiation via Diffeologies and Categorical Gluing"
+In: *Foundations of Software Science and Computation Structures (FoSSaCS)*, 2020
+
+**Chen, Ricky T. Q.; Rubanova, Yulia; Bettencourt, Jesse; Duvenaud, David**
+"Neural Ordinary Differential Equations"
+In: *Advances in Neural Information Processing Systems (NeurIPS)*, 2018
+
+---
+
+## Cubical Automation and Verified Type Checking
+
+**Doré, Maximilian; Cavallo, Evan; Mörtberg, Anders**
+"Automating Boundary Filling in Cubical Type Theories"
+In: *9th International Conference on Formal Structures for Computation and Deduction (FSCD)*, 2024
+
+**Sozeau, Matthieu; Boulier, Simon; Forster, Yannick; Tabareau, Nicolas; Winterhalter, Théo**
+"Correct and Complete Type Checking for the Calculus of Inductive Constructions, in Coq"
+*Journal of the ACM*, 2025
+
+**Sirman, Loïc; Lennon-Bertrand, Meven; Krishnaswami, Neel**
+"Implementing Observational Equality with NbE"
+Presented at TYPES 2024
+
+**Chen, Liang-Ting; Nordvall Forsberg, Fredrik; Tsai, Hsiang-Shang**
+"Quotient Inductive-Inductive-Recursive Types"
+In: *Certified Programs and Proofs (CPP)*, 2026
+
+---
+
+## Smooth Homotopy Type Theory
+
+**Riehl, Emily; Shulman, Michael**
+"A Type Theory for Synthetic ∞-Categories"
+*Higher Structures*, 1(1):116-193, 2017
+
+---
+
 ## Differential Geometry Textbooks
 
 **Lee, John M.**
