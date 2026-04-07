@@ -101,6 +101,29 @@ fn conv_pair_neq() {
 }
 
 #[test]
+fn conv_eta_pair() {
+    // A neutral variable compared with Pair(fst(n), snd(n)) should be conv
+    // via pair eta: n ≡ (fst n, snd n)
+    let ne = Arc::new(Neutral::Var(TermLevel(0)));
+    let sigma_ty = Arc::new(Value::Sigma(
+        Arc::new(Value::Nat),
+        Closure { env: Env::new(), body: Arc::new(Term::Nat) },
+    ));
+    let n = Value::Neutral(Arc::clone(&ne), Arc::clone(&sigma_ty));
+    let expanded = Value::Pair(
+        Arc::new(Value::Neutral(
+            Arc::new(Neutral::Fst(Arc::clone(&ne), Arc::new(Value::Nat))),
+            Arc::new(Value::Nat),
+        )),
+        Arc::new(Value::Neutral(
+            Arc::new(Neutral::Snd(Arc::clone(&ne), Arc::new(Value::Nat))),
+            Arc::new(Value::Nat),
+        )),
+    );
+    assert!(conv(1, 0, &n, &expanded));
+}
+
+#[test]
 fn conv_neutral_var_eq() {
     let v0 = Value::Neutral(
         Arc::new(Neutral::Var(TermLevel(0))),

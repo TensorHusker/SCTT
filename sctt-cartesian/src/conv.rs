@@ -15,7 +15,7 @@
 
 use std::sync::Arc;
 use crate::dim::DimLevel;
-use crate::value::{Closure, DimClosure, DimVal, Neutral, TermLevel, Value};
+use crate::value::{BdryVal, CofVal, Closure, DimClosure, DimVal, Neutral, TermLevel, Value};
 use crate::evaluate::{apply_closure, apply_dim_closure, do_app, do_path_app};
 
 // ─── Fresh Variable Helpers ─────────────────────────────────────────────────
@@ -127,13 +127,12 @@ pub fn conv(term_lvl: usize, dim_lvl: usize, a: &Value, b: &Value) -> bool {
         }
 
         // ── HCom (stuck) ─────────────────────────────────────────────────
-        (Value::HCom(f1, t1, ty1, _bdry1, b1), Value::HCom(f2, t2, ty2, _bdry2, b2)) => {
+        (Value::HCom(f1, t1, ty1, bdry1, b1), Value::HCom(f2, t2, ty2, bdry2, b2)) => {
             conv_dim_val(f1, f2)
                 && conv_dim_val(t1, t2)
                 && conv(term_lvl, dim_lvl, ty1, ty2)
                 && conv(term_lvl, dim_lvl, b1, b2)
-            // Note: full boundary comparison omitted for now (would need
-            // pairwise cofibration + dim-closure comparison).
+                && conv_bdry(term_lvl, dim_lvl, bdry1, bdry2)
         }
 
         // ── Glue ─────────────────────────────────────────────────────────
@@ -233,4 +232,21 @@ fn conv_neutral(term_lvl: usize, dim_lvl: usize, ne1: &Neutral, ne2: &Neutral) -
 
         _ => false,
     }
+}
+
+// ─── Boundary Comparison ────────────────────────────────────────────────────
+
+/// Compare two boundary systems branch-by-branch.
+fn conv_bdry(term_lvl: usize, dim_lvl: usize, b1: &BdryVal, b2: &BdryVal) -> bool {
+    if b1.branches.len() != b2.branches.len() {
+        return false;
+    }
+    b1.branches.iter().zip(b2.branches.iter()).all(|((c1, cl1), (c2, cl2))| {
+        conv_cof_val(c1, c2) && conv_dim_closure(term_lvl, dim_lvl, cl1, cl2)
+    })
+}
+
+/// Structural equality of cofibration values.
+fn conv_cof_val(a: &CofVal, b: &CofVal) -> bool {
+    a == b
 }

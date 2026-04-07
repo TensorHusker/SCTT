@@ -238,8 +238,27 @@ impl TypeChecker {
                 // base : motive Zero
                 let base_ty = do_app(Arc::clone(&motive_val), Arc::new(Value::Zero));
                 self.check(base, &base_ty)?;
-                // step : well-typed (simplified)
-                let _step_ty = self.infer(step)?;
+                // step : (n : Nat) -> motive n -> motive (S n)
+                // Check outer Pi has Nat domain; full dependent codomain
+                // check deferred until we have proper elaboration.
+                let step_ty = self.infer(step)?;
+                match &*step_ty {
+                    Value::Pi(dom, _) => {
+                        if !conv(self.term_lvl(), self.dim_lvl, dom, &Value::Nat) {
+                            return Err(ScttError::TypeMismatch {
+                                expected: "Pi(Nat, ...)".to_string(),
+                                actual: format!("{:?}", step_ty),
+                            });
+                        }
+                    }
+                    _ => {
+                        return Err(ScttError::TypeMismatch {
+                            expected: "function type for step".to_string(),
+                            actual: format!("{:?}", step_ty),
+                        });
+                    }
+                }
+
                 let scrut_val = self.eval_term(scrutinee);
                 Ok(do_app(motive_val, scrut_val))
             }
