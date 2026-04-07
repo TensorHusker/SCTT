@@ -5,6 +5,7 @@
 //! form, so beta-rules have already fired; the main work here is:
 //!
 //! - **Eta for functions**: `f ≡ λx. f(x)`
+//! - **Eta for pairs**: `p ≡ (fst p, snd p)`
 //! - **Eta for paths**: `<i> p @ i ≡ p`
 //! - **Structural comparison** of canonical forms and neutral spines.
 //!
@@ -69,10 +70,22 @@ pub fn conv(term_lvl: usize, dim_lvl: usize, a: &Value, b: &Value) -> bool {
             conv(term_lvl + 1, dim_lvl, &lhs, &rhs)
         }
 
-        // ── Pair ─────────────────────────────────────────────────────────
+        // ── Pair-Pair ──────────────────────────────────────────────────
         (Value::Pair(a1, b1), Value::Pair(a2, b2)) => {
             conv(term_lvl, dim_lvl, a1, a2)
                 && conv(term_lvl, dim_lvl, b1, b2)
+        }
+
+        // ── Pair-Other (eta for pairs: p ≡ (fst p, snd p)) ───────────
+        (Value::Pair(_, _), _) | (_, Value::Pair(_, _)) => {
+            let a_arc = Arc::new(a.clone());
+            let b_arc = Arc::new(b.clone());
+            let fst_a = crate::evaluate::do_fst(Arc::clone(&a_arc));
+            let fst_b = crate::evaluate::do_fst(Arc::clone(&b_arc));
+            let snd_a = crate::evaluate::do_snd(a_arc);
+            let snd_b = crate::evaluate::do_snd(b_arc);
+            conv(term_lvl, dim_lvl, &fst_a, &fst_b)
+                && conv(term_lvl, dim_lvl, &snd_a, &snd_b)
         }
 
         // ── PathType ─────────────────────────────────────────────────────
