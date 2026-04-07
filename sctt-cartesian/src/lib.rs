@@ -16,3 +16,14 @@ pub mod kan;
 pub mod glue;
 pub mod smooth;
 pub mod error;
+
+// ─── Convenient Re-exports ──────────────────────────────────────────────────
+
+pub use syntax::{Term, Level, Index, Smoothness};
+pub use dim::{Dim, DimIndex};
+pub use cof::Cof;
+pub use value::{Value, Neutral, Env, Closure, DimClosure, DimVal, TermLevel};
+pub use check::TypeChecker;
+pub use evaluate::evaluate;
+pub use quote::{quote, normalize};
+pub use error::{ScttError, Result};
