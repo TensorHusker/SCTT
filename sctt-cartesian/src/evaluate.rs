@@ -173,16 +173,20 @@ pub fn do_nat_elim(
     }
 }
 
-/// Coerce along a type family: if `from == to`, return body unchanged; else stuck.
+/// Coerce along a type family: if `from == to`, return body unchanged;
+/// if the line is constant, return body; else stuck.
 pub fn do_coe(from: DimVal, to: DimVal, line_cl: DimClosure, body: Arc<Value>) -> Arc<Value> {
     if from == to {
         body
+    } else if let Some(result) = crate::kan::try_reduce_coe(&from, &to, &line_cl, &body) {
+        result
     } else {
         Arc::new(Value::Coe(from, to, line_cl, body))
     }
 }
 
-/// Homogeneous composition: if `from == to`, return base; else stuck.
+/// Homogeneous composition: if `from == to`, return base;
+/// if a boundary branch is satisfied, return that branch at `to`; else stuck.
 pub fn do_hcom(
     from: DimVal,
     to: DimVal,
@@ -192,6 +196,8 @@ pub fn do_hcom(
 ) -> Arc<Value> {
     if from == to {
         base
+    } else if let Some(result) = crate::kan::try_reduce_hcom(&from, &to, &ty, &bdry, &base) {
+        result
     } else {
         Arc::new(Value::HCom(from, to, ty, bdry, base))
     }
