@@ -1,10 +1,12 @@
 use std::sync::Arc;
 use sctt_cartesian::dim::*;
 use sctt_cartesian::cof::*;
-use sctt_cartesian::syntax::Term;
+use sctt_cartesian::syntax::*;
 use sctt_cartesian::value::*;
 use sctt_cartesian::evaluate::*;
 use sctt_cartesian::quote::*;
+use sctt_cartesian::check::TypeChecker;
+use sctt_cartesian::conv::conv;
 
 #[test]
 fn dim_substitution_zero() {
@@ -123,4 +125,79 @@ fn nbe_beta_reduction() {
     let v = evaluate(&Env::new(), &t);
     let t2 = quote(0, 0, &v);
     assert_eq!(t2, Term::Zero);
+}
+
+// ─── Conversion Tests ───────────────────────────────────────────────────────
+
+#[test]
+fn conv_nat_self() {
+    assert!(conv(0, 0, &Value::Nat, &Value::Nat));
+}
+
+#[test]
+fn conv_different_constructors() {
+    assert!(!conv(0, 0, &Value::Nat, &Value::Zero));
+}
+
+#[test]
+fn conv_after_beta() {
+    let t1 = Term::app(Term::lambda(Term::var(0)), Term::Nat);
+    let t2 = Term::Nat;
+    let v1 = evaluate(&Env::new(), &t1);
+    let v2 = evaluate(&Env::new(), &t2);
+    assert!(conv(0, 0, &v1, &v2));
+}
+
+// ─── Type Checker Tests ─────────────────────────────────────────────────────
+
+#[test]
+fn tc_nat_type() {
+    let mut tc = TypeChecker::new();
+    let ty = tc.infer(&Term::Nat).unwrap();
+    assert!(matches!(&*ty, Value::Universe(l) if l.value() == 0));
+}
+
+#[test]
+fn tc_zero_is_nat() {
+    let mut tc = TypeChecker::new();
+    let ty = tc.infer(&Term::Zero).unwrap();
+    assert!(matches!(&*ty, Value::Nat));
+}
+
+#[test]
+fn tc_type_mismatch_rejected() {
+    let mut tc = TypeChecker::new();
+    // Nat infers to Universe(0), which does not convert with Nat
+    let result = tc.check(&Term::Nat, &Value::Nat);
+    assert!(result.is_err());
+}
+
+#[test]
+fn tc_app_identity() {
+    let mut tc = TypeChecker::new();
+    // (lambda x. x) Zero : Nat
+    // The identity is not directly inferable, but App of it is.
+    // Pi(Nat, Nat) -> checking lambda x.x against it, then applying.
+    let pi_ty = Value::Pi(
+        Arc::new(Value::Nat),
+        Closure {
+            env: Env::new(),
+            body: Arc::new(Term::Nat),
+        },
+    );
+    tc.check(&Term::lambda(Term::var(0)), &pi_ty).unwrap();
+}
+
+#[test]
+fn tc_pair_sigma() {
+    let mut tc = TypeChecker::new();
+    let sig_ty = Value::Sigma(
+        Arc::new(Value::Nat),
+        Closure {
+            env: Env::new(),
+            body: Arc::new(Term::Nat),
+        },
+    );
+    let pair = Term::pair(Term::Zero, Term::succ(Term::Zero));
+    tc.check(&pair, &sig_ty).unwrap();
 }
