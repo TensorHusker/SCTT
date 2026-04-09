@@ -250,9 +250,11 @@ In: *Proceedings of the ACM on Programming Languages*, Volume 5, POPL, 2021
 In: *Proceedings of the ACM on Programming Languages*, Volume 5, POPL, 2021
 
 **Leray, Yann; Winterhalter, Théo**
-"Encode the Cake and Eat It Too: Locally-Scoped Rewrite Rules in Type Theory"
-In: *Proceedings of the ACM on Programming Languages*, Volume 10, POPL, 2026
-*Distinguished Paper Award*
+"Encode the Cake and Eat It Too: Controlling Computation in Type Theory, Locally"
+In: *Proceedings of the ACM on Programming Languages*, Volume 10, No. POPL, Article 62, January 2026
+doi: [10.1145/3776704](https://doi.org/10.1145/3776704)
+Formalisation: [github.com/TheoWinterhalter/local-comp](https://github.com/TheoWinterhalter/local-comp/tree/popl26-paper)
+Prototype: [github.com/Yann-Leray/coq/tree/artifact-popl26](https://github.com/Yann-Leray/coq/tree/artifact-popl26)
 
 **Leray, Yann; Gilbert, Gaëtan; Tabareau, Nicolas; Winterhalter, Théo**
 "The Rewster: Type Preserving Rewrite Rules for the Coq Proof Assistant"
@@ -265,6 +267,11 @@ In: *European Symposium on Programming (ESOP 2024)*, 2024
 **Felicissimo, Thiago**
 *CompLF: A Computational Logical Framework*
 PhD Thesis, Paris-Saclay University, September 2024
+
+**Barras, Bruno; Maestracci, Music**
+"Implementation of Two Layers Type Theory in Dedukti and Application to Cubical Type Theory"
+In: *Logical Frameworks and Meta-Languages: Theory and Practice (LFMTP 2020)*, 2020
+doi: [10.4204/EPTCS.332.5](https://doi.org/10.4204/EPTCS.332.5)
 
 **Barras, Bruno; Felicissimo, Thiago; Winterhalter, Théo**
 "User-Defined Equational Theories for Dedukti/Lambdapi"
@@ -290,6 +297,10 @@ In: *Proceedings of the ACM on Programming Languages*, Volume 8, ICFP, 2024
 **Kovács, András**
 "Staged Compilation with Two-Level Type Theory"
 In: *Proceedings of the ACM on Programming Languages*, Volume 6, ICFP, 2022
+
+**Angiuli, Carlo; Hou (Favonia), Kuen-Bang; Harper, Robert**
+"Computational Higher Type Theory III: Univalent Universes and Exact Equality"
+arXiv:1712.01800, December 2017
 
 **Awodey, Steve**
 "A Cartesian Cubical Model Structure"
@@ -480,6 +491,186 @@ Studies in Logic and the Foundations of Mathematics 121, North-Holland, 1988
 **Bell, John L.**
 *A Primer of Infinitesimal Analysis (Second Edition)*
 Cambridge University Press, 2008
+
+---
+
+## Abstract Reasoning & ARC
+
+**Chollet, Francois**
+"On the Measure of Intelligence"
+arXiv:1911.01547, 2019
+
+**Chollet, Francois et al.**
+"ARC Prize 2024: Technical Report"
+arXiv:2412.04604, 2024
+
+**Chollet, Francois et al.**
+"ARC Prize 2025: Technical Report"
+arXiv:2601.10904, 2025
+
+**Johnson, Jack et al.**
+"The ARC of Progress towards AGI: A Living Survey of Abstraction and Reasoning"
+arXiv:2603.13372, 2026
+
+**Greenblatt, Ryan**
+"Getting 50% (SoTA) on ARC-AGI with GPT-4o"
+Redwood Research Blog, 2024
+
+**Xu, Yudong et al.**
+"Graphs, Constraints, and Search for the Abstraction and Reasoning Corpus"
+arXiv:2210.09880, 2023
+
+**Ainooson, James et al.**
+"An Approach to Solving the Abstraction and Reasoning Corpus (ARC) Challenge"
+arXiv:2302.09738, 2023
+
+**Acquaviva, Sam et al.**
+"Communicating Natural Programs to Humans and Machines"
+In: *Advances in Neural Information Processing Systems (NeurIPS)*, 2022
+
+**Moskvichev, Arseny et al.**
+"The ConceptARC Benchmark: Evaluating Understanding and Generalization in the ARC Domain"
+arXiv:2305.07141, 2023
+
+**Ferreira, Joao et al.**
+"Neural Networks for Abstraction and Reasoning: Towards Broad Generalization in Machines"
+Scientific Reports, 14:25469, 2024
+
+**Hodel, Michael et al.**
+"Addressing the Abstraction and Reasoning Corpus via Procedural Example Generation"
+2024
+
+**Ouellette, Simon et al.**
+"RE-ARC: Reverse-Engineering the ARC"
+2024
+
+**Park, Jongho et al.**
+"ARC-NCA: Towards Developmental Solutions to the Abstraction and Reasoning Corpus"
+arXiv:2505.08778, 2025
+
+**Xu, Yudong et al.**
+"A Comprehensive Behavioral Dataset for the Abstraction and Reasoning Corpus"
+Scientific Data, 2025
+
+---
+
+## Program Synthesis & Inductive Logic
+
+**Ellis, Kevin; Wong, Catherine; Nye, Maxwell; Sable-Meyer, Mathias; Morales, Lucas; Hewitt, Luke; Cary, Luc; Solar-Lezama, Armando; Tenenbaum, Joshua B.**
+"DreamCoder: Bootstrapping Inductive Program Synthesis with Wake-Sleep Library Learning"
+In: *Proceedings of PLDI 2021*, 2021
+
+**Ellis, Kevin et al.**
+"Learning to Infer Graphics Programs from Hand-Drawn Images"
+In: *Advances in Neural Information Processing Systems (NeurIPS)*, 2018
+
+**Balog, Matej; Gaunt, Alexander L.; Brockschmidt, Marc; Nowozin, Sebastian; Tarlow, Daniel**
+"DeepCoder: Learning to Write Programs"
+In: *ICLR 2017*, 2017
+
+**Lake, Brenden M.; Ullman, Tomer D.; Tenenbaum, Joshua B.; Gershman, Samuel J.**
+"Building Machines That Learn and Think Like People"
+Behavioral and Brain Sciences, 40:e253, 2017
+
+**Lake, Brenden M.; Salakhutdinov, Ruslan; Tenenbaum, Joshua B.**
+"Human-Level Concept Learning through Probabilistic Program Induction"
+Science, 350(6266):1332-1338, 2015
+
+**Gulwani, Sumit**
+"Automating String Processing in Spreadsheets Using Input-Output Examples"
+In: *Proceedings of POPL 2011*, 2011
+
+**Osera, Peter-Michael; Zdancewic, Steve**
+"Type-and-Example-Directed Program Synthesis"
+In: *Proceedings of PLDI 2015*, 2015
+
+**Polikarpova, Nadia; Kuraj, Ivan; Solar-Lezama, Armando**
+"Program Synthesis from Polymorphic Refinement Types"
+In: *Proceedings of PLDI 2016*, 2016
+
+**Feser, John K.; Chaudhuri, Swarat; Dillig, Isil**
+"Synthesizing Data Structure Transformations from Input-Output Examples"
+In: *Proceedings of PLDI 2015*, 2015
+
+**Frankle, Jonathan; Osera, Peter-Michael; Walker, David; Zdancewic, Steve**
+"Example-Directed Synthesis: A Type-Theoretic Interpretation"
+In: *Proceedings of POPL 2016*, 2016
+
+**Cropper, Andrew; Morel, Rolf**
+"Learning Programs by Learning from Failures"
+Machine Learning, 110:801-856, 2021
+
+---
+
+## Cognitive Science & Intelligence Measurement
+
+**Chollet, Francois**
+"On the Measure of Intelligence"
+arXiv:1911.01547, 2019
+
+**Hernandez-Orallo, Jose**
+*The Measure of All Minds: Evaluating Natural and Artificial Intelligence*
+Cambridge University Press, 2017
+
+**Spelke, Elizabeth S.; Kinzler, Katherine D.**
+"Core Knowledge"
+Developmental Science, 10(1):89-96, 2007
+
+**Hofstadter, Douglas R.**
+*Fluid Concepts and Creative Analogies: Computer Models of the Fundamental Mechanisms of Thought*
+Basic Books, 1995
+
+---
+
+## NbE & Type Checker Engineering
+
+**Berger, Ulrich; Schwichtenberg, Helmut**
+"An Inverse of the Evaluation Functional for Typed lambda-Calculus"
+In: *6th Annual IEEE Symposium on Logic in Computer Science (LICS)*, 1991
+
+**Abel, Andreas**
+*Normalization by Evaluation: Dependent Types and Impredicativity*
+Habilitation Thesis, Ludwig-Maximilians-Universitat Munchen, 2013
+
+**Abel, Andreas; Coquand, Thierry; Dybjer, Peter**
+"Normalization by Evaluation for Martin-Lof Type Theory with Typed Equality Judgements"
+In: *22nd Annual IEEE Symposium on Logic in Computer Science (LICS)*, 2007
+
+**Sterling, Jonathan**
+*First Steps in Synthetic Tait Computability*
+PhD Thesis, Carnegie Mellon University, 2021
+
+---
+
+## Deep Learning & Neural Reasoning
+
+**Vaswani, Ashish et al.**
+"Attention Is All You Need"
+In: *Advances in Neural Information Processing Systems (NeurIPS)*, 2017
+
+**Brown, Tom et al.**
+"Language Models are Few-Shot Learners"
+In: *Advances in Neural Information Processing Systems (NeurIPS)*, 2020
+
+**Wei, Jason et al.**
+"Chain-of-Thought Prompting Elicits Reasoning in Large Language Models"
+In: *Advances in Neural Information Processing Systems (NeurIPS)*, 2022
+
+**Wu, Yuhuai; Jiang, Albert Q. et al.**
+"Autoformalization with Large Language Models"
+In: *Advances in Neural Information Processing Systems (NeurIPS)*, 2022
+
+**Polu, Stanislas; Sutskever, Ilya**
+"Generative Language Modeling for Automated Theorem Proving"
+arXiv:2009.03393, 2020
+
+**Han, Jesse Michael; Rute, Jason; Wu, Yuhuai; Ayers, Edward; Polu, Stanislas**
+"Proof Artifact Co-Training for Theorem Proving with Language Models"
+In: *ICLR 2022*, 2022
+
+**Jiang, Albert Q. et al.**
+"Autoformalization in the Era of Large Language Models: A Survey"
+arXiv:2505.23486, 2025
 
 ---
 
