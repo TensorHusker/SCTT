@@ -14,9 +14,7 @@
 
 use std::collections::HashMap;
 use crate::syntax::Term;
-use crate::evaluate::evaluate;
 use crate::quote::normalize;
-use crate::value::Env;
 
 // ─── Grid Representation ────────────────────────────────────────────────────
 
@@ -271,7 +269,7 @@ fn try_color_map(examples: &[(Grid, Grid)]) -> Option<Transform> {
         if input.dims() != output.dims() {
             return None;
         }
-        for (i, (&ic, &oc)) in input.data.iter().zip(output.data.iter()).enumerate() {
+        for (&ic, &oc) in input.data.iter().zip(output.data.iter()) {
             if let Some(&existing) = map.get(&ic) {
                 if existing != oc {
                     return None; // Inconsistent mapping
