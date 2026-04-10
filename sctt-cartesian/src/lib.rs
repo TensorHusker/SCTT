@@ -16,6 +16,7 @@ pub mod kan;
 pub mod glue;
 pub mod smooth;
 pub mod error;
+pub mod arc;
 
 // ─── Convenient Re-exports ──────────────────────────────────────────────────
 
