@@ -369,6 +369,13 @@ pub fn evaluate(env: &Env, term: &Term) -> Arc<Value> {
             let scrv = evaluate(env, scrutinee);
             do_nat_elim(mv, bv, sv, scrv)
         }
+
+        // ── ARC Grid Types ───────────────────────────────────────────────────
+        Term::ColorType => Arc::new(Value::ColorType),
+        Term::Color(c) => Arc::new(Value::Color(*c)),
+        Term::GridLit { rows, cols, data } => Arc::new(Value::GridLit {
+            rows: *rows, cols: *cols, data: data.clone(),
+        }),
     }
 }
 

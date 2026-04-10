@@ -14,6 +14,8 @@ fn arb_term(max_depth: u32) -> impl Strategy<Value = Term> {
     let leaf = prop_oneof![
         Just(Term::Nat),
         Just(Term::Zero),
+        Just(Term::ColorType),
+        (0..10u8).prop_map(Term::color),
         (0..3usize).prop_map(Term::var),
         (0..3u8).prop_filter_map("valid level", |n| Term::universe(n)),
     ];

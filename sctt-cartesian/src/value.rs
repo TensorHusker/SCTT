@@ -190,6 +190,14 @@ pub enum Value {
     Nat,
     Zero,
     Succ(Arc<Value>),
+
+    // ── ARC Grid Types ─────────────────────────────────────────────────────
+    /// The type of colors (Fin(10)).
+    ColorType,
+    /// A color value (0-9).
+    Color(u8),
+    /// A concrete grid value: rows × cols matrix of colors.
+    GridLit { rows: usize, cols: usize, data: Vec<u8> },
 }
 
 // ─── Neutrals ─────────────────────────────────────────────────────────────────

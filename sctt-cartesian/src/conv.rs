@@ -113,6 +113,14 @@ pub fn conv(term_lvl: usize, dim_lvl: usize, a: &Value, b: &Value) -> bool {
         (Value::Zero, Value::Zero) => true,
         (Value::Succ(n1), Value::Succ(n2)) => conv(term_lvl, dim_lvl, n1, n2),
 
+        // ── ARC Grid Types ──────────────────────────────────────────────
+        (Value::ColorType, Value::ColorType) => true,
+        (Value::Color(c1), Value::Color(c2)) => c1 == c2,
+        (Value::GridLit { rows: r1, cols: c1, data: d1 },
+         Value::GridLit { rows: r2, cols: c2, data: d2 }) => {
+            r1 == r2 && c1 == c2 && d1 == d2
+        }
+
         // ── Neutral ──────────────────────────────────────────────────────
         (Value::Neutral(ne1, _), Value::Neutral(ne2, _)) => {
             conv_neutral(term_lvl, dim_lvl, ne1, ne2)

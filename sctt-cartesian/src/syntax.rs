@@ -125,6 +125,14 @@ pub enum Term {
     Zero,
     Succ(Arc<Term>),
     NatElim { motive: Arc<Term>, base: Arc<Term>, step: Arc<Term>, scrutinee: Arc<Term> },
+    // --- ARC Grid Types ---
+    /// The type of ARC colors (0-9). Semantically Fin(10).
+    ColorType,
+    /// A color literal (0-9).
+    Color(u8),
+    /// A concrete grid: rows × cols matrix of colors.
+    /// Semantically: Fin(rows) → Fin(cols) → Color
+    GridLit { rows: usize, cols: usize, data: Vec<u8> },
 }
 
 // Smart constructors
@@ -181,6 +189,15 @@ impl Term {
         let mut t = Term::Zero;
         for _ in 0..n { t = Term::succ(t); }
         t
+    }
+    pub fn color(c: u8) -> Self {
+        assert!(c < 10, "ARC color must be 0-9, got {}", c);
+        Term::Color(c)
+    }
+    pub fn grid_lit(rows: usize, cols: usize, data: Vec<u8>) -> Self {
+        assert_eq!(data.len(), rows * cols, "grid data length mismatch");
+        assert!(data.iter().all(|&c| c < 10), "all grid cells must be colors 0-9");
+        Term::GridLit { rows, cols, data }
     }
 }
 
@@ -283,6 +300,12 @@ impl Term {
                 base: Arc::new(base.shift_term(cutoff, amount)),
                 step: Arc::new(step.shift_term(cutoff, amount)),
                 scrutinee: Arc::new(scrutinee.shift_term(cutoff, amount)),
+            },
+            // ARC grid types: no term subterms — pass through
+            Term::ColorType => Term::ColorType,
+            Term::Color(c) => Term::Color(*c),
+            Term::GridLit { rows, cols, data } => Term::GridLit {
+                rows: *rows, cols: *cols, data: data.clone(),
             },
         }
     }
@@ -396,6 +419,12 @@ impl Term {
                 base: Arc::new(base.subst_term(target, replacement)),
                 step: Arc::new(step.subst_term(target, replacement)),
                 scrutinee: Arc::new(scrutinee.subst_term(target, replacement)),
+            },
+            // ARC grid types: no term variables — pass through
+            Term::ColorType => Term::ColorType,
+            Term::Color(c) => Term::Color(*c),
+            Term::GridLit { rows, cols, data } => Term::GridLit {
+                rows: *rows, cols: *cols, data: data.clone(),
             },
         }
     }
@@ -511,6 +540,12 @@ impl Term {
                 base: Arc::new(base.subst_dim(target, replacement)),
                 step: Arc::new(step.subst_dim(target, replacement)),
                 scrutinee: Arc::new(scrutinee.subst_dim(target, replacement)),
+            },
+            // ARC grid types: no dimension variables — pass through
+            Term::ColorType => Term::ColorType,
+            Term::Color(c) => Term::Color(*c),
+            Term::GridLit { rows, cols, data } => Term::GridLit {
+                rows: *rows, cols: *cols, data: data.clone(),
             },
         }
     }

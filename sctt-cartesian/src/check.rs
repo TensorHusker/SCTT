@@ -263,6 +263,35 @@ impl TypeChecker {
                 Ok(do_app(motive_val, scrut_val))
             }
 
+            // ── ARC Grid Types ──────────────────────────────────────────
+            Term::ColorType => Ok(Arc::new(Value::Universe(crate::syntax::Level::zero()))),
+            Term::Color(c) => {
+                if *c >= 10 {
+                    return Err(ScttError::TypeMismatch {
+                        expected: "color 0-9".to_string(),
+                        actual: format!("Color({})", c),
+                    });
+                }
+                Ok(Arc::new(Value::ColorType))
+            }
+            Term::GridLit { rows, cols, data } => {
+                if data.len() != rows * cols {
+                    return Err(ScttError::TypeMismatch {
+                        expected: format!("grid data length {}", rows * cols),
+                        actual: format!("length {}", data.len()),
+                    });
+                }
+                if data.iter().any(|&c| c >= 10) {
+                    return Err(ScttError::TypeMismatch {
+                        expected: "all cells 0-9".to_string(),
+                        actual: "cell >= 10".to_string(),
+                    });
+                }
+                // GridLit is self-typing: its type is ColorType (semantically Fin(r)→Fin(c)→Color,
+                // but we treat it as an opaque grid value typed at ColorType for now).
+                Ok(Arc::new(Value::ColorType))
+            }
+
             // ── Introductions require checking mode ──────────────────────
             Term::Lambda { .. } => Err(ScttError::TypeMismatch {
                 expected: "cannot infer lambda; use check mode".to_string(),

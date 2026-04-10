@@ -178,6 +178,13 @@ pub fn quote(term_lvl: usize, dim_lvl: usize, val: &Value) -> Term {
         }
         Value::Tangent(t) => Term::tangent(quote(term_lvl, dim_lvl, t)),
 
+        // ── ARC Grid Types ──────────────────────────────────────────────────
+        Value::ColorType => Term::ColorType,
+        Value::Color(c) => Term::Color(*c),
+        Value::GridLit { rows, cols, data } => Term::GridLit {
+            rows: *rows, cols: *cols, data: data.clone(),
+        },
+
         // ── Neutral ──────────────────────────────────────────────────────────
         Value::Neutral(ne, _ty) => quote_neutral(term_lvl, dim_lvl, ne),
     }
