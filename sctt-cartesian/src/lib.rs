@@ -17,6 +17,7 @@ pub mod glue;
 pub mod smooth;
 pub mod error;
 pub mod arc;
+pub mod arc_puzzle;
 
 // ─── Convenient Re-exports ──────────────────────────────────────────────────
 
