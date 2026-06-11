@@ -1,0 +1,56 @@
+[book]
+title = "Smooth Cubical Type Theory: A Revolutionary Foundation for Mathematics and Computation"
+authors = ["SCTT Research Team"]
+description = "The definitive guide to Smooth Cubical Type Theory, unifying homotopy type theory with differential geometry"
+language = "en"
+src = "."
+
+[build]
+build-dir = "../docs/book"  # mdbook CLEANS its build dir on every build —
+                            # keep it in a subdirectory so docs/guides/ survives
+create-missing = false
+
+[output.html]
+default-theme = "ayu"
+preferred-dark-theme = "ayu"
+smart-punctuation = true
+mathjax-support = true
+no-section-label = false
+git-repository-url = "https://github.com/tensorhusker/SCTT"
+edit-url-template = "https://github.com/tensorhusker/SCTT/edit/main/book/{path}"
+site-url = "/SCTT/"
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.search]
+enable = true
+limit-results = 30
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+boost-paragraph = 1
+expand = true
+heading-split-level = 2
+
+[output.html.playground]
+editable = true
+copyable = true
+line-numbers = true
+
+# Custom theme for code blocks: mdbook 0.5 no longer supports
+# [output.html.code.highlight]; syntax theme follows default-theme.
+
+# PDF output (mdbook-pdf) and link checking (mdbook-linkcheck) can be
+# re-enabled by adding [output.pdf] / [output.linkcheck] when those
+# backends are installed. They are omitted so the HTML output lands
+# directly in ../docs for GitHub Pages.
+
+# Preprocessor for mathematical notation (optional: skipped if not installed)
+[preprocessor.katex]
+optional = true
+
+# Preprocessor for mermaid diagrams (optional: skipped if not installed)
+[preprocessor.mermaid]
+optional = true

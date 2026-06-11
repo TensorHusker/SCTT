@@ -8,7 +8,31 @@
 
 We now reach the heart of SCTT's innovation: adding smooth structure to our cubical foundation. While traditional type theory excels at discrete mathematics and cubical type theory captures topological structure, neither directly supports the differential geometry essential to physics, optimization, and continuous systems.
 
-This chapter introduces smooth types—types equipped with differential structure that computes. We'll see how every type can be made smooth, how functions become differentiable by construction, and how the cubical structure from Chapter 3 naturally extends to support calculus.
+This chapter introduces smooth types—types equipped with differential structure that computes. We'll see how every type can be made smooth, how functions become differentiable by construction, and how the cubical structure from [Chapter 3](./chapter_03.md) naturally extends to support calculus. The computational aspects developed here will be formalized with differential operators in [Chapter 5](./chapter_05.md).
+
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 20 minutes**, read:
+- [§4.1 Smooth Real Numbers](#smooth-reals) — The type `ℝ` with differentiation
+- [§4.2 Smooth Functions](#smooth-functions) — `C∞(A, B)`
+- [§4.3 Tangent Bundles](#tangent-bundles) — Derivatives as linear maps
+
+**Core takeaways**:
+- Smooth reals `ℝ` support the derivative operator `D`
+- Smooth functions `C∞(A, B)` are infinitely differentiable
+- The tangent bundle `T M` captures all tangent vectors
+- Infinitesimals are realized via the Kock-Lawvere axiom
+- **Chain rule holds**: `D[g ∘ f] ≡ (D[g] ∘ f) · D[f]` (Theorem 5.2)
+
+**Prerequisites**: [Chapter 2](./chapter_02.md), [Chapter 3](./chapter_03.md), multivariable calculus
+
+**Time**: 4-5 hours for full chapter with exercises
+
+> **🔬 Running Example**: Particle worldlines are smooth paths through spacetime. Velocities are tangent vectors. See [running example §Chapter 4](./running_example.md#chapter-4-smooth-types).
+
+---
 
 ### Synthetic vs Analytic Approach
 
@@ -18,6 +42,8 @@ SCTT adapts SDG to our cubical setting:
 - **Classical SDG**: Uses nilpotent infinitesimals in a topos
 - **SCTT Approach**: Uses cubical paths as infinitesimals
 - **Key Innovation**: Computational content via cubical structure
+
+The key challenge is making the nilsquare axiom (ε² = 0) **compute** rather than merely assert — this requires the rewrite-rule machinery described below.
 
 ## 4.1 Smooth Real Numbers {#smooth-reals}
 
@@ -57,7 +83,7 @@ smooth_sqrt : C∞(ℝ₊, ℝ)  -- Guaranteed smooth where defined
 -- The smooth structure ensures:
 -- 1. All operations are infinitely differentiable
 -- 2. Derivatives exist and compute
--- 3. Chain rule holds definitionally
+-- 3. Chain rule holds (Theorem 5.2)
 ```
 
 ### Infinitesimals and Tangent Vectors
@@ -67,11 +93,11 @@ SCTT realizes infinitesimals through a cubical adaptation of the Kock-Lawvere ax
 #### The Infinitesimal Object
 
 ```sctt
--- The infinitesimal object (cubical version of D = {d : d² = 0})
+-- The infinitesimal object: nilsquare elements of the smooth ring ℝ
 𝔻 : Type
-𝔻 = Σ (ε : Path ℝ 0 0), ε ∘ ε ≡ refl
+𝔻 = Σ (ε : ℝ), ε · ε ≡ 0
 
--- Kock-Lawvere axiom (cubical form)
+-- Kock-Lawvere axiom
 KL : (f : C∞(ℝ, ℝ)) → (x : ℝ) →
      ∃! (a b : ℝ), ∀ (ε : 𝔻), 
      f(x + ε) = a + b · ε
@@ -81,6 +107,14 @@ derivative_via_KL : C∞(ℝ, ℝ) → C∞(ℝ, ℝ)
 derivative_via_KL f x = the unique b from KL
 ```
 
+> **⚠️ Motivational analogy only**: One is sometimes tempted to picture an
+> infinitesimal cubically, as a loop `ε : Path ℝ 0 0` with `ε ∘ ε ≡ refl`.
+> This picture is **not** a definition and does **not** support the
+> Kock-Lawvere axiom: it conflates path *composition* with ring
+> *multiplication*, the loop space of ℝ is contractible (so such paths carry
+> no infinitesimal information), and `f(x + ε)` would be ill-typed for a
+> path `ε`. The ring-theoretic 𝔻 above is the real definition.
+
 #### Microlinearity Principle
 
 ```sctt
@@ -89,6 +123,61 @@ microlinear : (f : C∞(ℝ, ℝ)) → (x : ℝ) → (ε : 𝔻) →
               f(x + ε) ≡ f(x) + f'(x) · ε
 
 -- This holds definitionally in SCTT!
+```
+
+### The Nilsquare Axiom as a Computation Rule
+
+The Kock-Lawvere axiom depends on the **nilsquare infinitesimal** type:
+
+```sctt
+-- The object of nilsquare infinitesimals
+D : Type
+D = { ε : ℝ | ε² = 0 }
+
+-- Kock-Lawvere axiom: every function on D is affine
+kock_lawvere : (f : D → ℝ) → ∃! (a b : ℝ), ∀ (ε : D), f(ε) = a + b · ε
+
+-- The derivative emerges algebraically:
+-- Given f : ℝ → ℝ and x : ℝ,
+-- f(x + ε) = f(x) + f'(x) · ε    for all ε : D
+-- No limits needed — differentiation is purely algebraic
+```
+
+**The central implementation challenge**: The equation ε² = 0 must hold **definitionally** (as a computation rule in the normalizer), not merely propositionally. This means the type checker must **reduce** `mul(ε, ε)` to `0` during normalization.
+
+This is harder than it sounds for three interlocking reasons:
+
+1. **Non-linear pattern matching**: The rule `mul(ε, ε) → 0` requires the same variable to appear twice on the left-hand side
+2. **Ring commutativity**: `mul(a, b) = mul(b, a)` cannot be oriented as a rewrite rule without non-termination
+3. **Higher-order interaction**: The rewrite must coexist with β-reduction, cubical composition, and all other computation rules without breaking confluence
+
+> **🔬 Deep Dive: The RTT → LRTT Solution**
+>
+> The **Rewriting Type Theory (RTT)** framework (Cockx, Tabareau, Winterhalter, POPL 2021) provides
+> the theoretical foundation: user-defined rewrite rules can be added to dependent type theory while
+> preserving subject reduction and consistency, provided they satisfy the **triangle property** — a
+> modular, decidable syntactic check for confluence.
+>
+> **Locally-scoped Rewrite Rules (LRTT)** (Leray, Winterhalter, POPL 2026) adds the crucial
+> architectural insight: ε² = 0 can be **scoped locally** to smooth contexts rather than imposed
+> globally. This means:
+> - The nilsquare rule activates only within smooth-annotated blocks
+> - It does not interfere with purely cubical or discrete code
+> - Conservativity is guaranteed via monomorphization
+>
+> For SCTT's implementation, this transforms the architecture from a monolithic normalizer
+> handling all three layers simultaneously to a **layered design** where smooth reduction rules
+> activate only when needed.
+
+```sctt
+-- How the normalizer handles ε² = 0 (conceptually):
+-- 
+-- 1. Declare multiplication as commutative (equational theory, not rewrite)
+-- 2. Add the rule: mul(ε, ε) → 0 with matching modulo commutativity
+-- 3. Scope this rule locally via LRTT to smooth contexts
+-- 4. Verify confluence via RTT's triangle property
+--
+-- Result: within a smooth block, ε * ε computes to 0 definitionally
 ```
 
 #### Tangent Bundle via Infinitesimals
@@ -123,7 +212,9 @@ smooth_add (x, y) = x +ₛ y
 
 -- Derivatives compute correctly
 _ : D[λ x → x *ₛ x] ≡ λ x → 2 *ₛ x
-_ = refl  -- Holds definitionally!
+_ = refl  -- Reduces via the ε²=0 computation rule (§4.1)
+           -- Only works when the nilsquare rewrite rule is active;
+           -- not valid in arbitrary smooth models.
 
 -- Smooth composition
 example : ℝ → ℝ
@@ -147,15 +238,22 @@ Functions between smooth types automatically carry smooth structure:
 C∞ : SmoothType → SmoothType → SmoothType
 C∞ A B = B^A  -- Exponential object
 
--- Key theorem: All functions are smooth
-all_smooth : (f : A → B) → IsSmooth f
-all_smooth f = axiom  -- By construction in smooth topos!
+-- In SCTT's smooth fragment, the arrow type A → B between smooth types
+-- IS the smooth function space C∞(A,B). There is no separate "non-smooth
+-- function" type between smooth types — smoothness is structural, not a
+-- property to be proved.
+--
+-- This mirrors SDG's smooth topos: every morphism is smooth by construction.
+-- The notation C∞(A,B) is used for emphasis, but it IS the arrow type.
 
--- But we can distinguish smoothness levels:
+-- Smoothness levels track differentiability order:
 C⁰ : Type → Type → Type      -- Continuous
-C¹ : Type → Type → Type      -- Once differentiable
-C∞ : Type → Type → Type      -- Smooth (all derivatives)
-Cω : Type → Type → Type      -- Analytic (Taylor series)
+Cᵏ : Type → Type → ℕ → Type  -- k-times differentiable
+C∞ : Type → Type → Type      -- Smooth (all derivatives exist)
+Cω : Type → Type → Type      -- Analytic (Taylor series converges)
+
+-- Between discrete types, general (non-smooth) functions exist.
+-- The flat modality (♭, discrete cohesion) marks the boundary — see §13.
 ```
 
 #### Smooth Evaluation Map
@@ -177,10 +275,15 @@ curry f = λa. λb. f(a, b)
 Not every function is smooth:
 
 ```sctt
--- Non-smooth function (cannot be in C∞)
-abs : ℝ → ℝ
+-- Non-smooth function — definable only on the DISCRETE reals
+abs : Real → Real
 abs x = if x ≥ 0 then x else -x
 -- Not differentiable at 0!
+-- Crucially, abs CANNOT be typed at ℝ → ℝ: the test x ≥ 0 is
+-- undecidable for the smooth reals (intuitionistic smooth topos),
+-- and every map ℝ → ℝ is smooth by construction (§4.2).
+-- The smooth ℝ REJECTING this definition is exactly how SCTT
+-- enforces smoothness.
 
 -- Smooth approximation
 smooth_abs : ℝ → ℝ → ℝ  -- Parameterized by ε
@@ -210,14 +313,15 @@ Jⁿ f x = (f(x), Df(x), D²f(x), ..., Dⁿf(x))
 #### Higher-Order Infinitesimals
 
 ```sctt
--- nth order infinitesimal neighborhood
-𝔻ⁿ : Type
-𝔻¹ = {ε : ℝ | ε² = 0}           -- First order
-𝔻² = {ε : ℝ | ε³ = 0}           -- Second order
-𝔻ⁿ = {ε : ℝ | εⁿ⁺¹ = 0}       -- nth order
+-- kth order infinitesimal neighborhood (subscript = order;
+-- contrast 𝔻(n), the n-DIMENSIONAL first-order object of §5.1)
+𝔻ₖ : Type
+𝔻₁ = {ε : ℝ | ε² = 0}           -- First order
+𝔻₂ = {ε : ℝ | ε³ = 0}           -- Second order
+𝔻ₖ = {ε : ℝ | εᵏ⁺¹ = 0}       -- kth order
 
 -- Taylor expansion via higher infinitesimals
-taylor_expansion : C∞(ℝ, ℝ) → ℝ → (ε : 𝔻ⁿ) → ℝ
+taylor_expansion : C∞(ℝ, ℝ) → ℝ → (ε : 𝔻ₙ) → ℝ
 taylor_expansion f x ε = 
   f(x) + f'(x)ε + f''(x)ε²/2! + ... + fⁿ(x)εⁿ/n!
 ```
@@ -231,11 +335,28 @@ faa_di_bruno : (f g : C∞(ℝ, ℝ)) → (n : ℕ) →
 -- The formula is computed automatically from
 -- the Kock-Lawvere axiom iteration
 ```
+
+```sctt
+-- Taylor polynomial of order n at point a
+taylor : C∞(ℝ, ℝ) → ℝ → ℝ → ℕ → ℝ
 taylor f a x n = Σ[k ≤ n] (Dᵏ[f](a) / k!) * (x - a)ᵏ
 
--- Smooth functions equal their Taylor series
-taylor_theorem : (f : C∞(ℝ, ℝ)) → (a : ℝ) →
-                 f ≡ λ x → limit[n → ∞] (taylor f a x n)
+-- Taylor's theorem WITH REMAINDER: smooth functions are approximated
+-- by their Taylor polynomials to order n
+taylor_theorem : (f : C∞(ℝ, ℝ)) → (a : ℝ) → (n : ℕ) →
+                 Σ (Rₙ : ℝ → ℝ),
+                   (f ≡ λ x → taylor f a x n + Rₙ x) ×
+                   (Rₙ x = o((x - a)ⁿ) as x → a)
+
+-- WARNING: a smooth function need NOT equal its Taylor SERIES.
+-- Counterexample: exp(-1/x²) (extended by 0 at 0) is C∞ but all of
+-- its derivatives vanish at 0, so its Taylor series at 0 is identically
+-- zero — yet the function is not. Smooth ≠ analytic (cf. C∞ vs Cω, §4.2).
+
+-- The series statement holds only for ANALYTIC functions:
+taylor_series_theorem : (f : Cω(ℝ, ℝ)) → (a : ℝ) →
+                        f ≡ λ x → limit[n → ∞] (taylor f a x n)
+                        -- (on the domain of convergence)
 ```
 
 ### Smooth Paths as Functions
@@ -281,6 +402,14 @@ T S² = Σ (p : S²), (v : ℝ³) × (v ⊥ p)
 -- Point with tangent vector perpendicular to surface
 ```
 
+```sctt
+-- Why ε² = 0 matters computationally for tangent bundles:
+-- The tangent bundle TM = M^D relies on D = {ε | ε² = 0}
+-- When the normalizer reduces ε² to 0, tangent vector arithmetic
+-- becomes exact: no floating-point approximation, no truncation error.
+-- This is what makes SCTT's differentiation "algebraic" rather than "analytic"
+```
+
 ### Differential of Maps
 
 Every smooth map has a differential:
@@ -290,10 +419,13 @@ Every smooth map has a differential:
 dF : (F : C∞(M, N)) → C∞(T M, T N)
 dF F (x, v) = (F x, DF[x](v))
 
--- Chain rule holds definitionally
+-- Chain rule (a theorem, proved via functoriality of the tangent functor)
 chain_rule : (F : C∞(M, N)) → (G : C∞(N, P)) →
              d(G ∘ F) ≡ dG ∘ dF
-chain_rule F G = refl  -- Computational!
+chain_rule F G = chain_proof F G
+  -- Theorem: follows from naturality of the differential and functoriality
+  -- of the tangent bundle construction. NOT definitional — requires a proof
+  -- that pushforward respects composition. See §5.2.
 
 -- Example
 F : C∞(ℝ², ℝ)
@@ -316,9 +448,11 @@ VectorField M = C∞(M, T M) with π ∘ X ≡ id
 gradient : C∞(ℝⁿ, ℝ) → VectorField ℝⁿ
 gradient f x = (x, ∇f(x))
 
--- Flow of vector field
-flow : VectorField M → ℝ → M → M
-flow X t x = solution of ∂γ/∂t = X(γ(t)), γ(0) = x
+-- Flow of a COMPLETE vector field
+-- (completeness is necessary: X = x²∂ₓ on ℝ has solutions that
+-- escape to infinity in finite time, so no global flow exists)
+flow : (X : VectorField M) → Complete X → ℝ → M → M
+flow X complete t x = solution of ∂γ/∂t = X(γ(t)), γ(0) = x
 ```
 
 ### Cotangent Bundle and Differential Forms
@@ -504,7 +638,7 @@ exact_path_independent f γ₁ γ₂ =
 We can embed discrete types into smooth ones:
 
 ```sctt
--- Smooth modality
+-- Flat modality: equip a type with DISCRETE smooth structure
 ♭ : Type → SmoothType
 ♭ A = ConstantSheaf A
 
@@ -521,21 +655,25 @@ no_inverse : ¬(ℝ → Real preserving smooth structure)
 The relationship between discrete and smooth:
 
 ```sctt
--- Cohesive adjunction
-♭ ⊣ ♯ ⊣ ♮
+-- Cohesive adjoint string (standard cohesive-HoTT notation)
+∫ ⊣ ♭ ⊣ ♯
 
--- Shape (underlying discrete type)
-♯ : SmoothType → Type
-♯ M = π₀(M)  -- Connected components
+-- Shape: the fundamental ∞-groupoid of a smooth type
+∫ : SmoothType → Type
+∫ M = Shape M  -- full homotopy type; π₀(M) is its 0-truncation ‖∫ M‖₀
 
--- Flat (discrete points)
-♮ : SmoothType → Type  
-♮ M = Points(M)
+-- Flat: the underlying type with DISCRETE cohesion
+♭ : SmoothType → Type
+♭ M = Discrete(Points M)
+
+-- Sharp: the underlying type with CODISCRETE cohesion
+♯ : SmoothType → SmoothType
+♯ M = Codiscrete(Points M)
 
 -- Examples
-♯ ℝ ≃ Unit      -- ℝ is connected
-♮ ℝ ≃ Real      -- Points of ℝ
-♯ (ℝ - {0}) ≃ Bool  -- Two components
+∫ ℝ ≃ Unit               -- ℝ is contractible, so its shape is trivial
+♭ ℝ ≃ Real               -- Points of ℝ, made discrete
+π₀(∫ (ℝ - {0})) ≃ Bool   -- Two connected components
 ```
 
 ## 4.7 Examples and Applications
@@ -615,7 +753,7 @@ relu_smooth ε x = log(1 + exp(x/ε)) * ε
 4. Build a Bezier curve as a smooth path.
 
 ### Advanced
-1. Prove that every smooth function ℝ → ℝ has a Taylor series.
+1. Show that exp(−1/x²) (extended by 0 at x = 0) is smooth but not analytic at 0 — its Taylor series at 0 vanishes identically.
 2. Show that smooth homotopy is an equivalence relation.
 3. Construct the Möbius band as a smooth manifold.
 4. Implement Lie derivatives of vector fields.

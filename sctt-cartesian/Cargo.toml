@@ -1,0 +1,24 @@
+[package]
+name = "sctt-cartesian"
+version = "0.1.0"
+edition = "2021"
+description = "Smooth Cubical Type Theory -- Cartesian cubical type theory with differentiable structure"
+license = "MIT"
+authors = ["Alaina Scott"]
+
+[dependencies]
+thiserror = "1"
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+
+[dev-dependencies]
+proptest = "1"
+
+[features]
+default = []
+arc-solver = ["serde", "serde_json"]
+
+[[bin]]
+name = "sctt-arc-solve"
+path = "src/bin/solve.rs"
+required-features = ["arc-solver"]

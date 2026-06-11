@@ -1,0 +1,19 @@
+[package]
+name = "sctt-web"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Web interface for SCTT"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-checker = { path = "../sctt-checker" }
+sctt-wasm = { path = "../sctt-wasm" }
+axum.workspace = true
+tokio.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+serde.workspace = true
+serde_json.workspace = true

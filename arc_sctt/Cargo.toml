@@ -1,0 +1,35 @@
+[package]
+name = "arc_sctt"
+version = "0.1.0"
+edition = "2021"
+description = "ARC solver using Smooth Cubical Type Theory with morphological intelligence"
+license = "MIT"
+authors = ["SCTT Collective <sctt@collective.ai>"]
+
+[dependencies]
+ndarray = { version = "0.15", features = ["serde"] }
+num-traits = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rayon = { version = "1.7", optional = true }
+itertools = "0.11"
+cached = "0.44"
+anyhow = "1.0"
+thiserror = "1.0"
+
+[dev-dependencies]
+criterion = "0.5"
+proptest = "1.2"
+
+[[bench]]
+name = "morphology_bench"
+harness = false
+
+[[bench]]
+name = "composition_bench"
+harness = false
+
+[features]
+default = ["parallel"]
+parallel = ["rayon"]
+gpu = []

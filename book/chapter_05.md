@@ -4,11 +4,35 @@
 >
 > "In SCTT, derivatives are not just operations—they are morphisms in the category of smooth types."
 
-## Introduction  
+## Introduction
 
-Having established smooth types in Chapter 4, we now turn to computation with differential structures. This chapter shows how SCTT makes differentiation a first-class computational operation, with derivatives that are guaranteed correct by type checking.
+Having established smooth types in [Chapter 4](./chapter_04.md), we now turn to computation with differential structures. This chapter shows how SCTT makes differentiation a first-class computational operation, with derivatives that are guaranteed correct by type checking. The theoretical foundations will be complemented by practical applications in [Chapter 11](./chapter_11.md) (Scientific Computing) and [Chapter 12](./chapter_12.md) (Physics and Engineering).
 
 Traditional calculus relies on limiting processes that may not converge. Numerical differentiation suffers from truncation and roundoff errors. SCTT solves both problems: derivatives exist by construction and compute exactly. We'll see how the chain rule becomes a theorem rather than a rule, how integration respects types, and how differential forms provide coordinate-free calculus.
+
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 20 minutes**, read:
+- [§5.1 Differentiation](#differentiation) — The `D` operator
+- [§5.2 Chain Rule](#chain-rule) — Automatic composition
+- [§5.4 Differential Forms](#differential-forms) — Coordinate-free calculus
+
+**Core takeaways**:
+- `D : C∞(ℝ, ℝ) → C∞(ℝ, ℝ)` computes derivatives exactly
+- **Chain rule is a theorem**: `D[g ∘ f] ≡ (D[g] ∘ f) · D[f]`
+- Integration via `∫ : Ω¹(M) → ℝ`
+- Stokes' theorem: `∫_∂Ω ω = ∫_Ω dω`
+- Differential forms generalize gradients, curls, and divergence
+
+**Prerequisites**: [Chapter 4](./chapter_04.md), vector calculus recommended
+
+**Time**: 3-4 hours for full chapter with exercises
+
+> **🔬 Running Example**: Forces are derivatives of potential energy. Lagrangian mechanics and Noether's theorem emerge naturally. See [running example §Chapter 5](./running_example.md#chapter-5-differential-operators).
+
+---
 
 ### Three Perspectives on Differentiation
 
@@ -60,7 +84,9 @@ leibniz f g =
   --            = (f(x) + f'(x)ε)(g(x) + g'(x)ε)  
   --            = f(x)g(x) + (f'(x)g(x) + f(x)g'(x))ε
   --            (using ε² = 0)
-  refl
+  kock_lawvere_unique (λ ε → expand_product f g ε)
+  -- Theorem, NOT definitional: the equality follows from the
+  -- uniqueness clause of the KL axiom, not by mere computation.
 ```
 
 ### Computational Differentiation
@@ -77,7 +103,8 @@ example' : ℝ → ℝ
 example' = D[example]
 -- Reduces to: λ x → 3*x² - 6*x + 2
 
--- This equality is definitional!
+-- This equality is definitional for concrete polynomials:
+-- D reduces term-by-term via the ε²=0 rewrite rule (§4.1).
 _ : example' ≡ λ x → 3*x² - 6*x + 2
 _ = refl
 ```
@@ -89,13 +116,15 @@ For multivariate functions, we use multiple infinitesimal directions:
 #### Multivariable Kock-Lawvere
 
 ```sctt
--- Multiple infinitesimal directions
-𝔻ⁿ : Type
-𝔻ⁿ = {ε : ℝⁿ | εᵢ * εⱼ = 0 for all i,j}
+-- Multiple infinitesimal directions: the n-DIMENSIONAL first-order
+-- infinitesimal object 𝔻(n) (Kock's D(n); parenthesized argument =
+-- dimension, subscript = order, cf. 𝔻ₖ below and §4.2)
+𝔻(n) : Type
+𝔻(n) = {ε : ℝⁿ | εᵢ * εⱼ = 0 for all i,j}
 
 -- Multilinear approximation
 multi_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
-           ∃! (a : ℝ) (b : ℝⁿ), ∀(ε : 𝔻ⁿ),
+           ∃! (a : ℝ) (b : ℝⁿ), ∀(ε : 𝔻(n)),
            f(x + ε) = a + ⟨b, ε⟩
 
 -- The vector b is the gradient!
@@ -106,19 +135,22 @@ multi_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
 #### Second-Order Structure
 
 ```sctt  
--- Second-order infinitesimals
-𝔻² : Type
-𝔻² = {ε : ℝ | ε³ = 0}
+-- Second-order infinitesimals (subscript = order, cf. §4.2)
+𝔻₂ : Type
+𝔻₂ = {ε : ℝ | ε³ = 0}
 
 -- Hessian via second-order KL
 hessian_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
-             ∃! H : ℝⁿˣⁿ, ∀(ε : 𝔻²)ⁿ,
+             ∃! H : ℝⁿˣⁿ, ∀(ε : 𝔻₂ⁿ),
              f(x + ε) = f(x) + ⟨∇f(x), ε⟩ + ½⟨ε, Hε⟩
 
--- Schwarz's theorem is automatic
+-- Schwarz's theorem (symmetry of mixed partials)
 schwarz : (f : C∞(ℝⁿ, ℝ)) →
           ∂ᵢ ∂ⱼ f ≡ ∂ⱼ ∂ᵢ f
-schwarz f = refl  -- By commutativity of 𝔻²!
+schwarz f = schwarz_proof f
+  -- Theorem: uses the commutativity of 𝔻₂ (the higher-order infinitesimals),
+  -- but the symmetry must be derived — it is NOT simply refl.
+  -- Proof proceeds by the KL-axiom applied in both directions. See §5.1.
 ```
 
 #### Jacobian Matrix
@@ -149,10 +181,16 @@ L_X X f x = D_X(x) f
 
 -- Properties
 _ : L_X (f * g) ≡ (L_X f) * g + f * (L_X g)
-_ = refl  -- Product rule
+_ = lie_leibniz_proof X f g
+  -- Theorem (Leibniz rule for Lie derivatives): follows from the product rule
+  -- for directional derivatives. NOT definitional — requires the smooth
+  -- Leibniz identity on vector fields. See §5.1.
 
 _ : L_X L_Y f - L_Y L_X f ≡ L_[X,Y] f
-_ = refl  -- Lie bracket relation
+_ = lie_bracket_proof X Y f
+  -- Theorem (Lie bracket identity): characterizes [X,Y] as the commutator
+  -- of derivations. Requires a non-trivial calculation with second-order
+  -- infinitesimals. NOT definitional. See §5.1.
 ```
 
 ## 5.2 Chain Rule {#chain-rule}
@@ -164,18 +202,21 @@ In SCTT, the chain rule emerges from the functoriality of differentiation:
 #### Proof via Kock-Lawvere
 
 ```sctt
--- Chain rule proof
-chain_rule : {L M N : Manifold} →
-            (g : C∞(L, M)) → (f : C∞(M, N)) →
-            D[f ∘ g] ≡ D[f] ∘ D[g]
+-- Chain rule proof (scalar form)
+chain_rule : (g : C∞(ℝ, ℝ)) → (f : C∞(ℝ, ℝ)) →
+            D[f ∘ g] ≡ (D[f] ∘ g) · D[g]
 chain_rule g f = 
   -- Let ε : 𝔻
   -- (f ∘ g)(x + ε) = f(g(x + ε))
   --                 = f(g(x) + g'(x)ε)     (by KL for g)
   --                 = f(g(x)) + f'(g(x))·g'(x)ε  (by KL for f)
   --                 = (f ∘ g)(x) + (f' ∘ g)(x)·g'(x)ε
-  -- Therefore D[f ∘ g](x) = f'(g(x))·g'(x) = (D[f] ∘ D[g])(x)
-  refl  -- QED, holds definitionally!
+  -- Therefore D[f ∘ g](x) = f'(g(x))·g'(x) = ((D[f] ∘ g) · D[g])(x)
+  --
+  -- NOTE: the composition form T(f ∘ g) ≡ Tf ∘ Tg holds for the tangent
+  -- FUNCTOR (see §4.3 and chain_manifold below), not for the scalar
+  -- operator D, which obeys the product form above.
+  chain_rule_proof g f  -- Theorem: follows from KL axiom applied twice (see derivation above)
 ```
 
 #### Higher-Order Chain Rule
@@ -225,6 +266,8 @@ reverse_diff f x = (f x, ∇f x)
 ad_correct : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
             π₂ (reverse_diff f x) ≡ ∇f x
 ad_correct f x = refl
+  -- Definitional: π₂ (reverse_diff f x) unfolds to ∇f x by the definition
+  -- of reverse_diff as a pair. This is a β-reduction, not a theorem.
 ```
 
 ### Higher-Order Chain Rule
@@ -232,15 +275,15 @@ ad_correct f x = refl
 ```sctt
 -- Second derivative chain rule
 chain_rule_2 : (g : C∞(ℝ, ℝ)) → (f : C∞(ℝ, ℝ)) →
-               D²[f ∘ g] ≡ 
-               λ x → D²[f](g x) * (D[g] x)² + 
+               D²[f ∘ g] ≡
+               λ x → D²[f](g x) * (D[g] x)² +
                      D[f](g x) * D²[g] x
-chain_rule_2 g f = refl
+chain_rule_2 g f = chain_rule_2_proof g f
+  -- Theorem: the second-order chain rule requires applying the first-order
+  -- chain rule twice and collecting terms. NOT definitional — proof uses
+  -- linearity of D and the product structure of 𝔻₂. See §5.2.
 
--- Faà di Bruno's formula (higher derivatives)
-faa_di_bruno : (n : ℕ) → 
-               (g : C∞(ℝ, ℝ)) → (f : C∞(ℝ, ℝ)) →
-               Dⁿ[f ∘ g] ≡ (bell_polynomial expression)
+-- For the general n-th derivative (Faà di Bruno), see §5.1 Higher-Order Chain Rule
 ```
 
 ## 5.3 Integration {#integration}
@@ -265,7 +308,10 @@ Integration is the inverse of differentiation:
 -- Fundamental theorem of calculus
 FTC : (f : C∞(ℝ, ℝ)) → (a b : ℝ) →
       ∫ a b (D[f]) ≡ f b - f a
-FTC f a b = refl
+FTC f a b = ftc_proof f a b
+  -- Theorem: requires the existence of smooth antiderivatives and continuity
+  -- of the integral operator over ℝ. NOT definitional — this is a genuine
+  -- analytical result, not a computation rule. See §5.3 for the full proof.
 ```
 
 ### Path and Surface Integrals
@@ -298,7 +344,7 @@ by_parts : (u v : C∞(ℝ, ℝ)) → (a b : ℝ) →
           (u * v)|ᵇₐ - ∫ a b (D[u] * v)
 by_parts u v a b = 
   calc ∫ a b (u * D[v])
-    ≡⟨ refl ⟩ 
+    ≡⟨ leibniz u v ⟩  -- product rule (a theorem, NOT definitional)
        ∫ a b D[u * v] - ∫ a b (D[u] * v)
     ≡⟨ FTC ⟩
        (u * v)|ᵇₐ - ∫ a b (D[u] * v) ∎
@@ -349,15 +395,23 @@ df(X) = X(f)  -- Directional derivative
 
 -- Key properties
 d_squared : (ω : Ωᵏ M) → d(d ω) ≡ 0
-d_squared ω = refl  -- d² = 0
+d_squared ω = d_squared_proof ω
+  -- Theorem (d² = 0): follows from the commutativity of partial derivatives
+  -- (Schwarz's theorem) and the antisymmetry of the wedge product. NOT
+  -- definitional — proof proceeds by local coordinate calculation. See §5.4.
 
 leibniz : (α : Ωᵏ M) → (β : Ωˡ M) →
          d(α ∧ β) ≡ (d α) ∧ β + (-1)ᵏ α ∧ (d β)
-leibniz α β = refl
+leibniz α β = leibniz_proof α β
+  -- Theorem (graded Leibniz rule for d): requires careful bookkeeping of
+  -- the sign (-1)ᵏ arising from anticommutativity of the wedge product.
+  -- NOT definitional — proof by induction on form degree. See §5.4.
 
 -- Coordinate expression
 local_d : Ωᵏ ℝⁿ → Ωᵏ⁺¹ ℝⁿ
-local_d ω = Σᵢ (∂ω/∂xᵢ) ∧ dxᵢ
+local_d ω = Σᵢ dxᵢ ∧ (∂ω/∂xᵢ)
+-- NB: dxᵢ goes on the LEFT — putting it on the right introduces a
+-- sign error (-1)ᵏ for odd-degree ω.
 ```
 
 ### Pullback and Pushforward
@@ -491,9 +545,11 @@ killing X g = L_X g ≡ 0
 ### Flows and Exponential Map
 
 ```sctt
--- Flow of vector field
-flow : VectorField M → ℝ → Diffeomorphism M M
-flow X t = exp(t X)
+-- Flow of a COMPLETE vector field
+-- (necessary hypothesis: X = x²∂ₓ on ℝ is smooth but its integral
+-- curves blow up in finite time, so it generates no global flow)
+flow : (X : VectorField M) → Complete X → ℝ → Diffeomorphism M M
+flow X complete t = exp(t X)
   where
     exp solves ∂φ/∂t = X(φ), φ(0) = id
 
@@ -523,11 +579,16 @@ morse_lemma : (f : Morse M ℝ) →
              LocallyEquivalent f (quadratic_form)
   near x with index = negative_eigenvalues
 
--- Morse inequalities
-morse_inequality : (f : Morse M ℝ) →
-                  Σᵢ (-1)ⁱ cᵢ(f) ≡ χ(M)
+-- Morse equality (Euler characteristic from critical points)
+morse_equality : (f : Morse M ℝ) →
+                 Σᵢ (-1)ⁱ cᵢ(f) ≡ χ(M)
   where cᵢ = number of critical points of index i
         χ = Euler characteristic
+
+-- Morse inequalities (critical points bound Betti numbers)
+morse_inequality : (f : Morse M ℝ) → (i : ℕ) →
+                   cᵢ(f) ≥ bᵢ(M)
+  where bᵢ = i-th Betti number dim Hⁱ_dR(M)
 ```
 
 ### Characteristic Classes
@@ -631,16 +692,16 @@ conserved u = energy_conservation_proof
 
 We've developed a complete differential calculus in type theory:
 - **Differentiation** is a computational type operation
-- **Chain rule** holds by construction
+- **Chain rule** follows from the KL axiom (Theorem 5.2)
 - **Integration** inverts differentiation with the FTC
 - **Differential forms** provide coordinate-free calculus
 - **Stokes' theorem** unifies integral theorems
 - **Lie derivatives** describe infinitesimal symmetries
 
-All these operations compute exactly, with correctness guaranteed by types. This isn't symbolic manipulation or numerical approximation—it's exact differential geometry as computation. Next, we'll see how this structure interacts with the homotopy theory from Chapter 3.
+All these operations compute exactly, with correctness guaranteed by types. This isn't symbolic manipulation or numerical approximation—it's exact differential geometry as computation. Next, we examine the limitations and challenges that arise from combining these three structures.
 
 ---
 
-*Next: [Chapter 6: Smooth Homotopy Theory](./chapter_06.md) →*
+*Next: [Chapter 6: Addressing Limitations and Challenges](./chapter_06.md) →*
 
 *Previous: [Chapter 4: Smooth Types](./chapter_04.md) ←*

@@ -1,0 +1,32 @@
+[package]
+name = "sctt-examples"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Examples and tutorials for SCTT"
+
+[dependencies]
+sctt-core = { path = "../sctt-core" }
+sctt-checker = { path = "../sctt-checker" }
+sctt-smooth = { path = "../sctt-smooth" }
+sctt-arc = { path = "../sctt-arc" }
+anyhow.workspace = true
+tokio.workspace = true
+
+[[example]]
+name = "basic_types"
+path = "examples/basic_types.rs"
+
+[[example]]
+name = "smooth_manifolds"
+path = "examples/smooth_manifolds.rs"
+
+[[example]]
+name = "hit_examples"
+path = "examples/hit_examples.rs"
+
+[[example]]
+name = "arc_solving"
+path = "examples/arc_solving.rs"

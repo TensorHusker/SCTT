@@ -6,6 +6,29 @@
 
 Before we can add smooth structures to type theory, we need a solid foundation. This chapter introduces dependent type theory—the bedrock upon which SCTT is built. If you're familiar with languages like Haskell or ML, you'll recognize many concepts, but with a crucial twist: types can depend on values.
 
+The concepts developed here will be essential for understanding the cubical structure in [Chapter 3](./chapter_03.md), smooth types in [Chapter 4](./chapter_04.md), and the formal rules presented in [Chapter 7](./chapter_07.md).
+
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 15 minutes**, read:
+- [§2.1 Types and Terms](#types-and-terms) — Basic syntax
+- [§2.2 Dependent Types](#dependent-types) — Types depending on values
+- [Running Example](#running-example) — Physical dimensions
+
+**Core takeaways**:
+- Types can depend on values (e.g., `Vec n` is a vector of length `n`)
+- Dependent functions `Π (x : A), B(x)` generalize regular functions
+- The type system prevents errors at compile time
+- **Curry-Howard**: Propositions are types, proofs are programs
+
+**Prerequisites**: Basic programming (functions, types), high school math
+
+**Time**: 2-3 hours for full chapter with exercises
+
+---
+
 ### Chapter Overview
 
 We present type theory in three layers:
@@ -13,9 +36,11 @@ We present type theory in three layers:
 2. **Semantics**: What types and terms mean
 3. **Pragmatics**: How to use types effectively
 
-By the end of this chapter, you'll understand the formal rules governing dependent types and how they provide a computational foundation for mathematics.
+By the end of this chapter, you'll understand the formal rules governing dependent types and how they provide a computational foundation for mathematics. These foundations will be extended with cubical structure in [Chapter 3](./chapter_03.md) and enriched with smooth geometry in [Chapter 4](./chapter_04.md).
 
 ## 2.1 Types and Terms {#types-and-terms}
+
+> **🔬 Running Example Preview**: Throughout this book, we'll build a complete particle physics simulation using SCTT. In this chapter, we'll use **dependent types** to ensure dimensional correctness in physical quantities. See the [complete running example](./running_example.md) for the full story.
 
 ### What is a Type?
 
@@ -104,8 +129,12 @@ To avoid paradoxes like Russell's, we have a hierarchy of universes:
 Γ ⊢ Typeᵢ : Typeᵢ₊₁
 
 Γ ⊢ A : Typeᵢ   Γ ⊢ B : Typeⱼ
-—————————————————————————————  (universe cumulativity)
+—————————————————————————————  (→-form)
 Γ ⊢ A → B : Typeₘₐₓ(ᵢ,ⱼ)
+
+Γ ⊢ A : Typeᵢ   i ≤ j
+—————————————————————  (universe cumulativity)
+Γ ⊢ A : Typeⱼ
 ```
 
 #### Examples
@@ -148,6 +177,33 @@ three_vector : Vec 3
 -- wrong : Vec 2
 -- wrong = three_vector  -- Error: Vec 3 ≠ Vec 2
 ```
+
+> **🔬 Running Example: Physical Dimensions**
+>
+> Just as vectors depend on their length, physical quantities depend on their **dimensions**:
+> ```sctt
+> -- Dimensions as types
+> data Dimension : Type where
+>   L : Dimension  -- Length
+>   T : Dimension  -- Time
+>   M : Dimension  -- Mass
+>   _⊗_ : Dimension → Dimension → Dimension
+>   _⁻¹ : Dimension → Dimension  -- inverse, e.g. T⁻¹ for "per second"
+>
+> -- A quantity is a real number tagged with a (phantom) dimension index:
+> data Quantity (d : Dimension) : Type where
+>   mkQ : Real → Quantity d  -- d occurs only in the type, not the data
+>
+> -- Type-safe quantities
+> position : Vec (Quantity L) 3        -- 3D position: three lengths
+> velocity : Quantity (L ⊗ T⁻¹)     -- Speed
+> mass : Quantity M
+>
+> -- This prevents dimensional errors at compile time!
+> -- error : Quantity L
+> -- error = mass + velocity  -- TYPE ERROR: M ≠ L·T⁻¹
+> ```
+> The type system catches physics errors automatically! See [full example](./running_example.md#chapter-2-type-theory-foundations).
 
 ### Pi Types (Dependent Functions)
 
@@ -649,7 +705,7 @@ Everything we've learned extends naturally to smooth structures:
 -- Regular function type
 f : Real → Real
 
--- Smooth function type (preview of Chapter 4)
+-- Smooth function type (preview of [Chapter 4](./chapter_04.md))
 g : C∞(Real, Real)
 
 -- Dependent smooth function
@@ -686,7 +742,7 @@ h : (x : Real) → C∞(Interval x (x+1), Real)
 1. How would you extend the type system to handle sized types?
 2. What would quotient types look like in this system?
 3. How might we add effects (IO, exceptions) while preserving purity?
-4. Can you design a type for continuous functions before seeing Chapter 4?
+4. Can you design a type for continuous functions before seeing [Chapter 4](./chapter_04.md)?
 
 ---
 
@@ -700,7 +756,7 @@ We've built our foundation:
 - **Universe hierarchy** avoids paradoxes
 - **Propositions as types** unifies logic and computation
 
-These concepts power everything in SCTT. Next, we'll add the cubical structure that makes types behave like spaces, setting the stage for smooth geometry.
+These concepts power everything in SCTT. Next, we'll add the cubical structure in [Chapter 3](./chapter_03.md) that makes types behave like spaces, setting the stage for smooth geometry in [Chapter 4](./chapter_04.md).
 
 ---
 

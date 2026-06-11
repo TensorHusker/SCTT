@@ -1,0 +1,34 @@
+[package]
+name = "sctt-checker"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Bidirectional type checker for SCTT"
+
+[dependencies]
+# Workspace dependencies
+sctt-core = { path = "../sctt-core" }
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+hashbrown.workspace = true
+smallvec.workspace = true
+rayon = { workspace = true, optional = true }
+
+# Checker-specific dependencies
+tracing = { version = "0.1", optional = true }
+tracing-subscriber = { version = "0.3", optional = true }
+
+[dev-dependencies]
+proptest.workspace = true
+criterion.workspace = true
+
+[features]
+default = ["parallel"]
+parallel = ["dep:rayon"]
+tracing = ["dep:tracing"]
+

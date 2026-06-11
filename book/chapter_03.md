@@ -8,11 +8,35 @@
 
 Traditional type theory treats equality as a mere proposition: either two things are equal or they aren't. But mathematics is richer than this. The way two things are equal matters. A circle can be equal to itself in infinitely many ways—by rotating it through any angle. Cubical type theory captures this richness by making paths first-class citizens.
 
-This chapter introduces the revolutionary cubical structure that gives SCTT its power. We'll see how paths become computational objects, how spaces emerge from types, and how the univalence axiom becomes a theorem rather than an axiom.
+This chapter introduces the revolutionary cubical structure that gives SCTT its power. We'll see how paths become computational objects, how spaces emerge from types, and how the univalence axiom becomes a theorem rather than an axiom. The foundations established in [Chapter 2](./chapter_02.md) are essential background, and this cubical structure will be enriched with smooth geometry in [Chapter 4](./chapter_04.md).
+
+---
+
+### ⚡ Quick Start: What You'll Learn
+
+**If you only have 20 minutes**, read:
+- [§3.1 The Interval Type](#interval) — The dimension `I`
+- [§3.2 Path Types](#paths) — Paths as functions from `I`
+- [§3.5 Univalence](#univalence) — Equivalent types are equal
+
+**Core takeaways**:
+- The interval type `I` has endpoints `i0` and `i1`
+- `Path A x y` is a continuous function `I → A` from `x` to `y`
+- Paths can be composed like paths in topology
+- **Univalence**: the canonical map `pathToEquiv : (A ≡ B) → (A ≃ B)` is an equivalence (in particular, `ua : A ≃ B → Path Type A B`)
+- Unlike axioms, univalence **computes** via Glue types
+
+**Prerequisites**: [Chapter 2](./chapter_02.md) — Dependent type theory
+
+**Time**: 3-4 hours for full chapter with exercises
+
+> **🔬 Running Example**: Particle trajectories are paths through space. Path composition models sequential motion. See [running example §Chapter 3](./running_example.md#chapter-3-cubical-structure).
+
+---
 
 ### Mathematical Foundations
 
-Cubical type theory is based on a model in cubical sets—presheaves on the category of cubes with connections and symmetries. The key insight is that:
+Cubical type theory is based on a model in cubical sets—presheaves on the Cartesian cube category. The key insight is that:
 
 1. **Cubes model higher equalities**: An n-cube represents an n-dimensional path
 2. **Composition is geometric**: Kan filling operations give computational content
@@ -38,22 +62,40 @@ i1 : I  -- right endpoint (1)
 
 But `I` is not an ordinary type—it's a pretype that represents "dimension" or "direction".
 
-#### De Morgan Algebra Structure
+#### Cartesian Interval Structure
 
-The interval forms a de Morgan algebra:
+SCTT uses the Cartesian cube category (ABCFHL) rather than the De Morgan variant (CCHM). The interval has no algebraic operations on its elements—only endpoints, face maps, and the diagonal:
 
 ```sctt
--- Operations on I
-_∧_ : I → I → I  -- meet (minimum)
-_∨_ : I → I → I  -- join (maximum)
-~_ : I → I        -- involution (1 - i)
+-- The Cartesian interval (ABCFHL)
+-- No connections (∧, ∨) or reversal (~)
+-- Only: endpoints, faces, degeneracies, and diagonals
 
--- De Morgan laws:
--- ~(i ∧ j) = ~i ∨ ~j
--- ~(i ∨ j) = ~i ∧ ~j
--- ~~i = i
--- i ∧ (j ∨ k) = (i ∧ j) ∨ (i ∧ k)
+i0 : I  -- left endpoint
+i1 : I  -- right endpoint
+
+-- Face maps: restriction to endpoints
+_[i0/i] : (I → A) → A  -- evaluate at left
+_[i1/i] : (I → A) → A  -- evaluate at right
+
+-- Diagonal: the key cofibration replacing connections
+(i = j) : Cofibration  -- diagonal constraint
+
+-- Face formulas (cofibrations)
+-- Built from: ⊥ | ⊤ | (i = 0) | (i = 1) | (i = j) | φ ∧ ψ | φ ∨ ψ
+-- Note: NO negation (~), NO meets/joins on interval elements
 ```
+
+> **Design Note: Why Cartesian over De Morgan?**
+>
+> SCTT uses the Cartesian cube category (ABCFHL) rather than the De Morgan variant (CCHM).
+> The Cartesian interval has a simpler algebra — no connections (∧, ∨) or reversal (~) — which
+> means fewer equational obligations in the normalizer. The diagonal cofibration (i = j) replaces
+> connections for constructing univalent universes. This is the variant implemented by cctt
+> (Kovács), which demonstrates that a high-performance cubical evaluator fits in a few thousand
+> lines. The simpler cube category also interacts more cleanly with the smooth layer's
+> equational theory (ε² = 0), since there are fewer cubical reduction rules to check
+> confluence against.
 
 #### Why Not an Inductive Type?
 
@@ -66,10 +108,15 @@ The interval cannot be an inductive type because:
 -- We can have expressions involving interval variables
 -- If i : I, then i represents a point in the interval
 
--- Examples of interval expressions:
--- i ∧ j     (minimum/meet)
--- i ∨ j     (maximum/join)  
--- ~i        (reversal: 1-i)
+-- In Cartesian cubical, interval expressions are just variables:
+-- i          (a dimension variable)
+-- i0, i1     (the two endpoints)
+-- There are NO operations (∧, ∨, ~) on interval elements themselves
+
+-- Structure lives in *cofibrations* (face formulas):
+-- (i = i0)   (left face)
+-- (i = i1)   (right face)
+-- (i = j)    (diagonal)
 ```
 
 ### Computing with the Interval
@@ -77,24 +124,29 @@ The interval cannot be an inductive type because:
 The interval enables us to define continuous deformations:
 
 ```sctt
--- A function from the interval is a path
-line_segment : I → Real
-line_segment i = 2 * i + 1
--- At i0: gives 1
--- At i1: gives 3
--- Continuously interpolates between
+-- A function out of the interval is a path in its codomain.
+-- NB: I has NO algebraic operations (see above), so arithmetic such as
+-- "2 * i + 1" is not even well-formed. A function I → Real is constant:
+constant_segment : I → Real
+constant_segment i = 1
 
 -- We can compute at specific points
 start : Real
-start = line_segment i0  -- evaluates to 1
+start = constant_segment i0  -- evaluates to 1
 
 end : Real  
-end = line_segment i1    -- evaluates to 3
+end = constant_segment i1    -- evaluates to 1
 
--- And at symbolic points
-middle : I → Real
-middle i = line_segment (i ∧ ~i)  -- stays at midpoint
+-- Paths respect the interval endpoints
+_ : constant_segment i0 ≡ constant_segment i0  -- trivially
+_ = refl
 ```
+
+> **⚠️ Identity paths vs. topological paths**: `Path ℝ a b` is the *identity type* of ℝ.
+> Since ℝ is a set, `Path ℝ a b` is **empty** whenever `a ≠ b` — there is no path
+> "interpolating from 1 to 3". Topological/smooth paths in a space `M` are a different
+> notion entirely: smooth maps `C∞([0,1], M)` out of the *real* unit interval, treated
+> in Chapter 4.
 
 ### Constraints and Faces
 
@@ -103,14 +155,17 @@ The interval supports constraints through face formulas:
 #### Face Lattice
 
 ```sctt
--- Face formulas form a Boolean algebra
-data FaceFormula : Type where
-  ⊤ : FaceFormula              -- true (everywhere)
-  ⊥ : FaceFormula              -- false (nowhere)
-  _=ᵢ_ : I → I → FaceFormula  -- equality constraint
-  _∧_ : FaceFormula → FaceFormula → FaceFormula
-  _∨_ : FaceFormula → FaceFormula → FaceFormula
-  ¬_ : FaceFormula → FaceFormula
+-- Face formulas (cofibrations) in Cartesian cubical type theory
+-- Note: ∧ and ∨ combine *cofibrations*, not interval elements
+data Cof : Type where
+  ⊤ : Cof               -- true (everywhere)
+  ⊥ : Cof               -- false (nowhere)
+  _=0 : I → Cof         -- left face: (i = i0)
+  _=1 : I → Cof         -- right face: (i = i1)
+  _=_ : I → I → Cof     -- diagonal: (i = j)
+  _∧_ : Cof → Cof → Cof -- conjunction of cofibrations
+  _∨_ : Cof → Cof → Cof -- disjunction of cofibrations
+  -- No negation (¬): cofibrations are NOT a Boolean algebra
 ```
 
 #### Partial Elements
@@ -119,7 +174,7 @@ A partial element is defined only where a formula holds:
 
 ```sctt
 -- Partial type former
-Partial : FaceFormula → Type → Type
+Partial : Cof → Type → Type
 
 -- Example: boundary of a square
 square_boundary : (i j : I) → 
@@ -137,7 +192,7 @@ Systems must be compatible on overlapping faces:
 
 ```sctt
 -- Compatibility condition
-IsCompatible : {φ ψ : FaceFormula} → 
+IsCompatible : {φ ψ : Cof} → 
                Partial φ A → Partial ψ A → Type
 IsCompatible u v = ∀ (i : I), (φ ∧ ψ)(i) → u(i) ≡ v(i)
 ```
@@ -187,9 +242,11 @@ We construct paths using lambda abstraction:
 refl : {A : Type} {x : A} → Path A x x
 refl {x = x} = λ i → x
 
--- A non-trivial path in Real
-linear_path : Path Real 0 1
-linear_path = λ i → i  -- directly use interval variable
+-- ⚠️ There is NO non-trivial path in Real: ℝ is a set, so Path ℝ a b is
+-- empty whenever a ≠ b (and "λ i → i" is not even well-typed: i : I is
+-- not a real number). Non-trivial paths need higher structure, e.g.:
+loop_path : Path S¹ base base
+loop_path = λ i → loop_constructor i  -- the circle's loop (see §3.7)
 
 -- A path in functions
 function_path : Path (Nat → Nat) (λ n → n) (λ n → n + 0)
@@ -206,15 +263,18 @@ We can apply paths at specific points:
 -- Path application (get point along path)
 app : {A : Type} {x y : A} → Path A x y → I → A
 
--- Examples
-midpoint : Real
-midpoint = linear_path (i0 ∨ i1) / 2
+-- Examples (with the constant path at 0)
+zero_path : Path Real 0 0
+zero_path = λ i → 0
+
+start_point : Real
+start_point = zero_path @ i0  -- evaluates to 0
 
 -- Paths compute!
-_ : linear_path i0 ≡ 0
+_ : zero_path @ i0 ≡ 0
 _ = refl  -- Definitionally equal
 
-_ : linear_path i1 ≡ 1  
+_ : zero_path @ i1 ≡ 0  
 _ = refl  -- Definitionally equal
 ```
 
@@ -246,7 +306,7 @@ We can compose paths using the sophisticated composition operations:
 
 ```sctt
 -- Horizontal composition for homogeneous types
-hcomp : {A : Type} → {φ : FaceFormula} →
+hcomp : {A : Type} → {φ : Cof} →
         (u : (i : I) → Partial φ A) →
         (u0 : A [φ ↦ u i0]) → A
 
@@ -257,6 +317,20 @@ p ∙ q = λ i → hcomp (λ j → λ {
   (i = i0) → x;         -- left boundary
   (i = i1) → q j        -- right boundary  
 }) (p i)                 -- bottom
+```
+
+#### Path Inverse (Symmetry)
+
+In De Morgan cubical type theory, path inverse is trivially `λ i → p @ ~i` using interval reversal. Without reversal, Cartesian cubical constructs inverse via Kan filling:
+
+```sctt
+-- Path inverse in Cartesian cubical type theory
+-- Without reversal (~), inverse is constructed via Kan filling:
+sym : Path A x y → Path A y x
+sym p = λ i → comp (λ _ → A) ((i = i0) ∨ (i = i1))
+                    (λ j → [ (i = i0) ↦ p @ j , (i = i1) ↦ x ])
+                    x   -- the cap is the constant x (= p @ i0), not p @ i
+-- The absence of ~ means inverse requires more work but keeps the interval algebra simpler
 ```
 
 #### The Double Composition Square
@@ -275,13 +349,17 @@ p ∙ q = λ i → hcomp (λ j → λ {
 #### Properties of Composition
 
 ```sctt
--- Left identity
-lid : {A : Type} {x y : A} (p : Path A x y) →
-      Path (Path A x y) (refl ∙ p) p
-lid p = λ i j → hfill (λ k → λ {
+-- Composition filler (honest type): the hfill term below relates refl to
+-- refl ∙ p over the family λ i → Path A x (p i) — it is NOT itself the
+-- left unit law.
+compPath-filler : {A : Type} {x y : A} (p : Path A x y) →
+      PathP (λ i → Path A x (p i)) refl (refl ∙ p)
+compPath-filler p = λ i j → hfill (λ k → λ {
   (j = i0) → x;
   (j = i1) → p k
 }) (inS x) i
+-- The left unit law  Path (Path A x y) (refl ∙ p) p  is then derived from
+-- this filler by one further composition (cubical library: lUnit).
 
 -- Associativity (up to higher path)
 assoc : {A : Type} {w x y z : A}
@@ -297,7 +375,7 @@ The fundamental composition operation for dependent types:
 
 ```sctt
 -- Composition in type families
-comp : (A : I → Type) → {φ : FaceFormula} →
+comp : (A : I → Type) → {φ : Cof} →
        (u : (i : I) → Partial φ (A i)) →
        (u0 : A i0 [φ ↦ u i0]) → A i1
 
@@ -311,29 +389,58 @@ comp : (A : I → Type) → {φ : FaceFormula} →
 
 ```sctt
 -- Kan filling (composition with intermediate results)
-fill : (A : I → Type) → {φ : FaceFormula} →
+fill : (A : I → Type) → {φ : Cof} →
        (u : (i : I) → Partial φ (A i)) →
        (u0 : A i0 [φ ↦ u i0]) →
        (i : I) → A i
-fill A {φ} u u0 i = comp (λj → A (i ∧ j)) {φ ∨ (i = i0)}
-                          (λj → λ { (φ = 1) → u (i ∧ j);
-                                   (i = i0) → u0 })
-                          u0
-
--- Crucial: fill i0 = u0, fill i1 = comp A u u0
+-- In ABCFHL, filling is *definable* when composition is endpoint-indexed
+-- (r → r'): fill is the instance hcom^{0→z} with a variable endpoint z.
+-- fill must be taken as primitive only if comp is fixed to 0 → 1.
+-- It satisfies:
+--   fill A φ u u0 i0 = u0
+--   fill A φ u u0 i1 = comp A φ u u0
+--   fill A φ u u0 i  agrees with u i on φ
 ```
+
+#### Formal Specification (Angiuli, Favonia, Harper 2017)
+
+For implementors, the precise mathematical definitions from *Computational Higher Type Theory III* (Angiuli, Hou, Harper 2017) are essential reference. The two core Kan operations for Cartesian cubical type theory are:
+
+**Coercion** (`coe`). Given a type `A` varying in dimension `x`, coercion sends an element of `A⟨r/x⟩` to an element of `A⟨r'/x⟩`:
+
+```
+coe^{r→r'}_{x.A}(M) : A⟨r'/x⟩    when M : A⟨r/x⟩
+```
+
+The key computation rule: when `r = r'`, coercion is the identity: `coe^{r→r}_{x.A}(M) ≡ M`. For compound types, coercion distributes structurally:
+
+- `coe^{r→r'}_{x. Π(a:A).B}(f) = λa. coe^{r→r'}_{x.B[coe^{r'→x}_{x.A}(a)/a]}(f (coe^{r'→r}_{x.A}(a)))` — note the substituted argument is coerced to the *bound* dimension `x`, so it varies along the coercion
+- `coe^{r→r'}_{x. Σ(a:A).B}(p) = (coe^{r→r'}_{x.A}(π₁(p)), coe^{r→r'}_{x.B[a:=fill]}(π₂(p)))`
+
+**Homogeneous composition** (`hcom`). Given a homogeneous type `A`, a cofibration `φ`, a tube `u : (i : I) → Partial φ A`, and a cap `u₀ : A` agreeing with `u` on `φ`, `hcom` produces the composite:
+
+```
+hcom^{r→r'}_A [φ ↦ u] u₀ : A
+```
+
+Subject to: (1) `hcom^{r→r}_A [φ ↦ u] u₀ ≡ u₀`, and (2) `hcom^{r→r'}_A [⊤ ↦ u] u₀ ≡ u r'`.
+
+The distinction between `coe` (heterogeneous, one element) and `hcom` (homogeneous, partial elements) is characteristic of the Cartesian approach. In CCHM, these are combined into a single `comp` operation, and the de Morgan algebra (connections) is used to define filling from composition. In the Cartesian setting filling is instead obtained from endpoint-indexed composition: fill is the instance `hcom^{0→z}` with a variable endpoint `z`; only if composition were fixed to `0→1` would filling need to be primitive.
 
 #### Example: Path Lifting
 
 ```sctt
--- Lifting a path to a path of paths
-path_lifting : {A : Type} {x y : A} →
+-- Filling the composition square (honest type): the fill term below
+-- relates refl to refl ∙ p over the family λ i → Path A x (p i).
+path_filler : {A : Type} {x y : A} →
                (p : Path A x y) →
-               Path (Path A x x) refl p
-path_lifting p = λi j → fill A {i0 ∨ i1}
+               PathP (λ i → Path A x (p i)) refl (refl ∙ p)
+path_filler p = λi j → fill (λ _ → A) {(j = i0) ∨ (j = i1)}
                              (λk → λ { (j = i0) → x;
                                       (j = i1) → p k })
                              x i
+-- The unit law Path (Path A x y) (refl ∙ p) p follows by one further
+-- composition (cubical library: lUnit).
 ```
 
 ### Transport: Moving Along Paths
@@ -370,14 +477,20 @@ hfill : {A : Type} →
         (u0 : A [ φ ↦ u i0 ]) →
         (i : I) → A
 
--- This gives us path lifting
+-- This gives a degenerate square over p (honest type): the j = i0 face is
+-- p definitionally, but the j = i1 face is the hcomp of the constant tube
+-- over p — equal to p only *propositionally*, not definitionally.
 path_lifting : {A : Type} {x y : A} →
                (p : Path A x y) →
-               Path (Path A x y) p p
-path_lifting p = λ i j → hfill (∂ i) (λ k → λ {
+               PathP (λ j → Path A x y) p
+                     (λ i → hcomp (λ k → λ { (i = i0) → x;
+                                             (i = i1) → y }) (p i))
+path_lifting p = λ j i → hfill (∂ i) (λ k → λ {
   (i = i0) → x;
   (i = i1) → y
 }) (inS (p i)) j
+-- A genuine Path (Path A x y) p p is then derived by one further
+-- composition collapsing the hcomp face.
 ```
 
 ## 3.4 Higher Paths {#higher-paths}
@@ -391,15 +504,22 @@ Paths form a hierarchy—we can have paths between paths:
 Square : {A : Type} {a b c d : A} →
          Path A a b → Path A c d →
          Path A a c → Path A b d → Type
-Square p q r s = Path (Path A _ _) 
-                      (λ i → r i) 
-                      (λ i → s i)
+Square p q r s = PathP (λ i → Path A (p i) (q i)) r s
 
 -- Example: commutative square
+-- (honest type: this hfill term is again the composition filler,
+--  PathP (λ i → Path A x (p i)) refl (refl ∙ p), read as a square)
 comm_square : {A : Type} {x y : A} →
               (p : Path A x y) →
-              Square p p refl refl
-comm_square p = λ i j → p (i ∧ j)
+              PathP (λ i → Path A x (p i)) refl (refl ∙ p)
+comm_square p = λ i j → hfill (λ k → λ {
+  (j = i0) → x;
+  (j = i1) → p k
+}) (inS x) i
+-- In De Morgan cubical, this would be simply p (i ∧ j).
+-- Without connections, we construct the square via Kan filling.
+-- A square with face p on both sides is derived from this filler by one
+-- further composition (cubical library: lUnit).
 ```
 
 ### Cubes and Higher Dimensions
@@ -416,16 +536,17 @@ Cube : {A : Type} →
 eckmann_hilton : {A : Type} {x : A} →
                  (α β : Path (Path A x x) refl refl) →
                  Path _ (α ∙ β) (β ∙ α)
-eckmann_hilton α β = λ i j k → 
-  hcomp (λ l → λ {
-    (i = i0) → α j k;
-    (i = i1) → β j k;
-    (j = i0) → x;
-    (j = i1) → x;
-    (k = i0) → x;
-    (k = i1) → x
-  }) x
+-- (proof term omitted)
 ```
+
+The proof is the *interchange law* argument: on 2-loops there are two
+composition operations (composing in either of the two dimensions), they
+share a unit (`refl`), and each is a homomorphism for the other. Sliding `α`
+and `β` past one another through a 3-dimensional cube — first composing
+horizontally, then vertically — interchanges their order, yielding
+`α ∙ β ≡ β ∙ α`. The fully formal construction involves several nested
+`hcomp`s; see `EH` in `Cubical.Homotopy.Loopspace` of the cubical Agda
+library for the complete proof term.
 
 ### Loop Spaces
 
@@ -460,16 +581,19 @@ The crown jewel of cubical type theory: equivalent types are equal.
 _≃_ : Type → Type → Type
 A ≃ B = Σ (f : A → B), isEquiv f
 
--- The univalence axiom becomes a theorem!
+-- The univalence axiom becomes a theorem! Full univalence says the
+-- canonical map pathToEquiv : (A ≡ B) → (A ≃ B) is itself an equivalence;
+-- ua below is its inverse (merely having ua : A ≃ B → Path Type A B
+-- would be strictly weaker).
 ua : {A B : Type} → A ≃ B → Path Type A B
 ua e = λ i → Glue B (λ {
   (i = i0) → (A, e);
   (i = i1) → (B, id_equiv)
 })
 
--- Its inverse
-ua⁻¹ : {A B : Type} → Path Type A B → A ≃ B
-ua⁻¹ p = transport_equiv p
+-- The canonical map (an equivalence, with inverse ua)
+pathToEquiv : {A B : Type} → Path Type A B → A ≃ B
+pathToEquiv p = transport_equiv p
 ```
 
 ### Computing with Univalence
@@ -477,10 +601,15 @@ ua⁻¹ p = transport_equiv p
 Unlike axiomatic univalence, cubical univalence computes:
 
 ```sctt
--- Transport along ua computes to the equivalence
+-- Transport along ua computes to the equivalence — up to a path, not
+-- definitionally: in CCHM/ABCFHL/cubical Agda, transport (ua e) x unfolds
+-- to e.fst x wrapped in an extra (trivial) transport, removed by
+-- transportRefl.
 transport_ua : {A B : Type} (e : A ≃ B) (x : A) →
                transport (ua e) x ≡ e.fst x
-transport_ua e x = refl  -- Holds definitionally!
+transport_ua e x = transportRefl (e.fst x)  -- propositional, NOT refl in general
+-- It is definitional only for types with trivial transp, such as Bool —
+-- which is why the Bool example below computes by refl.
 
 -- Example: computing with boolean negation
 not_path : Path Type Bool Bool
@@ -535,16 +664,19 @@ unglue : {A : Type} {φ : 𝔽} {Te : Partial φ (Σ Type (_≃ A))} →
 ### Examples with Glue
 
 ```sctt
--- The interval as glued type
-I_as_glue : Type
-I_as_glue = Glue Bool (i0 ∨ i1) (λ {
-  (i = i0) → (Unit, unit_to_bool_equiv);
-  (i = i1) → (Unit, unit_to_bool_equiv')
+-- A line of types over Bool: at i0 we glue Bool along the negation
+-- equivalence, at i1 along the identity. (Note the dimension i must be
+-- bound, and the glued types must actually be equivalent to Bool.)
+notLine : I → Type
+notLine = λ i → Glue Bool (λ {
+  (i = i0) → (Bool, notEquiv);
+  (i = i1) → (Bool, idEquiv)
 })
+-- This is exactly ua notEquiv: transporting along it negates a boolean.
 
 -- Constructing non-trivial paths
 twist : Path Type (A × B) (B × A)
-twist = λ i → Glue (A × B) (i ∨ ~i) (λ {
+twist = λ i → Glue (A × B) ((i = i0) ∨ (i = i1)) (λ {
   (i = i0) → (A × B, id_equiv);
   (i = i1) → (B × A, swap_equiv)
 })

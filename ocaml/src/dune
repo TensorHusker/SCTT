@@ -1,0 +1,11 @@
+(library
+ (name sctt_arc)
+ (public_name sctt_arc)
+ (libraries core yojson)
+ (preprocess (pps ppx_jane))
+ (modules
+  kernel/kan
+  arc/pattern_engine
+  arc/solver
+  smooth/manifold
+  data/generator))
