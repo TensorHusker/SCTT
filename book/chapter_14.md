@@ -180,7 +180,8 @@ sphere (n+1) = suspension (sphere n)
 -- Computing homotopy groups of spheres
 pi_n_sphere : (n k : ℕ) → Group
 pi_n_sphere n k = compute_homotopy_groups (sphere n) k
--- This gives us the stable homotopy groups of spheres!
+-- These are the UNSTABLE homotopy groups πₖ(Sⁿ). The stable groups
+-- arise only in the range k ≤ n−2 (or as the colimit over suspensions).
 ```
 
 ## 14.2 Smooth ∞-Groupoids {#smooth-groupoids}
@@ -237,13 +238,18 @@ Lie∞Groupoid = {
   compatibility : group_operations_respect_smooth_structure
 }
 
--- Example: String group (loop group of a Lie group)
+-- Example: String group — the 3-connected cover of a Lie group G
+-- (kills π₃; NOT the loop group ΩG). For G = Spin(n), String(G)
+-- has no finite-dimensional Lie group model: it is a Lie 2-group.
 string_group : (G : LieGroup) → Lie∞Groupoid
 string_group G = Lie∞Groupoid {
-  0_cells = ΩG,  -- Loop space of G
-  1_cells = λ γ₁ γ₂ → SmoothHomotopy γ₁ γ₂,
+  -- BCSS strict model: crossed module Ω̂G → P₀G, where P₀G is the
+  -- based path group and Ω̂G the level-1 Kac–Moody central extension
+  -- of the based loop group
+  0_cells = P₀G,                 -- Based smooth paths in G
+  1_cells = P₀G ⋉ Ω̂G,           -- Paths twisted by the central extension
   group_structure = pointwise_multiplication,
-  -- Higher structure from string theory
+  -- Characterized by: πₖ(String G) = πₖ(G) for k > 3, π₃ = 0
 }
 
 -- Exceptional cases: Lie 2-groups, 3-groups, etc.
@@ -415,15 +421,15 @@ CrossedModule = {
   action : G × H → H,      -- Group action
   homomorphism : H → G,    -- Equivariant homomorphism
   
-  -- Peiffer relation
-  peiffer : ∀ h₁ h₂, [h₁, h₂] = action(hom h₁, h₂) * hom(action(h₁, h₂))⁻¹
+  -- Peiffer relation (for ∂ = homomorphism, ▷ = action)
+  peiffer : ∀ h₁ h₂, action(homomorphism h₁) h₂ = h₁ * h₂ * h₁⁻¹
 }
 
--- String 2-group from loop group
+-- String 2-group via the BCSS crossed module Ω̂G → P₀G
 string_2_group : (G : LieGroup) → TwoGroup
 string_2_group G = TwoGroup {
-  G₀ = ΩG,                 -- Loop group
-  G₁ = ΩΩG,               -- Double loop group
+  G₀ = P₀G,                -- Based path group
+  G₁ = P₀G ⋉ Ω̂G,          -- Level-1 central extension of based loops
   coherence = string_group_coherence G
 }
 ```
@@ -437,11 +443,14 @@ chern_simons_2group : (M : Manifold³) →
                       ∞Connection M → 
                       ℝ
 chern_simons_2group M G conn = 
-  ∫_M (conn.A ∧ dconn.A + (2/3) * conn.A ∧ conn.A ∧ conn.A +
-        conn.B ∧ dconn.B + interaction_terms)
+  ∫_M (tr(conn.A ∧ dconn.A + (2/3) * conn.A ∧ conn.A ∧ conn.A) +
+        ⟨conn.B ∧ F_A⟩)   -- BF-type coupling of the 2-form to the curvature
   where
     A = conn.connection_1_forms
     B = conn.connection_2_forms
+    F_A = dA + A ∧ A
+    -- NOTE: a B ∧ dB term is a 5-form — it vanishes identically on a
+    -- 3-manifold and belongs to 5-dimensional Chern–Simons theory.
 
 -- Topological field theory structure
 chern_simons_tqft : (G : TwoGroup) → 
@@ -489,7 +498,7 @@ spin_network_state = {
 -- Area operator eigenvalue
 area_eigenvalue : spin_network_state → Face → ℝ
 area_eigenvalue state f = 
-  8πγℓ²ₚ * √(Σⱼ j_e(j_e + 1))
+  8πγℓ²ₚ * Σ_e √(j_e(j_e + 1))   -- sum of square roots, one per puncture
   where j_e = spin_labels(edges_bounding f)
         γ = barbero_immirzi_parameter
         ℓₚ = planck_length
@@ -498,14 +507,14 @@ area_eigenvalue state f =
 ### String Theory and Higher Gauge Fields
 
 ```sctt
--- NS-NS 3-form field strength in 11D supergravity  
+-- The C₃ gauge field of 11D supergravity (M-theory)
 three_form_field : Manifold¹¹ → Type
 three_form_field M = {
   C_field : Ω³(M),         -- 3-form gauge potential
   G_field : Ω⁴(M),         -- 4-form field strength = dC
   
-  -- Modified Bianchi identity with M2-brane sources
-  bianchi : dG = J₃,        -- 3-brane current
+  -- Bianchi identity (M5-branes source G₄ magnetically)
+  bianchi : dG = 0,
   
   -- Gauge transformation by 2-form
   gauge_invariance : C ∼ C + dΛ  -- where Λ : Ω²(M)
@@ -613,12 +622,13 @@ extended_tqft n = {
 }
 
 -- Example: 3D Chern-Simons as extended TQFT
+-- (codimension k gets a (k−1)-categorical level: top dimension ↦ numbers)
 chern_simons_extended : extended_tqft 3
 chern_simons_extended = ExtendedTQFT {
-  points ↦ Rep(G),           -- Representations of gauge group
-  circles ↦ Vect,            -- Category of vector spaces  
-  surfaces ↦ ℂ,              -- Complex numbers
-  3_manifolds ↦ path_integral -- Feynman path integral
+  3_manifolds ↦ ℂ,              -- Partition function (a number)
+  surfaces ↦ Vect,              -- Vector spaces (conformal blocks)
+  circles ↦ Rep(G)_category,    -- Linear category of representations
+  points ↦ 2_category_of_module_categories
 }
 ```
 

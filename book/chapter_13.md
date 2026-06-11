@@ -43,11 +43,11 @@ computable : ℝ → Type              -- Computable reals vs. arbitrary reals
 We organize SCTT's modalities into several categories:
 
 ```sctt
--- Cohesive modalities (geometric)
-♭ : Type → Type    -- Discrete underlying type
-♯ : Type → Type    -- Shape/π₀  
-♮ : Type → Type    -- Flat/constant sheaf
-ℑ : Type → Type    -- Infinitesimal/formal
+-- Cohesive modalities (geometric) — see §13.2 for precise definitions
+∫ : Type → Type    -- Shape: fundamental ∞-groupoid
+♭ : Type → Type    -- Flat: discrete underlying type (constant sheaf)
+♯ : Type → Type    -- Sharp: codiscrete
+ℑ : Type → Type    -- Infinitesimal shape (de Rham stack)
 
 -- Computational modalities  
 ⟐ : Type → Type    -- Terminating computations
@@ -114,24 +114,27 @@ class Modality (◯ : Type → Type) where
 
 ### Examples of SCTT Modalities
 
-#### The Smooth Modality (♯)
+#### The Smoothing Operation (NOT a modality)
 
 ```sctt
--- Smooth modality: turns any type into its smooth approximation
-♯ : Type → SmoothType
-♯ A = SmoothApproximation A
+-- Smoothing: approximate a discrete type by a smooth one.
+-- WARNING: this is a useful *operation*, but it is NOT a modality:
+-- it is not idempotent and has no universal property. (The symbol ♯
+-- is reserved for the codiscrete/sharp modality — see §13.2.)
+Smoothen : Type → SmoothType
+Smoothen A = SmoothApproximation A
 
 -- Unit: embed discrete into smooth
-unit_smooth : A → ♯ A
+unit_smooth : A → Smoothen A
 unit_smooth x = constant_smooth_function x
 
 -- Bind: smooth functions compose smoothly
-bind_smooth : ♯ A → (A → ♯ B) → ♯ B  
+bind_smooth : Smoothen A → (A → Smoothen B) → Smoothen B  
 bind_smooth smooth_a f = 
   smooth_composition smooth_a (smooth_extension f)
 
 -- Example: smooth approximation of integers
-smooth_integers : ♯ ℤ
+smooth_integers : Smoothen ℤ
 smooth_integers = SmoothApprox {
   approximation = λ x → ⌊x + 0.5⌋,  -- Round to nearest integer
   smoothing = tanh_approximation,      -- Smooth rounding
@@ -173,13 +176,20 @@ quicksort (x::xs) =
 #### The Classical Modality (🅒)
 
 ```sctt
--- Classical reasoning: allows law of excluded middle
+-- Classical reasoning: allows law of excluded middle, but ONLY for
+-- crisp (♭-discrete) or codiscrete (♯) propositions. Unrestricted LEM
+-- is INCONSISTENT with the Kock-Lawvere axiom: classically, 𝔻 = {0},
+-- which collapses the smooth structure (Kock; Shulman's real-cohesion).
 🅒 : Type → Type
 🅒 A = ClassicalType A  -- Allows non-constructive proofs
 
--- Classical logic principles become available
-classical_lem : ∀ (P : 🅒 Prop) → 🅒 (P ∨ ¬P)
-classical_lem P = classical_axiom  -- Law of excluded middle
+-- LEM is available only under ♯ / for crisp hypotheses
+classical_lem : ∀ (P : Prop) → ♯ (P ∨ ¬P)
+classical_lem P = sharp_classical_axiom
+-- NOTE: there is NO extract : 🅒 A → A. The ◯-access rule of §13.1
+-- does not apply to 🅒 — eliminating it into the smooth fragment
+-- would let LEM contaminate ℝ and refute Kock-Lawvere.
+-- 🅒 must also never commute with the smooth/cohesive modalities.
 
 -- Classical real numbers with Dedekind cuts
 classical_reals : 🅒 Type
@@ -187,13 +197,14 @@ classical_reals = 🅒 ℝ_classical where
   ℝ_classical = DedekindCuts ℚ
   -- Every real has a decimal expansion (non-constructively)
 
--- Classical analysis: intermediate value theorem
+-- Classical analysis: intermediate value theorem (under the modality)
 intermediate_value : 
   ∀ (f : 🅒 (ContinuousFunction [0,1] ℝ)),
   f(0) < 0 → f(1) > 0 → 🅒 (∃ c ∈ [0,1], f(c) = 0)
 intermediate_value f neg pos = 
   classical_proof_by_bisection f neg pos
-  -- Uses classical logic to guarantee existence
+  -- Uses classical logic to guarantee existence; the witness
+  -- stays inside 🅒 and cannot be extracted into smooth code
 ```
 
 ### Modal Interactions
@@ -203,7 +214,7 @@ Modalities can compose and interact:
 ```sctt
 -- Some modalities commute
 commute_smooth_terminating : 
-  ♯ (⟐ A) ≃ ⟐ (♯ A)
+  Smoothen (⟐ A) ≃ ⟐ (Smoothen A)
 commute_smooth_terminating = 
   -- Smooth approximation of terminating computation
   -- is the same as terminating smooth computation
@@ -220,8 +231,8 @@ impossible_quantum_classical : ¬(🅠 A × 🅒 A)
 
 -- Modal hierarchies
 refinement_hierarchy : 
-  ♭ A → ♯ A → SmoothA → C∞ A → Cω A
--- Discrete → continuous → smooth → C∞ → analytic
+  ♭ A → Smoothen A → C∞ A → Cω A
+-- Discrete → smooth → C∞ → analytic
 ```
 
 ## 13.2 Cohesive Structure {#cohesion}
@@ -230,124 +241,134 @@ refinement_hierarchy :
 
 SCTT naturally forms a cohesive topos, with modalities relating different levels of geometric structure:
 
-#### The Four Cohesive Modalities
+#### The Cohesive Modalities
 
 ```sctt
--- The cohesive quadruple
-♭ : SmoothType → Type          -- Discrete underlying set
-♯ : SmoothType → Type          -- Shape (π₀, connected components)  
-♮ : Type → SmoothType         -- Flat (discrete object as smooth)
-ℑ : SmoothType → SmoothType    -- Infinitesimal (formal neighborhood)
+-- The cohesive adjoint string (standard notation, cf. §4.6)
+∫ : SmoothType → Type          -- Shape: fundamental ∞-groupoid
+♭ : Type → SmoothType          -- Flat: discrete type as smooth (constant sheaf)
+♯ : Type → SmoothType          -- Sharp: codiscrete type as smooth
+Γ : SmoothType → Type          -- Underlying points (not itself a modality)
 
--- Adjunction relationships
--- ♮ ⊣ ♭ ⊣ ♯ ⊣ ♮ (this is not quite right, let me fix...)
--- ♮ ⊣ ♭   and   ♯ ⊣ ♮
-flat_discrete_adjunction : ♮ ⊣ ♭
-shape_flat_adjunction : ♯ ⊣ ♮
+-- Adjunction relationships: shape ⊣ flat ⊣ sharp
+shape_flat_adjunction : ∫ ⊣ ♭
+flat_sharp_adjunction : ♭ ⊣ ♯
 ```
 
-Let me correct the cohesive structure:
+Underlying the modalities is an adjoint quadruple Π ⊣ Disc ⊣ Γ ⊣ Codisc
+between smooth types and discrete types: Π takes the fundamental
+∞-groupoid, Disc equips a type with the discrete smooth structure, Γ takes
+underlying points, and Codisc equips a type with the codiscrete structure.
+The modalities are the composites ∫ = Disc ∘ Π, ♭ = Disc ∘ Γ, ♯ = Codisc ∘ Γ.
+Note that π₀ is just the 0-truncation of the shape: π₀ M = ‖∫ M‖₀.
+
+For differential cohesion, the infinitesimal structure forms its own
+adjoint triple (see §13.2 below):
 
 ```sctt
--- Correct cohesive structure: ♯ ⊣ ♮ ⊣ ♭
-shape_flat_adjunction : ♯ ⊣ ♮
-flat_discrete_adjunction : ♮ ⊣ ♭
-
--- Plus the infinitesimal modality
-infinitesimal_modality : ℑ ⊣ id  -- ℑ is left adjoint to identity
+-- Differential cohesion: reduction ⊣ infinitesimal shape ⊣ infinitesimal flat
+infinitesimal_triple : ℜ ⊣ ℑ ⊣ &
 ```
 
 #### Discrete Objects
 
 ```sctt
--- Discrete underlying set
-♭ : SmoothType → Type
-♭ M = UnderlyingSet M  -- Forgets smooth structure
+-- Underlying points functor
+Γ : SmoothType → Type
+Γ M = UnderlyingSet M  -- Forgets smooth structure
 
 -- Examples
-♭ ℝ ≃ ℝ_discrete              -- Real numbers as discrete set
-♭ S¹ ≃ S¹_discrete             -- Circle as discrete space
-♭ C∞(ℝ,ℝ) ≃ Set_of_functions  -- Functions as discrete set
+Γ ℝ ≃ ℝ_discrete              -- Real numbers as discrete set
+Γ S¹ ≃ S¹_discrete             -- Circle as discrete space
+Γ C∞(ℝ,ℝ) ≃ Set_of_functions  -- Functions as discrete set
 
 -- Properties of discrete objects
 is_discrete : (M : SmoothType) → Type  
-is_discrete M = (M ≃ ♮(♭ M))  -- M is isomorphic to its discretization
+is_discrete M = (M ≃ ♭(Γ M))  -- M is isomorphic to its discretization
 
--- Discrete objects have no non-trivial paths
-discrete_paths : ∀ (M : SmoothType) (is_discrete M) (x y : M) →
-                 (x ≡ y) ⊎ (Path M x y → ⊥)
-discrete_paths M discrete x y = 
-  if x ≡ y then inl refl
-  else inr (λ p → discrete_implies_no_nontrivial_paths discrete p)
+-- Discrete objects admit no non-constant smooth paths.
+-- (Note: this does NOT give decidable equality — it says only that
+-- every smooth path into a discrete type is constant.)
+discrete_paths : ∀ (M : SmoothType) (d : is_discrete M)
+                 (p : C∞(I, M)) →
+                 ∀ (t : I) → p t ≡ p 0
+discrete_paths M d p t = 
+  smooth_path_into_discrete_is_constant d p t
 ```
 
 #### Shape and Connected Components
 
 ```sctt
--- Shape: π₀ as a modality
-♯ : SmoothType → Type
-♯ M = π₀ M  -- Set of connected components
+-- Shape: the fundamental ∞-groupoid; π₀ is its 0-truncation
+∫ : SmoothType → Type
+∫ M = FundamentalInfinityGroupoid M
+π₀ M = ‖∫ M‖₀  -- Set of connected components
 
 -- Shape preserves finite colimits
-♯_preserves_colimits : 
+∫_preserves_colimits : 
   ∀ (diagram : Diagram SmoothType),
-  ♯ (colimit diagram) ≃ colimit (♯ ∘ diagram)
+  ∫ (colimit diagram) ≃ colimit (∫ ∘ diagram)
 
--- Examples
-♯ ℝ ≃ Unit                    -- ℝ is connected
-♯ (ℝ - {0}) ≃ Bool           -- Two components: ℝ₊ and ℝ₋  
-♯ S¹ ≃ Unit                   -- Circle is connected
-♯ (S¹ ⊔ S¹) ≃ Bool           -- Two circles have two components
+-- Examples (at the level of π₀; ∫ retains higher homotopy too,
+-- e.g. ∫ S¹ is the homotopy circle with π₁ = ℤ)
+π₀ ℝ ≃ Unit                    -- ℝ is connected
+π₀ (ℝ - {0}) ≃ Bool           -- Two components: ℝ₊ and ℝ₋  
+π₀ S¹ ≃ Unit                   -- Circle is connected
+π₀ (S¹ ⊔ S¹) ≃ Bool           -- Two circles have two components
 
 -- Shape respects smooth homotopy equivalence
 shape_homotopy_invariant :
   ∀ (M N : SmoothType) (f : C∞(M,N)),
-  SmoothHomotopyEquivalence f → (♯ M ≃ ♯ N)
+  SmoothHomotopyEquivalence f → (∫ M ≃ ∫ N)
 ```
 
 #### Flat Objects
 
 ```sctt
 -- Flat: embed discrete into smooth world
-♮ : Type → SmoothType
-♮ A = ConstantSmoothSheaf A
+♭ : Type → SmoothType
+♭ A = ConstantSmoothSheaf A
 
 -- Flat objects are "locally constant"
-flat_property : ∀ (A : Type) (x : ♮ A) (neighborhood : OpenSet ♮ A),
+flat_property : ∀ (A : Type) (x : ♭ A) (neighborhood : OpenSet ♭ A),
                x ∈ neighborhood → 
                ∃ (constant_value : A), 
                  ∀ y ∈ neighborhood, y ≡ constant_value
 
 -- Examples
-♮ ℕ = ConstantSheaf ℕ         -- Natural numbers as constant sheaf
-♮ Bool = {smooth functions ℝ → Bool that are locally constant}
+♭ ℕ = ConstantSheaf ℕ         -- Natural numbers as constant sheaf
+♭ Bool = {smooth functions ℝ → Bool that are locally constant}
 
 -- Flat preserves all colimits
-♮_preserves_all_colimits :
+♭_preserves_all_colimits :
   ∀ (diagram : Diagram Type),
-  ♮ (colimit diagram) ≃ colimit (♮ ∘ diagram)
+  ♭ (colimit diagram) ≃ colimit (♭ ∘ diagram)
 ```
 
 #### Infinitesimal Objects
 
 ```sctt
--- Infinitesimal: formal neighborhoods
+-- Differential cohesion: ℜ ⊣ ℑ ⊣ &
+-- ℜ M = reduced type (infinitesimal directions removed)
+-- ℑ M = de Rham stack (infinitesimally-nearby points identified)
+-- & M = infinitesimal flat
 ℑ : SmoothType → SmoothType  
-ℑ M = FormalNeighborhood M
+ℑ M = DeRhamStack M  -- M with infinitesimal neighborhoods collapsed
 
--- Infinitesimal objects detect tangent information
-tangent_detection : ∀ (M : SmoothType) (x : M),
-                   TangentSpace M x ≃ Hom(ℑ M, ℝ)
+-- The infinitesimal disk 𝔻 is NOT ℑ ℝ — it is what ℑ collapses:
+-- 𝔻 arises as the fiber of the unit map ℝ → ℑ ℝ over 0
+𝔻 ≃ fiber (unit_ℑ : ℝ → ℑ ℝ) 0
 
--- The infinitesimal disk
-ℑ ℝ ≃ D = {ε : ℝ | ε² = 0}  -- Dual numbers
+-- Tangent vectors are maps FROM the infinitesimal disk INTO M
+tangent_via_disk : ∀ (M : SmoothType) (x : M),
+                   TangentSpace M x ≃ Σ (t : 𝔻 → M), t 0 ≡ x
+
+-- The whole tangent bundle is the exponential by 𝔻
+tangent_bundle_exponential : TangentBundle M ≃ (𝔻 → M)
 
 -- Microlinearity via infinitesimals
-microlinear : ∀ (f : C∞(ℝ,ℝ)) (x : ℝ) (ε : ℑ ℝ),
+microlinear : ∀ (f : C∞(ℝ,ℝ)) (x : ℝ) (ε : 𝔻),
              f(x + ε) = f(x) + f'(x) * ε
-
--- Infinitesimal cohesion
-ℑ_adjunction : ℑ ⊣ id  -- ℑ is left adjoint to identity
 ```
 
 ### Cohesive Types and Smooth Spaces
@@ -355,39 +376,39 @@ microlinear : ∀ (f : C∞(ℝ,ℝ)) (x : ℝ) (ε : ℑ ℝ),
 The interaction of these modalities gives us rich geometric structure:
 
 ```sctt
--- Cohesive type: object with all four modalities defined
+-- Cohesive type: object with the cohesive structure made explicit
 CohesiveType : Type₁
 CohesiveType = {
   carrier : SmoothType,
   discrete : Type,
   shape : Type,  
   flat_embedding : Type → SmoothType,
-  infinitesimal : SmoothType,
+  infinitesimal_disk : SmoothType,
   
   -- Cohesive axioms
-  discrete_shape : discrete ≃ ♭ carrier,
-  shape_components : shape ≃ ♯ carrier,  
-  flat_adjunction : ♮ ⊣ ♭,
-  infinitesimal_tangent : TangentBundle carrier ≃ ℑ carrier
+  discrete_points : discrete ≃ Γ carrier,
+  shape_groupoid : shape ≃ ∫ carrier,  
+  flat_adjunction : ∫ ⊣ ♭,
+  tangent_exponential : TangentBundle carrier ≃ (infinitesimal_disk → carrier)
 }
 
 -- Examples of cohesive types
 ℝ_cohesive : CohesiveType
 ℝ_cohesive = CohesiveType {
   carrier = ℝ,
-  discrete = ℝ_discrete,  -- Real numbers as discrete set
-  shape = Unit,            -- ℝ is connected (one component)
-  flat_embedding = ♮,      -- Constant sheaf embedding
-  infinitesimal = D        -- Dual numbers ℝ[ε]/(ε²)
+  discrete = ℝ_discrete,       -- Real numbers as discrete set
+  shape = Unit,                -- ℝ is contractible: ∫ ℝ ≃ Unit
+  flat_embedding = ♭,          -- Constant sheaf embedding
+  infinitesimal_disk = 𝔻      -- Dual numbers ℝ[ε]/(ε²)
 }
 
 manifold_cohesive : (M : Manifold) → CohesiveType  
 manifold_cohesive M = CohesiveType {
   carrier = M,
   discrete = UnderlyingSet M,
-  shape = π₀ M,           -- Connected components
-  flat_embedding = ♮,
-  infinitesimal = FormalNeighborhood M
+  shape = ∫ M,            -- Fundamental ∞-groupoid (homotopy type of M)
+  flat_embedding = ♭,
+  infinitesimal_disk = 𝔻_dim(M)
 }
 ```
 
@@ -399,8 +420,8 @@ manifold_cohesive M = CohesiveType {
 -- Differential characters (forms + topology)
 DifferentialCharacter : (M : Manifold) → (n : ℕ) → Type
 DifferentialCharacter M n = 
-  fiber (♯ : Ω^n_closed(M) → H^n(♯ M, ℝ/ℤ)) 
-  -- Closed n-forms that map to integral cohomology
+  fiber (curv_class : Ω^n_closed(M) → H^n(∫ M, ℝ/ℤ)) 
+  -- Closed n-forms whose periods are integral
 
 -- Chern-Weil theory
 chern_weil : (E : VectorBundle M) → 
@@ -436,7 +457,7 @@ automatic_derivative f x =
 cohesive_integration : 
   ∀ (M : CohesiveType) (ω : Ω^n M.carrier),
   (n = dimension M.carrier) →
-  ∫_M ω ∈ ℝ / ♯(∂M)  -- Integration mod boundary components
+  ∫_M ω ∈ ℝ / π₀(∂M)  -- Integration mod boundary components
 ```
 
 ## 13.3 Differential Cohomology {#cohomology}
@@ -445,52 +466,69 @@ cohesive_integration :
 
 Differential cohomology unifies differential forms and topological cohomology:
 
-#### The Differential Cohomology Diamond
+#### The Differential Cohomology Hexagon
 
 ```sctt
--- The fundamental diamond diagram
-differential_cohomology_diamond : (M : Manifold) → (n : ℕ) → 
-  CommutativeDiagram where
-  
-  -- Four corners of the diamond
-  Ω^n_closed(M) ────→ H^n_dR(M)
-       │                  │
-       │                  │  
-       ↓                  ↓
-  H^n_diff(M) ────→ H^n(M, ℝ/ℤ)
-  
-  -- Differential cohomology is the pullback
-  H^n_diff(M) = pullback of (Ω^n_closed(M) → H^n_dR(M) → H^n(M, ℝ))
+-- Differential cohomology is the HOMOTOPY pullback (Hopkins–Singer)
+-- of the integral and de Rham approaches to cohomology:
+--
+--                Ĥⁿ(M;ℤ)
+--               ↙        ↘
+--      Ωⁿ_cl,ℤ(M)        Hⁿ(M,ℤ)
+--               ↘        ↙
+--               Hⁿ(M,ℝ)
+--
+-- (arrows OUT of Ĥⁿ: curvature to the left, characteristic class
+--  to the right; both legs agree in real cohomology)
+H_diff : (M : Manifold) → (n : ℕ) → Type
+H_diff M n = HomotopyPullback
+  (characteristic : Hⁿ(M,ℤ) → Hⁿ(M,ℝ))
+  (de_rham_class  : Ωⁿ_closed(M) → Hⁿ(M,ℝ))
+-- NOTE: the naive set-level pullback is WRONG — it loses the flat part
+-- Hⁿ⁻¹(M;ℝ/ℤ) (e.g. all holonomy data of flat connections).
+```
+
+The structure of Ĥⁿ is captured by two exact sequences:
+
+```sctt
+-- Curvature exact sequence
+0 → Hⁿ⁻¹(M;ℝ/ℤ) → Ĥⁿ(M;ℤ) → Ωⁿ_cl,ℤ(M) → 0
+
+-- Characteristic class exact sequence
+0 → Ωⁿ⁻¹(M)/Ωⁿ⁻¹_cl,ℤ(M) → Ĥⁿ(M;ℤ) → Hⁿ(M;ℤ) → 0
 ```
 
 #### Construction in SCTT
 
 ```sctt
--- Differential cohomology groups
+-- Differential cohomology classes (local data presentation)
 H_diff : (M : Manifold) → (n : ℕ) → Type
 H_diff M n = {
-  connection : Ω^(n-1)(M),           -- Connection form
-  curvature : Ω^n_closed(M),         -- Curvature (closed n-form)  
-  characteristic_class : H^n(M, ℤ),   -- Integral cohomology class
+  connection : LocalForms Ω^(n-1)(M),   -- Local connection (n-1)-forms
+  curvature : Ω^n_closed(M),            -- Curvature (global closed n-form)  
+  characteristic_class : H^n(M, ℤ),     -- Integral cohomology class
   
-  -- Consistency condition
-  consistency : d(connection) = curvature mod ℤ-valued forms
+  -- Consistency: locally F = dA, glued by Čech data;
+  -- globally [F] = characteristic_class in Hⁿ(M;ℝ)
+  consistency : LocallyExact connection curvature ∧
+                [curvature] ≡ image characteristic_class
 }
 
--- Examples
--- n=1: Line bundles with connection
+-- Examples (note degrees: geometric objects live one degree HIGHER
+-- than their connection forms)
+-- n=2: Line bundles with connection (curvature F ∈ Ω², c₁ ∈ H²)
 line_bundle_diff_cohomology : Manifold → Type
-line_bundle_diff_cohomology M = H_diff M 1 ≃
-  {(∇ : Connection, F : Ω²_closed(M), c₁ : H²(M,ℤ)) | dA = F, [F] = c₁}
+line_bundle_diff_cohomology M = H_diff M 2 ≃
+  {(∇ : Connection, F : Ω²_closed(M), c₁ : H²(M,ℤ)) | locally F = dA, [F] = c₁}
 
--- n=2: Gerbes and 2-connections  
+-- n=3: Gerbes with connective structure
 gerbe_diff_cohomology : Manifold → Type
-gerbe_diff_cohomology M = H_diff M 2 ≃
-  {gerbes with connection | curvature condition}
+gerbe_diff_cohomology M = H_diff M 3 ≃
+  {gerbes with connection | curvature 3-form condition}
 
--- n=3: String structures
+-- n=4: String structures / Chern–Simons data
 string_diff_cohomology : Manifold → Type  
-string_diff_cohomology M = H_diff M 3
+string_diff_cohomology M = H_diff M 4
 ```
 
 ### Chern-Weil Theory in SCTT
@@ -656,28 +694,36 @@ serre_spectral_sequence fib n =
 #### Differential Cohomology of Common Spaces
 
 ```sctt
+-- Computed from the two exact sequences (§13.3 above).
+-- General facts: Ĥ⁰(M) ≅ H⁰(M;ℤ); Ĥ¹(M) ≅ C∞(M, ℝ/ℤ);
+-- in top degree+1, Ĥ^{d+1}(M) ≅ H^d(M;ℝ/ℤ); zero above that.
+
 -- Circle S¹
 s1_differential_cohomology : (n : ℕ) → Type
-s1_differential_cohomology 0 = ℤ                    -- H⁰_diff(S¹) ≅ ℤ
-s1_differential_cohomology 1 = ℝ/ℤ                  -- Connections on S¹
-s1_differential_cohomology 2 = 0                     -- H²_diff(S¹) = 0
+s1_differential_cohomology 0 = ℤ                    -- Ĥ⁰(S¹) ≅ ℤ
+s1_differential_cohomology 1 = C∞(S¹, ℝ/ℤ)         -- smooth ℝ/ℤ-valued functions
+s1_differential_cohomology 2 = ℝ/ℤ                  -- flat U(1) connections (holonomy)
 s1_differential_cohomology (n+3) = 0                 -- Zero for n ≥ 3
 
 -- Sphere S²  
 s2_differential_cohomology : (n : ℕ) → Type
-s2_differential_cohomology 0 = ℤ                    -- H⁰_diff(S²) ≅ ℤ  
-s2_differential_cohomology 1 = 0                     -- No 1-forms on S²
-s2_differential_cohomology 2 = ℝ/ℤ                  -- U(1) bundles on S²
-s2_differential_cohomology 3 = ℤ                    -- H³_diff(S²) ≅ ℤ
+s2_differential_cohomology 0 = ℤ                    -- Ĥ⁰(S²) ≅ ℤ  
+s2_differential_cohomology 1 = C∞(S², ℝ/ℤ)         -- smooth ℝ/ℤ-valued functions
+s2_differential_cohomology 2 = Extension ℤ (Ω¹(S²)/Ω¹_cl,ℤ(S²))
+  -- U(1) bundles WITH connection: infinite-dimensional extension
+  -- 0 → Ω¹/Ω¹_cl,ℤ → Ĥ²(S²) → H²(S²;ℤ) = ℤ → 0
+s2_differential_cohomology 3 = ℝ/ℤ                  -- Ĥ³(S²) ≅ H²(S²;ℝ/ℤ) ≅ ℝ/ℤ
 s2_differential_cohomology (n+4) = 0                 -- Zero for n ≥ 4
 
 -- Torus T² = S¹ × S¹
 torus_differential_cohomology : (n : ℕ) → Type  
 torus_differential_cohomology 0 = ℤ
-torus_differential_cohomology 1 = (ℝ/ℤ)²           -- Two independent connections
-torus_differential_cohomology 2 = ℝ/ℤ ⊕ ℤ          -- Area form + discrete torsion
-torus_differential_cohomology 3 = (ℝ/ℤ)²
-torus_differential_cohomology 4 = ℤ
+torus_differential_cohomology 1 = C∞(T², ℝ/ℤ)
+torus_differential_cohomology 2 = Extension ℤ_with_flat_part
+  -- 0 → H¹(T²;ℝ/ℤ) ≅ (ℝ/ℤ)² ⊕ … → part of Ĥ²; full group is the
+  -- extension 0 → Ω¹/Ω¹_cl,ℤ → Ĥ²(T²) → H²(T²;ℤ) = ℤ → 0
+torus_differential_cohomology 3 = ℝ/ℤ               -- Ĥ³(T²) ≅ H²(T²;ℝ/ℤ)
+torus_differential_cohomology (n+4) = 0
 ```
 
 #### Physical Examples
@@ -723,9 +769,9 @@ Modal SCTT provides a rich framework for organizing and computing with different
 -- The modal structure of mathematics
 Mathematics = {
   discrete : ♭,          -- Combinatorics, number theory
-  continuous : ♯,        -- Topology, analysis
+  continuous : ∫,        -- Topology, analysis (shape)
   smooth : smooth,       -- Differential geometry  
-  coherent : ♮,         -- Sheaf theory
+  codiscrete : ♯,       -- Classical/non-constructive layer
   infinitesimal : ℑ,    -- Synthetic differential geometry
   
   logical : □/◇,        -- Necessity and possibility
@@ -755,7 +801,7 @@ Modal SCTT demonstrates how adding the right abstractions can dramatically expan
 1. Compute the cohesive modalities for the Klein bottle
 2. Show that the cohesive structure on manifolds gives synthetic differential geometry
 3. Implement the Kock-Lawvere axiom using infinitesimal modality
-4. Prove that ♯ preserves finite colimits
+4. Prove that ∫ (shape) preserves finite colimits
 
 ### Differential Cohomology
 1. Compute H²_diff(ℂP²) for the complex projective plane

@@ -74,12 +74,12 @@ This book is written for multiple audiences. Choose your path:
 2. Skim Chapter 2 (refresh type theory)
 3. Understand Chapters 3-5 (what SCTT provides)
 4. **Deep dive**: Chapter 9 (type checking algorithms)
-5. **Deep dive**: Chapter 10 (programming patterns)
+5. **Deep dive**: Chapters 16-19 (build the kernel, certified ML, rewrite rules, ecosystem)
 6. Review Chapters 11-12 for application ideas
 
 **Focus on**: Code examples, algorithms, implementation strategies
 
-**Reference**: Chapters 7-8 when you need formal details
+**Reference**: Chapters 7-8 when you need formal details. Appendix E for the ordered reading list of papers.
 
 ---
 
@@ -126,6 +126,10 @@ This book is written for multiple audiences. Choose your path:
 **Focus on**: Foundations, constructivity, what can/cannot be expressed
 
 ---
+
+## The Central Technical Challenge
+
+SCTT's smooth layer rests on the nilsquare axiom: every infinitesimal ε satisfies ε² = 0 *definitionally*, so that evaluating f(x + ε) automatically yields f(x) + f'(x)·ε — the Kock-Lawvere axiom makes differentiation a computation rule rather than a limit process. The difficulty is that ε² = 0 is a *non-linear, commutative* rewrite rule — the variable ε appears twice on the left-hand side, and the ring multiplication it lives inside is commutative — which means standard higher-order pattern matching cannot express it and standard Knuth-Bendix completion cannot orient it. The solution chain developed over 2021-2026 works as follows: **Rewriting Type Theory (RTT)** (Cockx, Tabareau, Winterhalter; POPL 2021) provides the metatheoretic framework for adding user-defined computation rules to a dependent type theory while preserving subject reduction and consistency, using the *triangle property* as a modular confluence criterion; **BiTTs** (Felicissimo; ESOP 2024) gives a generic bidirectional type checking algorithm for any type theory specified with such rules; the **Rewster** (Leray et al.; ITP 2024) mechanizes the RTT metatheory inside MetaRocq so that type preservation and confluence of new rules can be machine-checked; **LRTT** (Leray, Winterhalter; POPL 2026) extends RTT with *locally-scoped* rewrite rules so that ε² = 0 fires only inside smooth blocks and never interacts with the cubical Kan operations (coe, hcom, Glue), eliminating most critical pairs by construction; and **cctt** (Kovács) provides the high-performance Cartesian cubical evaluation architecture — defunctionalized closures, the sub/force pattern for O(1) interval substitution, triple-context NbE — into which the LRTT-scoped nilsquare rule is integrated as an additional reduction case in the evaluator. The remaining open problem (the "Gruissan gap") is automated verification of confluence when equational-theory matching (commutativity, associativity) interacts with higher-order β-reduction and cubical operations in the same scope.
 
 ## How to Use This Book
 
@@ -221,7 +225,10 @@ Making SCTT real and practical
 Scientific computing and engineering
 
 ### Part VI: Advanced Topics (Chapters 13-15)
-Cutting edge and future directions
+Cutting edge, open risks, and research frontiers
+
+### Part VII: Implementation Pathways (Chapters 16-19)
+Building the kernel, certified ML, rewrite rules, ecosystem bridges
 
 ---
 

@@ -57,7 +57,7 @@ SCTT_Metatheory = {
   -- Core properties (CONJECTURED for full SCTT; proven for subsystems)
   consistency : ¬∃(Γ : Context)(t : Term), Γ ⊢ t : ⊥,           -- Conjecture 8.1
   canonicity : ∀(t : ClosedTerm)(A : Type), (⊢ t : A) → HasCanonicalForm t,  -- Conjecture 8.2
-  decidability : Decidable TypeChecking ∧ Decidable DefEq,       -- Theorem 8.3 (algorithmic)
+  decidability : Decidable TypeChecking ∧ Decidable DefEq,       -- Conditional 8.3 (cubical fragment, assuming normalization; smooth layer: fragments only, see §8.3)
   normalization : StronglyNormalizing SCTT_reduction,              -- Conjecture 8.4
   
   -- Smooth-specific properties  
@@ -179,7 +179,7 @@ derivative_consistency :
 -- Implementation via dual numbers is consistent
 dual_number_consistency :
   ∀(f : C∞(ℝ,ℝ))(x : ℝ)(ε : DualNumber),
-  f(x + ε) = f(x) + f'(x) * ε + O(ε²)
+  f(x + ε) = f(x) + f'(x) * ε   -- exact: ε² = 0 by nilpotency, so there is no higher-order remainder
 
 -- No contradictions arise from smooth structure
 smooth_no_contradiction :
@@ -257,18 +257,21 @@ conjecture sctt_canonicity :
 -- Base types have specific canonical forms
 BaseType : Type → Type
 BaseType ℕ = true
-BaseType ℝ = true  
 BaseType Bool = true
-BaseType (Path A x y) = true
+BaseType ℝ = false  -- a real is an infinite object: no finite literal normal form
+BaseType (Path A x y) = false  -- paths are not a base type
 BaseType (A → B) = false  -- not a base type
 BaseType (Σ(x:A).B) = false
 
--- Canonical forms
+-- Canonical forms (only for genuine base types)
 CanonicalForm : (A : BaseType) → Type
 CanonicalForm ℕ = Numeral
-CanonicalForm ℝ = RealLiteral
 CanonicalForm Bool = BoolLiteral
-CanonicalForm (Path A x y) = PathLiteral A x y
+
+-- For ℝ the right notion is NOT a literal: a closed real canonically
+-- denotes an effective Cauchy approximation — a computable sequence of
+-- rationals with an explicit modulus of convergence. A real is an
+-- infinite object, so it has no finite literal normal form.
 ```
 
 > **Honest Assessment**: Canonicity for **Cartesian cubical type theory** alone is a theorem
@@ -289,9 +292,7 @@ canonical_logical_relations :
 proof_sketch canonical_logical_relations A =
   case A of
     ℕ → naturals_are_numerals
-    ℝ → reals_are_literals  
     Bool → bools_are_literals
-    Path A x y → paths_are_path_literals
 
 -- Key lemma: closed terms reduce to canonical forms
 closed_terms_canonical :
@@ -336,23 +337,15 @@ canonical_examples = [
 
 #### Canonical Smooth Functions
 
+There is **no** canonicity theorem for smooth function types: a closed term of
+`C∞(M,N)` does not normalize to a member of some finite taxonomy of expressions
+(polynomial, rational, elementary, …). Smooth functions are higher-type, infinite
+objects; the only honest canonicity statements are at genuine base types (ℕ, Bool),
+and for ℝ via effective Cauchy approximations as above. What we *can* say is that
+closed smooth functions carry computational content: applied to a (canonical
+approximation of a) point, they evaluate.
+
 ```sctt
--- Canonical forms for smooth functions
-SmoothFunctionCanonical : (M N : SmoothType) → Type
-SmoothFunctionCanonical M N = 
-  Polynomial M N |
-  RationalFunction M N |
-  ElementaryFunction M N |
-  DefinedByDE M N |  -- Differential equation
-  CompositeCanonical M N
-
--- Canonicity theorem for smooth functions
-smooth_function_canonicity :
-  ∀(f : ClosedTerm)(M N : SmoothType),
-  (⊢ f : C∞(M,N)) → 
-  ∃(canonical : SmoothFunctionCanonical M N), 
-  f →* canonical
-
 -- Examples
 polynomial_canonical : C∞(ℝ,ℝ) 
 polynomial_canonical = λ x → x³ - 2*x + 1
@@ -366,29 +359,11 @@ sine_canonical = solution_to_ode (y'' = -y, y(0) = 0, y'(0) = 1)
 
 ### Canonicity for Path Types
 
-```sctt
--- Canonical paths in SCTT
-PathCanonical : (A : Type)(x y : A) → Type
-PathCanonical A x y = 
-  ConstantPath A x |  -- when x ≡ y
-  LinearPath A x y |  -- in vector spaces
-  GeodesicPath A x y | -- in Riemannian manifolds
-  ComputedPath A x y   -- by cubical operations
-
--- Every path has canonical form
-path_canonicity :
-  ∀(p : ClosedTerm)(A : Type)(x y : A),
-  (⊢ p : Path A x y) →
-  ∃(canonical : PathCanonical A x y), p →* canonical
-
--- Smooth paths have additional structure
-smooth_path_canonical : (M : SmoothManifold)(x y : M) → Type
-smooth_path_canonical M x y = {
-  path : C∞([0,1], M),
-  boundary : path(0) = x ∧ path(1) = y,
-  canonical_property : IsGeodesic path ∨ IsMinimalLength path ∨ IsComputed path
-}
-```
+Path types are not base types, so they admit no taxonomy of canonical forms.
+The correct canonicity statement for paths is the cubical one: a closed term of
+`Path A x y` is a function out of the interval, and canonicity applies only after
+instantiating the dimension — for each closed `r : I`, the endpoint `p r` is a
+closed term of `A` and (when `A` is a base type) reduces to a canonical form of `A`.
 
 ## 8.3 Decidability {#decidability}
 
@@ -396,16 +371,23 @@ smooth_path_canonical M x y = {
 
 The fundamental question: can we always decide if a term has a given type?
 
-#### Decidability Theorem
+#### Conditional Decidability
+
+Decidability of type checking and definitional equality is **conditional**, not a
+theorem for full SCTT. For the cubical fragment, decidability follows *assuming the
+normalization conjecture* (Conjecture 8.4): normalize both sides and compare normal
+forms. For the smooth layer, definitional equality is decidable **only for the
+fragments listed below** (polynomial and rational-function identities); equality of
+general smooth functions is undecidable by Richardson's theorem.
 
 ```sctt
--- Type checking is decidable
-theorem type_checking_decidable :
-  Decidable (λ(Γ : Context)(t : Term)(A : Type) → Γ ⊢ t : A)
+-- Conditional: decidable for the cubical fragment, assuming normalization (Conjecture 8.4)
+conditional type_checking_decidable :
+  Normalization → Decidable (λ(Γ : Context)(t : Term)(A : Type) → Γ ⊢ t : A)
 
--- Definitional equality is decidable  
-theorem def_eq_decidable :
-  Decidable (λ(Γ : Context)(t₁ t₂ : Term)(A : Type) → Γ ⊢ t₁ ≡ t₂ : A)
+-- Conditional: cubical fragment as above; smooth layer only for §8.3 fragments
+conditional def_eq_decidable :
+  Normalization → Decidable (λ(Γ : Context)(t₁ t₂ : Term)(A : Type) → Γ ⊢ t₁ ≡ t₂ : A)
 
 -- Implementation as algorithms
 type_check : Context → Term → Type → Bool + Error
@@ -486,7 +468,7 @@ undecidable_problems = [
   
   {
     problem = "Convergence of infinite series", 
-    reason = "Equivalent to halting problem",
+    reason = "Π⁰₂-complete — strictly harder than the halting problem (which is Σ⁰₁)",
     workaround = "Require explicit convergence proofs"
   },
   
@@ -675,7 +657,7 @@ glue_termination :
 ```sctt
 -- Type checking complexity bounds
 type_checking_complexity : ComplexityBound
-type_checking_complexity = EXPTIME  -- In worst case
+type_checking_complexity = NonElementary  -- worst case: no elementary bound exists for MLTT-family conversion (Statman 1979); EXPTIME-hard
 
 -- But most practical fragments are much better
 practical_fragments : List (Fragment, ComplexityBound)
@@ -785,7 +767,7 @@ SCTT's metatheory combines established results for individual subsystems with op
 |---|---|---|
 | **Consistency** (§8.1) | Proven for MLTT, CCHM, Cartesian cubical | **Conjecture** |
 | **Canonicity** (§8.2) | Proven for Cartesian cubical (Sterling & Angiuli, 2021) | **Conjecture** |
-| **Decidability** (§8.3) | Standard for dependent TT; fragments characterized | Theorem (algorithmic) |
+| **Decidability** (§8.3) | Standard for dependent TT; fragments characterized | Conditional (fragments only) |
 | **Normalization** (§8.4) | Proven for MLTT; empirically holds for cubical | **Conjecture** |
 | **Complexity** (§8.5) | Bounds known for fragments | Partially characterized |
 

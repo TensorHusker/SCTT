@@ -129,8 +129,12 @@ To avoid paradoxes like Russell's, we have a hierarchy of universes:
 Γ ⊢ Typeᵢ : Typeᵢ₊₁
 
 Γ ⊢ A : Typeᵢ   Γ ⊢ B : Typeⱼ
-—————————————————————————————  (universe cumulativity)
+—————————————————————————————  (→-form)
 Γ ⊢ A → B : Typeₘₐₓ(ᵢ,ⱼ)
+
+Γ ⊢ A : Typeᵢ   i ≤ j
+—————————————————————  (universe cumulativity)
+Γ ⊢ A : Typeⱼ
 ```
 
 #### Examples
@@ -184,12 +188,14 @@ three_vector : Vec 3
 >   T : Dimension  -- Time
 >   M : Dimension  -- Mass
 >   _⊗_ : Dimension → Dimension → Dimension
+>   _⁻¹ : Dimension → Dimension  -- inverse, e.g. T⁻¹ for "per second"
 >
-> Quantity : Dimension → Type
-> Quantity d = Σ (value : Real), (dim : d)
+> -- A quantity is a real number tagged with a (phantom) dimension index:
+> data Quantity (d : Dimension) : Type where
+>   mkQ : Real → Quantity d  -- d occurs only in the type, not the data
 >
 > -- Type-safe quantities
-> position : Quantity (L ⊗ L ⊗ L)  -- 3D position
+> position : Vec (Quantity L) 3        -- 3D position: three lengths
 > velocity : Quantity (L ⊗ T⁻¹)     -- Speed
 > mass : Quantity M
 >

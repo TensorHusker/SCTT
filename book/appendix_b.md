@@ -120,7 +120,8 @@ This appendix provides a comprehensive reference for all mathematical notation u
 |--------|--------------|---------|---------|---------|
 | `ℝ` | "the reals" / "R" | Smooth real numbers | `x : ℝ` | 4 |
 | `ℝⁿ` | "R to the n" / "R n" | n-dimensional real space | `x : ℝ³` | 4 |
-| `ℝ₊` | "R plus" / "positive reals" | Positive real numbers | `ε : ℝ₊` | 4 |
+| `ℝ₊` | "R plus" / "positive reals" | Strictly positive real numbers | `ε : ℝ₊` | 4 |
+| `ℝ≥₀` | "R greater-equal zero" / "non-negative reals" | Non-negative real numbers (codomain of metrics and norms) | `d(x,y) : ℝ≥₀` | 4 |
 | `C∞(M, N)` | "C infinity from M to N" | Smooth functions | `f : C∞(ℝ, ℝ)` | 4 |
 | `Cⁿ(M, N)` | "C n from M to N" | n-times differentiable functions | `f : C²(ℝ, ℝ)` | 4 |
 | `𝔻` | "D" / "infinitesimals" | Infinitesimal object | `ε : 𝔻` | 4 |
@@ -191,7 +192,7 @@ This appendix provides a comprehensive reference for all mathematical notation u
 | `VectorField M` | "vector field on M" | Vector field type | `X : VectorField M` | 4, 5 |
 | `SmoothPath M` | "smooth path in M" | Smooth path type | `γ : SmoothPath M` | 4 |
 | `[X, Y]` | "bracket X Y" / "Lie bracket of X and Y" | Lie bracket | `[X,Y] : VectorField M` | 5 |
-| `g` | "g" / "metric" | Riemannian metric | `g : T*M ⊗ T*M → ℝ` | 4 |
+| `g` | "g" / "metric" | Riemannian metric | `g : TM ⊗ TM → ℝ` (a section of `T*M ⊗ T*M`) | 4 |
 | `⟨v, w⟩` | "v inner w" / "inner product" | Inner product | `⟨v,w⟩_g` | 4 |
 | `Γⁱⱼₖ` | "Christoffel symbol i j k" | Christoffel symbols | Connection coefficients | 12 |
 | `R` | "Riemann" / "curvature" | Riemann curvature tensor | Curvature | 12 |

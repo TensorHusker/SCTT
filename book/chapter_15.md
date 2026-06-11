@@ -62,8 +62,8 @@ complexity_conjecture =
 -- Known results
 known_complexity_results : ComplexityAnalysis
 known_complexity_results = {
-  upper_bound = EXPTIME,      -- From reduction to QBF
-  lower_bound = PSPACE,       -- From cubical path complexity  
+  upper_bound = EXPTIME,      -- Explicit exponential-time checking algorithm
+  lower_bound = PSPACE_hard,  -- Reduction FROM QBF
   
   -- Decidable fragments
   polynomial_fragments = [
@@ -508,7 +508,54 @@ Can higher inductive types be given smooth structure? If the circle HIT `S¹` ca
 
 Not all smooth processes are invertible. Directed type theory replaces ∞-groupoids with ∞-categories, admitting asymmetric morphisms. Combining directedness with smoothness would model irreversible thermodynamic processes, causal structure in relativity, and resource-sensitive computation.
 
-## 15.3 Vision {#vision}
+## 15.3 Open Risks {#risks}
+
+The following risks are not speculative — they are specific technical obstacles where failure would require redesigning parts of SCTT. Each is stated precisely enough to be falsified.
+
+### Risk 1: Equational Theories × Higher-Order Rewriting
+
+**The problem.** SCTT's nilsquare rule `mul(ε, ε) ⇒ 0` requires matching modulo commutativity: the matcher must recognize `mul(a, ε) · mul(ε, b)` as containing ε² regardless of operand order. When this AC-matching interacts with **β-reduction** in a higher-order setting (where metavariables can be instantiated to λ-abstractions), new critical pairs arise that have not been systematically studied.
+
+**Why it matters.** If the combined system (AC-matching + β-reduction + cubical operations) is not confluent, then definitional equality becomes inconsistent — two terms that should be equal normalize to different results. The type checker would reject valid programs or, worse, accept invalid ones.
+
+**Current mitigation.** LRTT's local scoping (Leray & Winterhalter, POPL 2026) confines the nilsquare rule to smooth blocks, preventing most cross-layer critical pairs. Within a smooth block, the interaction is between AC-matching and β-reduction only (no cubical operations). For SCTT's *specific* rule set (nilsquare + ring axioms), the critical pairs are finite and can be hand-verified. But automated verification for arbitrary user-defined rules in this setting remains open — this is the Gruissan gap (Barras, Felicissimo, Winterhalter, 2024).
+
+**What would falsify it.** A concrete non-joinable critical pair between `mul(ε, ε) ⇒ 0` and β-reduction in a smooth block. No such pair is known.
+
+### Risk 2: Canonicity for the Combined Theory
+
+**The problem.** Canonicity says: every closed term of type ℕ reduces to a numeral. This is proved individually for:
+- Cartesian cubical type theory (Sterling & Angiuli, LICS 2021)
+- CIC with rewrite rules satisfying the triangle property (Cockx et al., POPL 2021)
+- Lipschitz/sensitivity type systems (various, via logical relations)
+
+But **no one has proved canonicity for the combined system** — cubical + smooth + sensitivity + rewrite rules together. The proofs use different techniques (cubical uses gluing models; RTT uses the triangle property; sensitivity uses metric logical relations) that do not obviously compose.
+
+**Why it matters.** Without canonicity, SCTT could have "stuck" terms — programs that type-check but do not compute. The type checker would be sound (it would not accept false proofs) but incomplete (some valid computations would fail to reduce).
+
+**Current mitigation.** Each layer's canonicity proof works *in isolation*. The LRTT conservativity result guarantees that anything provable with local rewrite rules is also provable (with more effort) using propositional equality, so a failure of canonicity in the combined system would not make the system inconsistent — only computationally incomplete.
+
+**What would falsify it.** A closed term `t : ℕ` in the combined system that does not reduce to a numeral. This would require the cubical, smooth, and sensitivity layers to interact in a way that creates a stuck configuration.
+
+### Risk 3: Expression Swell in the Smooth-Cubical Evaluator
+
+**The problem.** Cubical evaluators already face expression swell — normal forms of path types can be exponentially larger than the input terms (each `hcom` introduces new subterms for every face of the cofibration). Adding the smooth layer's ε-expansion on top of this could produce terms whose normal forms are doubly exponential.
+
+**Why it matters.** If normal forms are too large, the type checker becomes impractically slow. The Brunerie number computation (the n with π₄(S³) ≅ ℤ/nℤ, computed to be ±2, i.e. π₄(S³) ≅ ℤ/2ℤ) is the canonical benchmark: cctt computes it in seconds, but most cubical implementations cannot compute it at all. Adding smooth operations must not break this.
+
+**Current mitigation.** LRTT's staging approach resolves smooth computation at elaboration time and produces pure cubical terms for the runtime evaluator. If staging is complete (every smooth expression can be fully evaluated at elaboration time), the runtime evaluator never sees smooth terms and expression swell stays at the cubical level. Whether staging is always complete for SCTT's smooth fragment is unverified.
+
+**What would falsify it.** A smooth term that cannot be fully staged (e.g., a smooth function that depends on a runtime cubical variable in a way that prevents compile-time evaluation), forcing the evaluator to handle smooth and cubical operations simultaneously with exponential blowup.
+
+### Risk Summary
+
+| Risk | Severity | Likelihood | Mitigation |
+|------|----------|------------|------------|
+| AC × β × cubical confluence | **High** | Low (for SCTT's specific rules) | LRTT scoping; hand-verify finite critical pairs |
+| Combined canonicity | **High** | Medium | Layered architecture; conservativity fallback |
+| Expression swell | **Medium** | Low-Medium | 2LTT staging; smooth-layer elaboration-time resolution |
+
+## 15.4 Vision {#vision}
 
 ### What Comes Next: The Implementation Pathways
 

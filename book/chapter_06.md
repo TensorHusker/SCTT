@@ -138,10 +138,11 @@ approx_discontinuous ε x = tanh(x/ε)
 Even when something is expressible in SCTT, computing it may be infeasible:
 
 ```sctt
--- Type checking smooth functions is EXPTIME-hard
+-- Type checking unannotated smooth terms is non-elementary in general (Statman)
 complex_smooth : C∞(ℝ¹⁰⁰⁰, ℝ¹⁰⁰⁰)
 complex_smooth = deeply_nested_composition
-  -- Type checking time: O(2^2^n) in worst case!
+  -- Worst-case time: non-elementary — no fixed tower of exponentials bounds it
+  -- (The restricted, fully annotated fragment defined below is in EXPTIME)
 
 -- Path composition can explode
 long_path : Path A x y
@@ -151,7 +152,9 @@ long_path = p₁ ∙ p₂ ∙ p₃ ∙ ... ∙ p₁₀₀₀
 -- Higher-dimensional composition is worse
 cube_filling : (n : ℕ) → Cube n → Type
 cube_filling n cube = 
-  -- Complexity: O(2^(2^n)) for n-dimensional cubes
+  -- Complexity: exponential in the number of cells, which is itself
+  -- exponential in the cube dimension n (still within EXPTIME for
+  -- the annotated fragment at any fixed dimension)
   
 -- PRACTICAL LIMIT: ~5-dimensional cubes
 -- Beyond this, type checking doesn't terminate in practice
@@ -166,23 +169,23 @@ Normalization in SCTT faces several computational barriers. Unlike pure type the
 Symbolic differentiation causes exponential growth:
 
 ```sctt
--- Simple function
-f : ℝ → ℝ
-f x = x^10
-
--- Its 10th derivative expands dramatically
-D^10[f] : ℝ → ℝ  
-D^10[f] x = 10! = 3,628,800
-  -- From x^10 to constant 3,628,800!
-
--- Composite functions are worse
+-- Composite transcendental functions exhibit genuine expression swell
 g : ℝ → ℝ
 g x = exp(sin(x^2))
 
 -- D[g] requires chain rule expansions:
 D[g] x = D[exp] (sin(x^2)) * D[sin] (x^2) * D[x^2]
        = exp(sin(x^2)) * cos(x^2) * 2x
--- Each derivative layer multiplies complexity
+
+-- Repeated differentiation compounds the swell:
+D^2[g] x = exp(sin(x^2)) * (2x * cos(x^2))^2
+         + exp(sin(x^2)) * (2*cos(x^2) - 4*x^2*sin(x^2))
+  -- The term count keeps growing with each derivative;
+  -- each derivative layer multiplies complexity
+
+-- Note: pure polynomials do NOT swell — differentiating x^10
+-- repeatedly only shrinks it (D^10[x^10] = 10! = 3,628,800, a constant).
+-- Swell comes from nested transcendental composition.
 ```
 
 **Theorem 6.2.1 (Expression Swell Bound)**
@@ -295,21 +298,24 @@ The presence of smooth structures only exacerbates this issue, as each smooth ty
 
 *The problem "Given two smooth functions f,g : ℝ → ℝ, decide if f ≡ g" is undecidable.*
 
-**Proof**: By reduction from Richardson's theorem. Richardson proved that equality of expressions involving exp, sin, cos and rational functions is undecidable. Since SCTT includes these functions:
+**Proof**: By reduction from Richardson's theorem. Richardson proved that for the class of expressions built from rational numbers, π, sin, |·|, and exp, the problem "is this expression identically zero?" is undecidable — no single algorithm decides zero-equivalence for all expressions in the class. Since SCTT includes these functions:
 
 ```sctt
--- Undecidable equality
-richardson_function : ℝ → ℝ
-richardson_function x = exp(π * x) - 1
+-- Richardson's theorem: undecidability is about the CLASS, not any instance
+richardson_class : Set (ℝ → ℝ)
+richardson_class = expressions_built_from {ℚ, π, sin, abs, exp}
 
 zero_function : ℝ → ℝ
 zero_function x = 0
 
--- This equality is undecidable!
-undecidable_equality : richardson_function ≟ zero_function
-undecidable_equality = 
-  -- No algorithm can decide this in general
-  -- Equivalent to "e^(πi) + 1 = 0" (Euler's identity)
+-- No algorithm decides, for every f in richardson_class,
+-- whether f ≡ zero_function
+richardson_undecidability :
+  ¬ ∃ (decide : richardson_class → Bool),
+    ∀ f, decide f = true ↔ f ≡ zero_function
+-- Note: any PARTICULAR expression has a definite answer
+-- (it either is or is not identically zero); what fails is
+-- a single uniform decision procedure for the whole class
 ```
 
 **Corollary**: Type checking in SCTT with definitional equality of smooth functions is undecidable.
@@ -345,14 +351,15 @@ syntactic_equality t₁ t₂ =
 
 **Theorem 6.2.4 (Type Checking Complexity)**
 
-*Type checking in SCTT is EXPTIME-complete.*
+*Type checking the annotated fragment of SCTT is PSPACE-hard and lies in EXPTIME; exact completeness is open. For the unrestricted dependent core, type checking is non-elementary in general (Statman).*
 
 **Proof Sketch**: 
-- **EXPTIME-hard**: Reduction from QBF (Quantified Boolean Formula)
-- **In EXPTIME**: Type checking algorithm runs in exponential time
+- **PSPACE-hard**: via reduction from QBF (Quantified Boolean Formula)
+- **In EXPTIME**: for the annotated fragment, the type checking algorithm runs in exponential time
+- Whether the annotated fragment is EXPTIME-complete (or PSPACE-complete) remains open
 
 ```sctt
--- EXPTIME-hard construction
+-- PSPACE-hard construction
 qbf_encoding : QBF → SCTTTerm
 qbf_encoding (∀x₁ ∃x₂ ... φ(x₁,x₂,...)) = 
   -- Encode as type with exponentially many paths
@@ -376,7 +383,8 @@ complex_smooth_type =
   (g : C∞(ℝ¹⁰⁰, ℝ¹⁰⁰)) ×
   Path (C∞(ℝ¹⁰⁰, ℝ¹⁰⁰)) (f ∘ g) (g ∘ f)
 
--- ...has type checking time: O(2^2^1000)!
+-- ...without annotations, checking can take non-elementary time;
+-- even the annotated fragment's exponential bound is astronomical here.
 -- Completely intractable
 ```
 
@@ -554,7 +562,8 @@ lorenz_system (x,y,z) =
   (σ * (y - x), x * (ρ - z) - y, x * y - β * z)
 
 -- Maximum Lyapunov exponent λ ≈ 0.9056 (for standard parameters σ=10, ρ=28, β=8/3)
--- Errors double every 1/λ ≈ 1.1 time units!
+-- Errors grow by a factor of e every 1/λ ≈ 1.1 time units
+-- (and double every ln2/λ ≈ 0.77 time units)!
 
 -- Numerical trajectory diverges exponentially
 error_evolution : (t : Time) → (ε : ℝ₊) → ℝ₊
@@ -835,12 +844,17 @@ undecidable_functions n =
 SCTT amplifies Richardson's undecidability results:
 
 ```sctt
--- Richardson's Theorem (1968): Equality undecidable for
+-- Richardson's Theorem (1968): Equality undecidable for the CLASS of
 -- expressions involving {+, -, *, /, exp, sin, cos, ln, π, algebraic numbers}
 richardson_example : ℝ → ℝ
 richardson_example x = 
   exp(π * sqrt(163)) - 262537412640768744
-  -- Is this identically zero? Undecidable!
+  -- A famous near-integer: e^(π√163) ≈ 262537412640768743.99999999999925
+  -- Naive numerics at fixed precision cannot tell it from zero,
+  -- yet it is PROVABLY nonzero (≈ -7.5×10⁻¹³; by Gelfond–Schneider,
+  -- e^(π√163) is transcendental, so the difference cannot vanish).
+  -- This shows why interval arithmetic at any fixed precision
+  -- cannot decide equality — not that this instance is undecidable.
 
 -- SCTT includes these functions, so inherits undecidability
 smooth_richardson : C∞(ℝ, ℝ)
@@ -895,16 +909,17 @@ smooth_homotopy_type M N =
 
 **Specker Sequences**
 
-Some sequences are uncomputable but well-defined:
+Some computable sequences have well-defined but uncomputable limits:
 
 ```sctt
--- Specker sequence: increasing, bounded, but uncomputable
+-- Specker sequence: computable, increasing, bounded — but with
+-- an uncomputable limit (via time-bounded dovetailing)
 specker : ℕ → ℝ
 specker n = 
-  sum_{k=0}^n 1/2^{g(k)} 
-  where g(k) = if program_k halts then k else 2*k
+  sum_{k=0}^n (if halts_within program_k n then 1/2^k else 0)
+  -- "program k halts within n steps" is decidable, so each xₙ is computable
   -- Sequence is increasing and bounded by 2
-  -- But limit point is uncomputable!
+  -- But the limit point is uncomputable!
 
 -- SCTT cannot represent the limit
 specker_limit : ℝ
@@ -1039,11 +1054,12 @@ QBF_solver qbf =
   -- Smooth types don't help
   evaluate_quantified_formula qbf
 
--- Game theory problems stay PSPACE-complete
+-- Nash equilibrium computation is PPAD-complete
+-- (Daskalakis–Goldberg–Papadimitriou; Chen–Deng), not PSPACE-complete
 smooth_game_value : SmoothGame → ℝ
 smooth_game_value game = 
   -- Even with smooth payoff functions
-  -- Computing Nash equilibria remains hard
+  -- Computing Nash equilibria remains PPAD-hard
   approximate_nash_equilibrium game
 ```
 
@@ -1052,7 +1068,7 @@ smooth_game_value game =
 SCTT problems can be arbitrarily high in the exponential hierarchy:
 
 ```sctt
--- Type checking smooth terms can be EXPTIME-complete
+-- Type checking annotated smooth terms is PSPACE-hard and in EXPTIME
 complex_smooth_type : Type
 complex_smooth_type = 
   Π(f : C∞(ℝⁿ, ℝ)), 
@@ -1062,25 +1078,33 @@ complex_smooth_type =
 -- 1. Verifying smoothness of f and g
 -- 2. Checking composition is well-typed  
 -- 3. Verifying path equality
--- Total complexity: O(2^2^n) in n = dimension
+-- Total complexity: exponential in term size for the annotated
+-- fragment; non-elementary in general without annotations
 
 -- Higher-order smooth types are even worse
 smooth_type_tower : ℕ → Type
 smooth_type_tower 0 = ℝ
 smooth_type_tower (n+1) = C∞(smooth_type_tower n, smooth_type_tower n)
 -- smooth_type_tower 3 = C∞(C∞(C∞(ℝ,ℝ), C∞(ℝ,ℝ)), C∞(C∞(ℝ,ℝ), C∞(ℝ,ℝ)))
--- Type checking: non-elementary complexity!
+-- Type checking such towers in the unannotated dependent core
+-- is non-elementary (Statman) — this is where the general
+-- non-elementary lower bound lives
 ```
 
 **Space Complexity Lower Bounds**
 
 ```sctt
--- Theorem: SCTT type checking requires exponential space
-space_lower_bound : ∀(n : ℕ), ∃(term : SCTTTerm),
+-- Observation: the natural normalization-based type checking
+-- algorithm uses exponential space on some inputs; no
+-- sub-exponential-space algorithm is known
+space_usage_of_normalization : ∀(n : ℕ), ∃(term : SCTTTerm),
   size(term) = O(n) ∧ 
-  space_required(type_check term) = Ω(2^n)
+  space_used(normalize_and_check term) = Ω(2^n)
+-- (This is a bound on the known algorithm, not a proven lower
+-- bound for the problem — such a bound would separate PSPACE
+-- from EXPTIME, a famous open problem.)
 
--- Proof construction:
+-- Example family witnessing the algorithm's space usage:
 exponential_space_term : (n : ℕ) → SCTTTerm
 exponential_space_term n = 
   PathP (λ i → iterate_smooth_type n) 
@@ -1589,7 +1613,7 @@ This chapter has honestly examined SCTT's limitations:
 - **Constructivity**: No law of excluded middle or axiom of choice
 - **Smoothness**: Cannot naturally express discontinuous phenomena
 - **Decidability**: Halting problem and function equality remain undecidable
-- **Complexity**: Type checking is EXPTIME-complete in worst case
+- **Complexity**: Type checking is non-elementary in general; the annotated fragment is PSPACE-hard and in EXPTIME
 
 ### Practical Challenges
 - **Performance**: Normalization dominates computation time

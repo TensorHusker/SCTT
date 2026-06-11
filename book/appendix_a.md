@@ -248,7 +248,7 @@ naturally in A and B.
 
 **Examples**:
 - Free ⊣ Forgetful (for groups, vector spaces, etc.)
-- Product × ⊣ Exponential (in categories with products)
+- (− × A) ⊣ (−)^A (in cartesian closed categories)
 
 ### Universal Properties
 
@@ -334,7 +334,7 @@ This perspective is central to type theory!
 
 ### Metric Spaces
 
-**Definition**: (X, d) where d : X × X → ℝ₊ satisfies:
+**Definition**: (X, d) where d : X × X → ℝ≥₀ (non-negative reals) satisfies:
 - d(x,y) = 0 ⟺ x = y
 - d(x,y) = d(y,x)
 - d(x,z) ≤ d(x,y) + d(y,z) (triangle inequality)
@@ -345,7 +345,7 @@ This perspective is central to type theory!
 
 ### Normed Vector Spaces
 
-**Norm** ‖·‖ : V → ℝ₊ satisfying:
+**Norm** ‖·‖ : V → ℝ≥₀ (non-negative reals) satisfying:
 - ‖v‖ = 0 ⟺ v = 0
 - ‖cv‖ = |c|‖v‖
 - ‖v + w‖ ≤ ‖v‖ + ‖w‖ (triangle inequality)

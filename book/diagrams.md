@@ -439,10 +439,9 @@ equivalence           type equality
 
 Each diagram can be copied into relevant chapter sections. Formatting:
 
-```markdown
-```
-<diagram content here>
-```
+    ```
+    (diagram content here)
+    ```
 
 Tips:
 - Use monospaced font (code blocks)
@@ -450,7 +449,6 @@ Tips:
 - Use box-drawing characters: ─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼
 - Use arrows: → ← ↑ ↓ ⟶ ⟵ ⇒ ⇐
 - Use math symbols: ∀ ∃ ∈ ⊢ ≡ ≃ ⊎ ×
-```
 
 ---
 

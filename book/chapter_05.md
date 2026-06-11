@@ -21,7 +21,7 @@ Traditional calculus relies on limiting processes that may not converge. Numeric
 
 **Core takeaways**:
 - `D : C∞(ℝ, ℝ) → C∞(ℝ, ℝ)` computes derivatives exactly
-- **Chain rule is automatic**: `D[g ∘ f] = Dg ∘ Df` (definitionally!)
+- **Chain rule is a theorem**: `D[g ∘ f] ≡ (D[g] ∘ f) · D[f]`
 - Integration via `∫ : Ω¹(M) → ℝ`
 - Stokes' theorem: `∫_∂Ω ω = ∫_Ω dω`
 - Differential forms generalize gradients, curls, and divergence
@@ -84,7 +84,9 @@ leibniz f g =
   --            = (f(x) + f'(x)ε)(g(x) + g'(x)ε)  
   --            = f(x)g(x) + (f'(x)g(x) + f(x)g'(x))ε
   --            (using ε² = 0)
-  refl
+  kock_lawvere_unique (λ ε → expand_product f g ε)
+  -- Theorem, NOT definitional: the equality follows from the
+  -- uniqueness clause of the KL axiom, not by mere computation.
 ```
 
 ### Computational Differentiation
@@ -114,13 +116,15 @@ For multivariate functions, we use multiple infinitesimal directions:
 #### Multivariable Kock-Lawvere
 
 ```sctt
--- Multiple infinitesimal directions
-𝔻ⁿ : Type
-𝔻ⁿ = {ε : ℝⁿ | εᵢ * εⱼ = 0 for all i,j}
+-- Multiple infinitesimal directions: the n-DIMENSIONAL first-order
+-- infinitesimal object 𝔻(n) (Kock's D(n); parenthesized argument =
+-- dimension, subscript = order, cf. 𝔻ₖ below and §4.2)
+𝔻(n) : Type
+𝔻(n) = {ε : ℝⁿ | εᵢ * εⱼ = 0 for all i,j}
 
 -- Multilinear approximation
 multi_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
-           ∃! (a : ℝ) (b : ℝⁿ), ∀(ε : 𝔻ⁿ),
+           ∃! (a : ℝ) (b : ℝⁿ), ∀(ε : 𝔻(n)),
            f(x + ε) = a + ⟨b, ε⟩
 
 -- The vector b is the gradient!
@@ -131,20 +135,20 @@ multi_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
 #### Second-Order Structure
 
 ```sctt  
--- Second-order infinitesimals
-𝔻² : Type
-𝔻² = {ε : ℝ | ε³ = 0}
+-- Second-order infinitesimals (subscript = order, cf. §4.2)
+𝔻₂ : Type
+𝔻₂ = {ε : ℝ | ε³ = 0}
 
 -- Hessian via second-order KL
 hessian_KL : (f : C∞(ℝⁿ, ℝ)) → (x : ℝⁿ) →
-             ∃! H : ℝⁿˣⁿ, ∀(ε : 𝔻²)ⁿ,
+             ∃! H : ℝⁿˣⁿ, ∀(ε : 𝔻₂ⁿ),
              f(x + ε) = f(x) + ⟨∇f(x), ε⟩ + ½⟨ε, Hε⟩
 
 -- Schwarz's theorem (symmetry of mixed partials)
 schwarz : (f : C∞(ℝⁿ, ℝ)) →
           ∂ᵢ ∂ⱼ f ≡ ∂ⱼ ∂ᵢ f
 schwarz f = schwarz_proof f
-  -- Theorem: uses the commutativity of 𝔻² (the nilsquare infinitesimals),
+  -- Theorem: uses the commutativity of 𝔻₂ (the higher-order infinitesimals),
   -- but the symmetry must be derived — it is NOT simply refl.
   -- Proof proceeds by the KL-axiom applied in both directions. See §5.1.
 ```
@@ -198,17 +202,20 @@ In SCTT, the chain rule emerges from the functoriality of differentiation:
 #### Proof via Kock-Lawvere
 
 ```sctt
--- Chain rule proof
-chain_rule : {L M N : Manifold} →
-            (g : C∞(L, M)) → (f : C∞(M, N)) →
-            D[f ∘ g] ≡ D[f] ∘ D[g]
+-- Chain rule proof (scalar form)
+chain_rule : (g : C∞(ℝ, ℝ)) → (f : C∞(ℝ, ℝ)) →
+            D[f ∘ g] ≡ (D[f] ∘ g) · D[g]
 chain_rule g f = 
   -- Let ε : 𝔻
   -- (f ∘ g)(x + ε) = f(g(x + ε))
   --                 = f(g(x) + g'(x)ε)     (by KL for g)
   --                 = f(g(x)) + f'(g(x))·g'(x)ε  (by KL for f)
   --                 = (f ∘ g)(x) + (f' ∘ g)(x)·g'(x)ε
-  -- Therefore D[f ∘ g](x) = f'(g(x))·g'(x) = (D[f] ∘ D[g])(x)
+  -- Therefore D[f ∘ g](x) = f'(g(x))·g'(x) = ((D[f] ∘ g) · D[g])(x)
+  --
+  -- NOTE: the composition form T(f ∘ g) ≡ Tf ∘ Tg holds for the tangent
+  -- FUNCTOR (see §4.3 and chain_manifold below), not for the scalar
+  -- operator D, which obeys the product form above.
   chain_rule_proof g f  -- Theorem: follows from KL axiom applied twice (see derivation above)
 ```
 
@@ -274,7 +281,7 @@ chain_rule_2 : (g : C∞(ℝ, ℝ)) → (f : C∞(ℝ, ℝ)) →
 chain_rule_2 g f = chain_rule_2_proof g f
   -- Theorem: the second-order chain rule requires applying the first-order
   -- chain rule twice and collecting terms. NOT definitional — proof uses
-  -- linearity of D and the product structure of 𝔻². See §5.2.
+  -- linearity of D and the product structure of 𝔻₂. See §5.2.
 
 -- For the general n-th derivative (Faà di Bruno), see §5.1 Higher-Order Chain Rule
 ```
@@ -337,7 +344,7 @@ by_parts : (u v : C∞(ℝ, ℝ)) → (a b : ℝ) →
           (u * v)|ᵇₐ - ∫ a b (D[u] * v)
 by_parts u v a b = 
   calc ∫ a b (u * D[v])
-    ≡⟨ refl ⟩ 
+    ≡⟨ leibniz u v ⟩  -- product rule (a theorem, NOT definitional)
        ∫ a b D[u * v] - ∫ a b (D[u] * v)
     ≡⟨ FTC ⟩
        (u * v)|ᵇₐ - ∫ a b (D[u] * v) ∎
@@ -402,7 +409,9 @@ leibniz α β = leibniz_proof α β
 
 -- Coordinate expression
 local_d : Ωᵏ ℝⁿ → Ωᵏ⁺¹ ℝⁿ
-local_d ω = Σᵢ (∂ω/∂xᵢ) ∧ dxᵢ
+local_d ω = Σᵢ dxᵢ ∧ (∂ω/∂xᵢ)
+-- NB: dxᵢ goes on the LEFT — putting it on the right introduces a
+-- sign error (-1)ᵏ for odd-degree ω.
 ```
 
 ### Pullback and Pushforward
@@ -536,9 +545,11 @@ killing X g = L_X g ≡ 0
 ### Flows and Exponential Map
 
 ```sctt
--- Flow of vector field
-flow : VectorField M → ℝ → Diffeomorphism M M
-flow X t = exp(t X)
+-- Flow of a COMPLETE vector field
+-- (necessary hypothesis: X = x²∂ₓ on ℝ is smooth but its integral
+-- curves blow up in finite time, so it generates no global flow)
+flow : (X : VectorField M) → Complete X → ℝ → Diffeomorphism M M
+flow X complete t = exp(t X)
   where
     exp solves ∂φ/∂t = X(φ), φ(0) = id
 
@@ -568,11 +579,16 @@ morse_lemma : (f : Morse M ℝ) →
              LocallyEquivalent f (quadratic_form)
   near x with index = negative_eigenvalues
 
--- Morse inequalities
-morse_inequality : (f : Morse M ℝ) →
-                  Σᵢ (-1)ⁱ cᵢ(f) ≡ χ(M)
+-- Morse equality (Euler characteristic from critical points)
+morse_equality : (f : Morse M ℝ) →
+                 Σᵢ (-1)ⁱ cᵢ(f) ≡ χ(M)
   where cᵢ = number of critical points of index i
         χ = Euler characteristic
+
+-- Morse inequalities (critical points bound Betti numbers)
+morse_inequality : (f : Morse M ℝ) → (i : ℕ) →
+                   cᵢ(f) ≥ bᵢ(M)
+  where bᵢ = i-th Betti number dim Hⁱ_dR(M)
 ```
 
 ### Characteristic Classes

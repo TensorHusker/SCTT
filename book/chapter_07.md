@@ -31,7 +31,7 @@ SCTT_System = {
   
   -- Layer 2: Cubical structure (paths and composition)
   cubical_extension = {
-    interval_type : "Γ ⊢ I : Type",
+    interval_terms : "Γ ⊢ r : I",  -- NB: I is a pretype (a separate sort), not a member of any universe
     path_types : "Γ ⊢ PathP A x y : Type",
     composition_operation : "comp",
     transport_operation : "transp"
@@ -311,7 +311,7 @@ A term `f : Lip(A, B, k)` is a function from A to B that stretches distances by 
 ### Path Introduction
 
 ```
-Γ, i : I ⊢ p : A    Γ ⊢ p[i0/i] ≡ x : A i0    Γ ⊢ p[i1/i] ≡ y : A i1
+Γ, i : I ⊢ p : A i    Γ ⊢ p[i0/i] ≡ x : A i0    Γ ⊢ p[i1/i] ≡ y : A i1
 ——————————————————————————————————————————————————————————————————————  (PathP-intro)
 Γ ⊢ λ i → p : PathP A x y
 ```
@@ -542,23 +542,13 @@ Already covered above for functions, pairs, etc.
 
 ### Cubical Uniqueness
 
-#### Path Uniqueness
-Paths with the same boundary are unique up to homotopy:
-
-```
-Γ ⊢ p : PathP A x y    Γ ⊢ q : PathP A x y
-——————————————————————————————————————————  (Path-Unique)
-Γ ⊢ ∃! (H : PathP (PathP A x y) p q), H i0 ≡ refl ∧ H i1 ≡ refl
-```
-
 #### Composition Uniqueness
-The composition operation is unique:
-
-```
-Γ ⊢ φ : F    Γ ⊢ u : (i : I) → Partial φ A    Γ ⊢ u0 : A[φ ↦ u i0]
-—————————————————————————————————————————————————————————————————————  (Comp-Unique)
-Γ ⊢ ∃! (comp A φ u u0), satisfying_Kan_conditions
-```
+Composition is *structure*, not a property: `comp A φ u u0` is a chosen operation
+supplied by the Kan structure of the type, so there is no `∃!` rule for it. What
+does hold is a propositional uniqueness principle: any two terms satisfying the
+same `comp` boundary specification (agreeing with `u` on `φ` and with `u0` at `i0`)
+are path-equal. Composition is thus unique only up to a path, never uniquely
+existent in the `∃!` sense.
 
 ### Smooth Uniqueness  
 
@@ -631,7 +621,12 @@ The mechanism that makes univalence compute:
 Γ ⊢ Glue A φ Te : Type
 
 -- With introduction/elimination
-Γ ⊢ glue : PartialP φ (λ o → Te o .fst) → A → Glue A φ Te
+Γ ⊢ t : PartialP φ (λ o → Te o .fst)
+Γ ⊢ a : A
+Γ, φ ⊢ (Te o .snd) .fst (t o) ≡ a : A      -- on φ, the equivalence maps t to a
+————————————————————————————————————————————————  (Glue-intro)
+Γ ⊢ glue t a : Glue A φ Te
+
 Γ ⊢ unglue : Glue A φ Te → A
 ```
 
@@ -700,24 +695,26 @@ Definitional equality is preserved by all type formers:
 
 ## 7.10 Consistency and Normalization
 
-### Consistency Theorem
+The metatheoretic properties below are stated as conjectures: they are expected to hold, but remain unproven for the combined cubical + smooth system. See §8.1–8.4 for the precise status; for the cubical fragment, normalization and canonicity follow Sterling–Angiuli (2021), but the smooth extension remains open.
 
-**Theorem 7.10.1 (Consistency of SCTT)**: SCTT is consistent, i.e., there is no term of the empty type:
+### Consistency Conjecture
+
+**Conjecture 7.10.1 (Consistency of SCTT)**: SCTT is consistent, i.e., there is no term of the empty type:
 ```
 ¬∃(Γ : Context)(t : Term), Γ ⊢ t : ⊥
 ```
 
-**Proof sketch**: By constructing a model in cubical sets with smooth structure, showing that the empty type has no elements in any model.
+**Expected proof strategy**: Construct a model in cubical sets with smooth structure, showing that the empty type has no elements in any model.
 
 ### Strong Normalization
 
-**Theorem 7.10.2 (Strong Normalization)**: Every well-typed SCTT term has a normal form, and every reduction sequence terminates.
+**Conjecture 7.10.2 (Strong Normalization)**: Every well-typed SCTT term has a normal form, and every reduction sequence terminates.
 
 **Note**: This is more complex in SCTT due to smooth computations potentially involving infinite data, but holds for the purely type-theoretic fragment.
 
 ### Canonicity
 
-**Theorem 7.10.3 (Canonicity)**: Every closed term of natural number type is definitionally equal to a numeral.
+**Conjecture 7.10.3 (Canonicity)**: Every closed term of natural number type is definitionally equal to a numeral.
 
 ```
 ∀(t : Term), (⊢ t : ℕ) → ∃(n : Numeral), ⊢ t ≡ n : ℕ
